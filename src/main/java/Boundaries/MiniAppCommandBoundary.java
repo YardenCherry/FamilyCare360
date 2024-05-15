@@ -3,10 +3,10 @@ package Boundaries;
 import java.util.Date;
 import java.util.Map;
 
-import demo.integrative.Documents.MiniAppCommandEntity;
-import demo.integrative.Objects.CommandId;
-import demo.integrative.Objects.CreatedBy;
-import demo.integrative.Objects.TargetObject;
+import Entities.MiniAppCommandEntity;
+import Objects.CommandId;
+import Objects.CreatedBy;
+import Objects.TargetObject;
 
 public class MiniAppCommandBoundary {
     private CommandId commandId;

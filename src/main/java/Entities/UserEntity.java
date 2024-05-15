@@ -1,17 +1,15 @@
-package Documents;
+package Entities;
 
-import demo.integrative.Boundaries.Enums.Role;
-import demo.integrative.Boundaries.NewUserBoundary;
-import demo.integrative.Objects.UserId;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import Enums.Role;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
-
-@Document(collection = "USERS")
+@Entity
+@Table(name = "USERS")
 public class UserEntity {
 
-    @Id
-    private String id;
+    @Id private String id;
     private String userName;
     private Role role;
     private String avatar;

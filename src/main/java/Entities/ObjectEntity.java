@@ -1,15 +1,17 @@
-package Documents;
+package Entities;
 
 
 import java.util.Date;
 import java.util.Map;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
-import demo.integrative.Objects.CreatedBy;
+import Objects.CreatedBy;
 
-@Document(collection = "OBJECTS")
+@Entity
+@Table(name = "OBJECTS")
 public class ObjectEntity {
 
 

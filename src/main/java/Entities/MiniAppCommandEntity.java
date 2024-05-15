@@ -1,14 +1,16 @@
-package Documents;
+package Entities;
 
 import java.util.Date;
 import java.util.Map;
 
-import demo.integrative.Objects.CreatedBy;
-import demo.integrative.Objects.TargetObject;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import Objects.CreatedBy;
+import Objects.TargetObject;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
-@Document(collection="COMMANDS")
+@Entity
+@Table(name="COMMANDS")
 public class MiniAppCommandEntity {
 	
 	@Id

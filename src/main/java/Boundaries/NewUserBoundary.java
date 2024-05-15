@@ -1,7 +1,7 @@
 package Boundaries;
 
-import demo.integrative.Boundaries.Enums.Role;
-import demo.integrative.Documents.UserEntity;
+import Enums.Role;
+import Entities.UserEntity;
 
 public class NewUserBoundary {
 

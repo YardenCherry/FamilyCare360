@@ -1,9 +1,8 @@
 package Boundaries;
 
-import demo.integrative.Documents.ObjectEntity;
-import demo.integrative.Documents.UserEntity;
-import demo.integrative.Objects.CreatedBy;
-import demo.integrative.Objects.ObjectId;
+import Entities.ObjectEntity;
+import  Objects.CreatedBy;
+import Objects.ObjectId;
 
 
 import java.util.Date;
