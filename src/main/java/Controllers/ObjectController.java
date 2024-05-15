@@ -9,12 +9,11 @@ import Logics.ObjectLogic;
 
 
 @RestController
-@RequestMapping(path = {"superapp/objects"})
+@RequestMapping(path = {"/objects"})
 public class ObjectController {
 
     private  ObjectLogic objectLogic;
 
-    //    @Autowired
     public ObjectController(ObjectLogic objectLogic) {
         this.objectLogic = objectLogic;
     }

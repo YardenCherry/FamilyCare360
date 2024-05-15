@@ -11,7 +11,7 @@ import Logics.UserLogic;
 
 
 @RestController
-@RequestMapping(path ={"superapp/users"})
+@RequestMapping(path ={"/users"})
 public class UserController {
 
     private  UserLogic userLogic;

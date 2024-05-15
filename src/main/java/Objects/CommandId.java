@@ -1,12 +1,11 @@
 package Objects;
 
-import org.springframework.beans.factory.annotation.Value;
-
 public class CommandId {
 	
 	private String superApp;
 	private String miniApp;
 	private String id;
+	
 	public CommandId () {}
 
 	public String getSuperApp() {

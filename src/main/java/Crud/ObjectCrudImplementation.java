@@ -1,201 +1,68 @@
 package Crud;
 
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.UUID;
 
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import Boundaries.ObjectBoundary;
 import Entities.ObjectEntity;
+import Logics.ObjectLogic;
+import Objects.ObjectId;
 
+@Service
+public class ObjectCrudImplementation implements ObjectLogic {
+	private ObjectCrud objectCrud ;
 
-public class ObjectCrudImplementation implements ObjectCrud{
-
+	public ObjectCrudImplementation(ObjectCrud objectCrud) {
+		this.objectCrud = objectCrud;
+	}
+	
 	@Override
-	public void flush() {
-		// TODO Auto-generated method stub
+	@Transactional(readOnly = false)
+	public ObjectBoundary storeInDatabase(ObjectBoundary objectBoundary)
+	{
+		ObjectId objectId=new ObjectId();
+		objectId.setId(UUID.randomUUID().toString());
+		objectBoundary.setObjectID(objectId);
+		ObjectEntity entity = objectBoundary.toEntity();
 		
+		entity = this.objectCrud.save(entity);
+		return new ObjectBoundary(entity);
 	}
 
 	@Override
-	public <S extends ObjectEntity> S saveAndFlush(S entity) {
-		// TODO Auto-generated method stub
-		return null;
+	@Transactional(readOnly = true)
+	public Optional<ObjectBoundary> getSpecificDemoFromDatabase(String id) {
+		return this.objectCrud
+			.findById(id)
+			.map(entity->new ObjectBoundary(entity));
 	}
 
 	@Override
-	public <S extends ObjectEntity> List<S> saveAllAndFlush(Iterable<S> entities) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void deleteAllInBatch(Iterable<ObjectEntity> entities) {
-		// TODO Auto-generated method stub
+	@Transactional(readOnly = true)
+	public List<ObjectBoundary> getAll() {
+		List<ObjectEntity> entities = 
+		  this.objectCrud
+			.findAll();
 		
-	}
-
-	@Override
-	public void deleteAllByIdInBatch(Iterable<String> ids) {
-		// TODO Auto-generated method stub
+		List<ObjectBoundary> rv = new ArrayList<>();
 		
-	}
-
-	@Override
-	public void deleteAllInBatch() {
-		// TODO Auto-generated method stub
+		for (ObjectEntity entity : entities) {
+			rv.add(new ObjectBoundary(entity));
+		}
 		
+		return rv;
 	}
 
 	@Override
-	public ObjectEntity getOne(String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ObjectEntity getById(String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ObjectEntity getReferenceById(String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <S extends ObjectEntity> List<S> findAll(Example<S> example) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <S extends ObjectEntity> List<S> findAll(Example<S> example, Sort sort) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <S extends ObjectEntity> List<S> saveAll(Iterable<S> entities) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<ObjectEntity> findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<ObjectEntity> findAllById(Iterable<String> ids) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <S extends ObjectEntity> S save(S entity) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Optional<ObjectEntity> findById(String id) {
+	public Optional<Void> updateObject(ObjectBoundary miniAppCommandBoundary, String id) {
 		// TODO Auto-generated method stub
 		return Optional.empty();
 	}
-
-	@Override
-	public boolean existsById(String id) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public long count() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void deleteById(String id) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void delete(ObjectEntity entity) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void deleteAllById(Iterable<? extends String> ids) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void deleteAll(Iterable<? extends ObjectEntity> entities) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void deleteAll() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public List<ObjectEntity> findAll(Sort sort) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Page<ObjectEntity> findAll(Pageable pageable) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <S extends ObjectEntity> Optional<S> findOne(Example<S> example) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
-	}
-
-	@Override
-	public <S extends ObjectEntity> Page<S> findAll(Example<S> example, Pageable pageable) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <S extends ObjectEntity> long count(Example<S> example) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public <S extends ObjectEntity> boolean exists(Example<S> example) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public <S extends ObjectEntity, R> R findBy(Example<S> example,
-			Function<FetchableFluentQuery<S>, R> queryFunction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
+	
 }

@@ -13,7 +13,7 @@ import Logics.CommandLogic;
 
 
 @RestController
-@RequestMapping(path = {"superapp/miniapp"})
+@RequestMapping(path = {"/miniapp"})
 public class CommandController {
 
     private CommandLogic commandLogic;

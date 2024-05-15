@@ -1,6 +1,8 @@
 package Boundaries;
 
 import Enums.Role;
+
+
 import Entities.UserEntity;
 import Objects.UserId;
 
@@ -66,4 +68,17 @@ public class UserBoundary {
                 ", avatar='" + avatar + '\'' +
                 '}';
     }
+
+	public UserEntity toEntity() {
+		UserEntity userEntity = new UserEntity();
+
+		userEntity.setId(this.getUserId().getEmail() + "_" + this.getUserId().getSuperapp());
+		userEntity.setRole(this.getRole());
+		userEntity.setUserName(this.getUserName());
+		userEntity.setAvatar(this.getAvatar());
+		
+
+
+        return userEntity;
+	}
 }
