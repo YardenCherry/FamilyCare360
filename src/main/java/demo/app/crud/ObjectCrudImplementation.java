@@ -59,9 +59,15 @@ public class ObjectCrudImplementation implements ObjectLogic {
 	}
 
 	@Override
-	public Optional<Void> updateObject(ObjectBoundary miniAppCommandBoundary, String id) {
+	public void deleteAll() {
 		// TODO Auto-generated method stub
-		return Optional.empty();
+		
+	}
+
+	@Override
+	public void updateById(String id, ObjectBoundary update) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

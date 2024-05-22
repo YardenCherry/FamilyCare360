@@ -27,8 +27,8 @@ public class ObjectId {
     @Override
     public String toString() {
         return "ObjectId{" +
-                "id='" + id + '\'' +
-                ", superApp='" + superApp + '\'' +
+                "id='" + id + "/n" +
+                ", superApp='" + superApp + "/n" +
                 '}';
     }
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Map;
 
 import demo.app.objects.CreatedBy;
+import demo.app.objects.Location;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -24,12 +25,21 @@ public class ObjectEntity {
     private CreatedBy createdBy;
 	@Transient
     private Map<String, Object> objectDetails;
+	public Location location;
 
 
     public ObjectEntity() {
     }
 
-    public String getObjectID() {
+    public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
+	public String getObjectID() {
         return objectID;
     }
 
@@ -91,6 +101,7 @@ public class ObjectEntity {
                 "objectID='" + objectID + '\'' +
                 ", type='" + type + '\'' +
                 ", alias='" + alias + '\'' +
+                ", location='" + location + '\'' +
                 ", active=" + active +
                 ", creationTimeStamp=" + creationTimeStamp +
                 ", createdBy=" + createdBy +

@@ -57,9 +57,16 @@ public class UserCrudImplementation implements UserLogic {
 	}
 
 	@Override
-	public Optional<Void> updateObject(UserBoundary userBoundary, String id) {
+	@Transactional(readOnly = false)
+	public void deleteAll() {
+		this.userCrud
+		.deleteAll();
+	}
+
+	@Override
+	public void updateById(String id, UserBoundary update) {
 		// TODO Auto-generated method stub
-		return Optional.empty();
+		
 	}
 	
 	

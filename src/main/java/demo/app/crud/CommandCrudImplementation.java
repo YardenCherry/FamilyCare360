@@ -51,10 +51,15 @@ public class CommandCrudImplementation implements CommandLogic {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
-	public Optional<Void> updateObject(MiniAppCommandBoundary miniAppCommandBoundary, String id) {
+	public void deleteAll() {
 		// TODO Auto-generated method stub
-		return Optional.empty();
+		
+	}
+
+	@Override
+	public void updateById(String id, MiniAppCommandBoundary update) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

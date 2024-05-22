@@ -43,4 +43,20 @@ public class UserController {
 			.getAll()
 			.toArray(new UserBoundary[0]);
 	}
+	@DeleteMapping
+	public void deleteAll() {
+		this.userLogic
+			.deleteAll();
+	}
+
+	@PutMapping(
+		path = {"/{id}"},
+		consumes = {MediaType.APPLICATION_JSON_VALUE})
+	public void update (
+			@PathVariable("id") String id,
+			@RequestBody UserBoundary update) {
+		this.userLogic
+			.updateById(id, update);
+	}
+	
 }

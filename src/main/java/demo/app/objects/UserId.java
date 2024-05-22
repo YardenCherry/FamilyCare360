@@ -24,5 +24,10 @@ public class UserId {
         this.superapp = superAppName;
     }
 
+	@Override
+	public String toString() {
+		return "UserId {superapp=" + superapp + ",/n email=" + email + "}";
+	}
+
 
 }

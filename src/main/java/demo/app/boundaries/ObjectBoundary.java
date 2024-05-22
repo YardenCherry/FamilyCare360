@@ -2,17 +2,21 @@ package demo.app.boundaries;
 
 import demo.app.entities.ObjectEntity;
 import demo.app.objects.CreatedBy;
+import demo.app.objects.Location;
 import demo.app.objects.ObjectId;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+
+
 public class ObjectBoundary {
 
     private ObjectId objectID;
     private String type;
     private String alias;
+    private Location location;
     private Boolean active;
     private Date creationTimeStamp;
     private CreatedBy createdBy;
@@ -32,9 +36,18 @@ public class ObjectBoundary {
         setCreatedBy(objectEntity.getCreatedBy());
         setType(objectEntity.getType());
         setAlias(objectEntity.getAlias());
+        setLocation(objectEntity.getLocation());
     }
 
-    public ObjectId getObjectID() {
+    public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
+	public ObjectId getObjectID() {
         return objectID;
     }
 
@@ -100,6 +113,7 @@ public class ObjectBoundary {
         objectEntity.setActive(this.getActive() == null || this.getActive());
         objectEntity.setAlias(this.getAlias() == null ? "demo instance" : this.getAlias());
         objectEntity.setObjectDetails(this.getObjectDetails() == null ? new HashMap<>() : this.getObjectDetails());
+        objectEntity.setLocation(this.location);
 
 
         return objectEntity;
@@ -111,6 +125,7 @@ public class ObjectBoundary {
                 "objectID=" + objectID +
                 ", type='" + type + '\'' +
                 ", alias='" + alias + '\'' +
+                ", loction='" + location + '\'' +
                 ", active=" + active +
                 ", creationTimeStamp=" + creationTimeStamp +
                 ", createdBy=" + createdBy +

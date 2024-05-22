@@ -41,5 +41,19 @@ public class ObjectController {
 			.toArray(new ObjectBoundary[0]);
 	}
 
+	@DeleteMapping
+	public void deleteAll() {
+		this.objectLogic
+			.deleteAll();
+	}
 
+	@PutMapping(
+		path = {"/{id}"},
+		consumes = {MediaType.APPLICATION_JSON_VALUE})
+	public void update (
+			@PathVariable("id") String id,
+			@RequestBody ObjectBoundary update) {
+		this.objectLogic
+			.updateById(id, update);
+	}
 }

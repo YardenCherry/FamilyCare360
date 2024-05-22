@@ -34,7 +34,10 @@ public class CommandId {
 	
 	@Override
 	public String toString() {
-		return "CommandId [superApp=" + superApp + ", miniApp=" + miniApp + ", id=" + id + "]";
+		return "CommandId:/n "
+				+ "{superApp=" + superApp + "/n"
+						+ ", miniApp=" + miniApp 
+						+ "/n, id=" + id + "}";
 	}
 
 }
