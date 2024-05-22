@@ -7,6 +7,8 @@ public class CommandId {
 	private String id;
 	
 	public CommandId () {}
+	
+	
 
 	public String getSuperApp() {
 		return superApp;

@@ -2,65 +2,34 @@ package demo.app.converters;
 
 import demo.app.boundaries.MiniAppCommandBoundary;
 import demo.app.entities.MiniAppCommandEntity;
+import demo.app.objects.CommandId;
 
 public class CommandConverter {
-	public MiniAppCommandBoundary toBounday (MiniAppCommandEntity entity) {
-		MiniAppCommandBoundary rv = new MiniAppCommandBoundary();
-		
-		rv.setId(entity.getId());
-		rv.setMessage(entity.getMessage());
-		rv.setMessageTimestamp(entity.getMessageTimestamp());
-		rv.setVersion(entity.getVersion());
-		rv.setStatus(
-				this.toBoundary(entity.getStatus()));
-		rv.setDemoData(entity.getDemoData());
-		
-		rv.setName(new NameBoundary(
-			entity.getFirstName(),
-			entity.getLastName()));
-		
-		return rv;
-	}
-	
 
-	public MiniAppCommandEntity toEntity (MiniAppCommandBoundary boundary) {
-		MiniAppCommandEntity rv = new MiniAppCommandEntity();
-		
-		rv.setId(boundary.getId());
-		rv.setMessage(boundary.getMessage());
-		rv.setMessageTimestamp(boundary.getMessageTimestamp());
-		if (boundary.getVersion() != null) {
-			rv.setVersion(boundary.getVersion());
-		}else {
-			rv.setVersion(0);
-		}
-		if (boundary.getStatus() != null) {
-			rv.setStatus(
-				this.toEntity(boundary.getStatus()));
-		}else {
-			rv.setStatus(StatusEnumInDB.not_available);
-		}
-		rv.setDemoData(boundary.getDemoData());
+    public MiniAppCommandBoundary toBoundary(MiniAppCommandEntity entity) {
+        MiniAppCommandBoundary boundary = new MiniAppCommandBoundary();
+        CommandId commandId=new CommandId();
+        commandId.setId(entity.getCommandId().split("_")[0]);
+        commandId.setMiniApp(entity.getCommandId().split("_")[1]);
+        commandId.setSuperApp(entity.getCommandId().split("_")[2]);
+        boundary.setCommandId(commandId);
+        boundary.setCommand(entity.getCommand());
+        boundary.setTargetObject(entity.getTargetObject());
+        boundary.setInvocationTimeStamp(entity.getInvocationTimeStamp());
+        boundary.setInvokedBy(entity.getInvokedBy());
+        boundary.setCommandAttributes(entity.getCommandAttributes());
+        return boundary;
+    }
 
-		// convert name to first and last names 
-		if (boundary.getName() != null) {
-			rv.setFirstName(boundary.getName().getFirstName());
-			rv.setLastName(boundary.getName().getLastName());
-		}else {
-			rv.setFirstName(null);
-			rv.setLastName(null);
-		}
-		return rv;
-
-	}
-	
-	public StatusEnum toBoundary(StatusEnumInDB status) {
-		return 
-			StatusEnum.valueOf(status.name().toUpperCase());
-	}
-
-	public StatusEnumInDB toEntity (StatusEnum status) {
-		return 
-			StatusEnumInDB.valueOf(status.name().toLowerCase());
-	}
+    public MiniAppCommandEntity toEntity(MiniAppCommandBoundary boundary) {
+        MiniAppCommandEntity entity = new MiniAppCommandEntity();
+        entity.setCommandId(String.join("_", boundary.getCommandId().getSuperApp(), boundary.getCommandId().getMiniApp(), boundary.getCommandId().getId()));
+        entity.setMiniAppName(boundary.getCommandId().getMiniApp());
+        entity.setCommand(boundary.getCommand());
+        entity.setTargetObject(boundary.getTargetObject());
+        entity.setInvocationTimeStamp(boundary.getInvocationTimeStamp());
+        entity.setInvokedBy(boundary.getInvokedBy());
+        entity.setCommandAttributes(boundary.getCommandAttributes());
+        return entity;
+    }
 }

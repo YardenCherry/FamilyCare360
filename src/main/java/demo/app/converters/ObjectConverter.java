@@ -1,66 +1,61 @@
 package demo.app.converters;
 
-import demo.app.boundaries.MiniAppCommandBoundary;
-import demo.app.entities.MiniAppCommandEntity;
+import demo.app.boundaries.ObjectBoundary;
+import demo.app.entities.ObjectEntity;
+import demo.app.objects.CreatedBy;
+import demo.app.objects.ObjectId;
 
 public class ObjectConverter {
-	public MiniAppCommandBoundary toBounday (MiniAppCommandEntity entity) {
-		MiniAppCommandBoundary rv = new MiniAppCommandBoundary();
+	public ObjectBoundary toBounday (ObjectEntity entity) {
+		ObjectBoundary rv = new ObjectBoundary();
 		
-		rv.setId(entity.getId());
-		rv.setMessage(entity.getMessage());
-		rv.setMessageTimestamp(entity.getMessageTimestamp());
-		rv.setVersion(entity.getVersion());
-		rv.setStatus(
-				this.toBoundary(entity.getStatus()));
-		rv.setDemoData(entity.getDemoData());
-		
-		rv.setName(new NameBoundary(
-			entity.getFirstName(),
-			entity.getLastName()));
-		
+		ObjectId ob= new ObjectId();
+		ob.setId(entity.getObjectID().split("_")[0]);
+		ob.setSuperApp(entity.getObjectID().split("_")[1]);
+		rv.setObjectID(ob);
+		rv.setType(entity.getType());
+		rv.setAlias(entity.getAlias());
+		rv.setLocation(entity.getLocation());
+		rv.setActive(entity.getActive());
+		rv.setCreationTimeStamp(entity.getCreationTimeStamp());
+		rv.setCreatedBy(entity.getCreatedBy());
+		rv.setObjectDetails(entity.getObjectDetails());
+	
 		return rv;
 	}
 	
 
-	public MiniAppCommandEntity toEntity (MiniAppCommandBoundary boundary) {
-		MiniAppCommandEntity rv = new MiniAppCommandEntity();
+	public ObjectEntity toEntity (ObjectBoundary boundary) {
+		ObjectEntity rv = new ObjectEntity();
 		
-		rv.setId(boundary.getId());
-		rv.setMessage(boundary.getMessage());
-		rv.setMessageTimestamp(boundary.getMessageTimestamp());
-		if (boundary.getVersion() != null) {
-			rv.setVersion(boundary.getVersion());
+		rv.setObjectID(String.join("_",boundary.getObjectID().getId(), boundary.getObjectID().getSuperApp()));
+		rv.setType(boundary.getType());
+		rv.setAlias(boundary.getAlias());
+		rv.setCreationTimeStamp(boundary.getCreationTimeStamp());
+		rv.setObjectDetails(boundary.getObjectDetails());
+		rv.setLocation(boundary.getLocation());
+		if (boundary.getActive() != null) {
+			rv.setActive(boundary.getActive());
 		}else {
-			rv.setVersion(0);
+			rv.setActive(false);
 		}
-		if (boundary.getStatus() != null) {
-			rv.setStatus(
-				this.toEntity(boundary.getStatus()));
+		
+		if (boundary.getCreatedBy() != null) {
+			rv.setCreatedBy(boundary.getCreatedBy());
 		}else {
-			rv.setStatus(StatusEnumInDB.not_available);
+			rv.setCreatedBy(new CreatedBy());
 		}
-		rv.setDemoData(boundary.getDemoData());
-
-		// convert name to first and last names 
-		if (boundary.getName() != null) {
-			rv.setFirstName(boundary.getName().getFirstName());
-			rv.setLastName(boundary.getName().getLastName());
+		
+		if (boundary.getCreatedBy() != null) {
+			rv.setCreatedBy(boundary.getCreatedBy());
 		}else {
-			rv.setFirstName(null);
-			rv.setLastName(null);
+			CreatedBy cb = new CreatedBy();
+			/// check with eyal
+			rv.setCreatedBy(new CreatedBy());
 		}
+		
 		return rv;
 
 	}
 	
-	public StatusEnum toBoundary(StatusEnumInDB status) {
-		return 
-			StatusEnum.valueOf(status.name().toUpperCase());
-	}
-
-	public StatusEnumInDB toEntity (StatusEnum status) {
-		return 
-			StatusEnumInDB.valueOf(status.name().toLowerCase());
-	}
 }
