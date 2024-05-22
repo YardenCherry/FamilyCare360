@@ -5,20 +5,35 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import demo.app.boundaries.ObjectBoundary;
+import demo.app.converters.ObjectConverter;
 import demo.app.entities.ObjectEntity;
 import demo.app.logics.ObjectLogic;
 import demo.app.objects.ObjectId;
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class ObjectCrudImplementation implements ObjectLogic {
 	private ObjectCrud objectCrud ;
+	private ObjectConverter objectConverter;
 
-	public ObjectCrudImplementation(ObjectCrud objectCrud) {
+	public ObjectCrudImplementation(ObjectCrud objectCrud,ObjectConverter objectConverter ) {
 		this.objectCrud = objectCrud;
+		this.objectConverter = objectConverter;
+	}
+	
+	@Value("${spring.application.name:defaultName}")
+	public void setup(String name) {
+		System.err.println("*** " + name);
+	}
+
+	@PostConstruct  
+	public void setupIsDone() {
+		System.err.println("demo logic implementation is ready");
 	}
 	
 	@Override
@@ -28,10 +43,10 @@ public class ObjectCrudImplementation implements ObjectLogic {
 		ObjectId objectId=new ObjectId();
 		objectId.setId(UUID.randomUUID().toString());
 		objectBoundary.setObjectID(objectId);
-		ObjectEntity entity = objectBoundary.toEntity();
+		ObjectEntity entity = this.objectConverter.toEntity(objectBoundary);
 		
 		entity = this.objectCrud.save(entity);
-		return new ObjectBoundary(entity);
+		return this.objectConverter.toBounday(entity);
 	}
 
 	@Override
@@ -39,7 +54,7 @@ public class ObjectCrudImplementation implements ObjectLogic {
 	public Optional<ObjectBoundary> getSpecificDemoFromDatabase(String id) {
 		return this.objectCrud
 			.findById(id)
-			.map(entity->new ObjectBoundary(entity));
+			.map(entity->this.objectConverter.toBounday(entity));
 	}
 
 	@Override
@@ -52,21 +67,30 @@ public class ObjectCrudImplementation implements ObjectLogic {
 		List<ObjectBoundary> rv = new ArrayList<>();
 		
 		for (ObjectEntity entity : entities) {
-			rv.add(new ObjectBoundary(entity));
+			rv.add(this.objectConverter.toBounday(entity));
 		}
 		
 		return rv;
 	}
 
 	@Override
+	@Transactional//(readOnly = false)
 	public void deleteAll() {
-		// TODO Auto-generated method stub
+		this.objectCrud.deleteAll();
 		
 	}
 
 	@Override
 	public void updateById(String id, ObjectBoundary update) {
-		// TODO Auto-generated method stub
+		ObjectEntity existing = 
+				  this.objectCrud
+					.findById(id)
+					.orElseThrow(()->new RuntimeException("could not find demo with id: " + id));
+		
+		// add the checks after ask eyal
+		
+		this.objectCrud
+		.save(existing);
 		
 	}
 	
