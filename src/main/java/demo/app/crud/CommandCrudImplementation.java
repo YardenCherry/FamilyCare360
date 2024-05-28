@@ -25,7 +25,7 @@ public class CommandCrudImplementation implements CommandLogic {
         this.commandConverter = commandConverter;
     }
 
-    @Value("${spring.application.name:defaultName}")
+    @Value("${spring.application.name:supperApp}")
     public void setup(String name) {
         System.err.println("*** " + name);
     }

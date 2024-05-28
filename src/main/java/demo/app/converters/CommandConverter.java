@@ -1,9 +1,11 @@
 package demo.app.converters;
 
+import org.springframework.stereotype.Component;
+
 import demo.app.boundaries.MiniAppCommandBoundary;
 import demo.app.entities.MiniAppCommandEntity;
 import demo.app.objects.CommandId;
-
+@Component
 public class CommandConverter {
 
     public MiniAppCommandBoundary toBoundary(MiniAppCommandEntity entity) {

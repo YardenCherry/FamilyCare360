@@ -1,12 +1,14 @@
 package demo.app.converters;
 
+import org.springframework.stereotype.Component;
+
 import demo.app.boundaries.ObjectBoundary;
 import demo.app.entities.ObjectEntity;
 import demo.app.objects.CreatedBy;
 import demo.app.objects.ObjectId;
-
+@Component
 public class ObjectConverter {
-	public ObjectBoundary toBounday (ObjectEntity entity) {
+	public ObjectBoundary toBoundary(ObjectEntity entity) {
 		ObjectBoundary rv = new ObjectBoundary();
 		
 		ObjectId ob= new ObjectId();
@@ -16,7 +18,7 @@ public class ObjectConverter {
 		rv.setType(entity.getType());
 		rv.setAlias(entity.getAlias());
 		rv.setLocation(entity.getLocation());
-		rv.setActive(entity.getActive());
+		rv.setActive(entity.getActive());	
 		rv.setCreationTimeStamp(entity.getCreationTimeStamp());
 		rv.setCreatedBy(entity.getCreatedBy());
 		rv.setObjectDetails(entity.getObjectDetails());

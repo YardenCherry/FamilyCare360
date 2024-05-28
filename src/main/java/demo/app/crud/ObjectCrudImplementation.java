@@ -26,7 +26,7 @@ public class ObjectCrudImplementation implements ObjectLogic {
 		this.objectConverter = objectConverter;
 	}
 	
-	@Value("${spring.application.name:defaultName}")
+	@Value("${spring.application.name:supperApp}")
 	public void setup(String name) {
 		System.err.println("*** " + name);
 	}
@@ -46,7 +46,7 @@ public class ObjectCrudImplementation implements ObjectLogic {
 		ObjectEntity entity = this.objectConverter.toEntity(objectBoundary);
 		
 		entity = this.objectCrud.save(entity);
-		return this.objectConverter.toBounday(entity);
+		return this.objectConverter.toBoundary(entity);
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class ObjectCrudImplementation implements ObjectLogic {
 	public Optional<ObjectBoundary> getSpecificDemoFromDatabase(String id) {
 		return this.objectCrud
 			.findById(id)
-			.map(entity->this.objectConverter.toBounday(entity));
+			.map(entity->this.objectConverter.toBoundary(entity));
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class ObjectCrudImplementation implements ObjectLogic {
 		List<ObjectBoundary> rv = new ArrayList<>();
 		
 		for (ObjectEntity entity : entities) {
-			rv.add(this.objectConverter.toBounday(entity));
+			rv.add(this.objectConverter.toBoundary(entity));
 		}
 		
 		return rv;

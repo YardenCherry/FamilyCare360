@@ -4,70 +4,64 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import demo.app.boundaries.UserBoundary;
+import demo.app.converters.UserConverter;
 import demo.app.entities.UserEntity;
 import demo.app.logics.UserLogic;
 
 @Service
 public class UserCrudImplementation implements UserLogic {
-	private UserCrud userCrud ;
+	private final UserCrud userCrud;
+    private final UserConverter userConverter;
 
-	public UserCrudImplementation(UserCrud userCrud) {
-		this.userCrud = userCrud;
-	}
-	
+    public UserCrudImplementation(UserCrud userCrud, UserConverter userConverter) {
+        this.userCrud = userCrud;
+        this.userConverter = userConverter;
+    }
+    
+	@Value("${spring.application.name:supperApp}")
+    public void setup(String name) {
+        System.err.println("*** " + name);
+    }
 	@Override
-	@Transactional(readOnly = false)
-	public UserBoundary storeInDatabase(UserBoundary userBoundary)
-	{
-//		UserId userId=new UserId();
-//		userId.setId(UUID.randomUUID().toString());
-//		userBoundary.setUserId(userId);
-		UserEntity entity = userBoundary.toEntity();
-		
-		entity = this.userCrud.save(entity);
-		return new UserBoundary(entity);
-	}
+    @Transactional
+    public UserBoundary storeInDatabase(UserBoundary userBoundary) {
+        UserEntity entity = userConverter.toEntity(userBoundary);
+        entity = this.userCrud.save(entity);
+        return userConverter.toBoundary(entity);
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public Optional<UserBoundary> getSpecificDemoFromDatabase(String id) {
-		return this.userCrud
-			.findById(id)
-			.map(entity->new UserBoundary(entity));
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<UserBoundary> getSpecificDemoFromDatabase(String id) {
+        return this.userCrud.findById(id)
+            .map(userConverter::toBoundary);
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public List<UserBoundary> getAll() {
-		List<UserEntity> entities = 
-		  this.userCrud
-			.findAll();
-		
-		List<UserBoundary> rv = new ArrayList<>();
-		
-		for (UserEntity entity : entities) {
-			rv.add(new UserBoundary(entity));
-		}
-		
-		return rv;
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserBoundary> getAll() {
+        List<UserEntity> entities = this.userCrud.findAll();
+        List<UserBoundary> rv = new ArrayList<>();
+        for (UserEntity entity : entities) {
+            rv.add(userConverter.toBoundary(entity));
+        }
+        return rv;
+    }
 
-	@Override
-	@Transactional(readOnly = false)
-	public void deleteAll() {
-		this.userCrud
-		.deleteAll();
-	}
+    @Override
+    @Transactional
+    public void deleteAll() {
+        this.userCrud.deleteAll();
+    }
 
-	@Override
-	public void updateById(String id, UserBoundary update) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
+    @Override
+    @Transactional
+    public void updateById(String id, UserBoundary update) {
+        // Implement the update logic as needed
+    }
 }

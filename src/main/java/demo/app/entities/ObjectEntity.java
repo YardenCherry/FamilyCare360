@@ -25,6 +25,7 @@ public class ObjectEntity {
     private CreatedBy createdBy;
 	@Transient
     private Map<String, Object> objectDetails;
+	@Transient
 	public Location location;
 
 
