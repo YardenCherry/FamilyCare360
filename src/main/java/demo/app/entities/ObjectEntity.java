@@ -21,22 +21,20 @@ public class ObjectEntity {
     private String alias;
     private Boolean active;
     private Date creationTimeStamp;
-	@Transient
-    private CreatedBy createdBy;
+    private String createdBy;
 	@Transient
     private Map<String, Object> objectDetails;
-	@Transient
-	public Location location;
+	public String location;
 
 
     public ObjectEntity() {
     }
 
-    public Location getLocation() {
+    public String getLocation() {
 		return location;
 	}
 
-	public void setLocation(Location location) {
+	public void setLocation(String location) {
 		this.location = location;
 	}
 
@@ -80,11 +78,11 @@ public class ObjectEntity {
         this.creationTimeStamp = creationTimeStamp;
     }
 
-    public CreatedBy getCreatedBy() {
+    public String getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(CreatedBy createdBy) {
+    public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 

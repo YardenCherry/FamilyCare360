@@ -42,7 +42,7 @@ public class ObjectCrudImplementation implements ObjectLogic {
 	{
 		ObjectId objectId=new ObjectId();
 		objectId.setId(UUID.randomUUID().toString());
-		objectBoundary.setObjectID(objectId);
+		objectBoundary.setObjectId(objectId);
 		ObjectEntity entity = this.objectConverter.toEntity(objectBoundary);
 		
 		entity = this.objectCrud.save(entity);

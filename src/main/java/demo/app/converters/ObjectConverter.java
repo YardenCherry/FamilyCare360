@@ -5,58 +5,72 @@ import org.springframework.stereotype.Component;
 import demo.app.boundaries.ObjectBoundary;
 import demo.app.entities.ObjectEntity;
 import demo.app.objects.CreatedBy;
+import demo.app.objects.Location;
 import demo.app.objects.ObjectId;
+import demo.app.objects.UserId;
 @Component
 public class ObjectConverter {
 	public ObjectBoundary toBoundary(ObjectEntity entity) {
-		ObjectBoundary rv = new ObjectBoundary();
+		ObjectBoundary boundary = new ObjectBoundary();
 		
 		ObjectId ob= new ObjectId();
 		ob.setId(entity.getObjectID().split("_")[0]);
 		ob.setSuperApp(entity.getObjectID().split("_")[1]);
-		rv.setObjectID(ob);
-		rv.setType(entity.getType());
-		rv.setAlias(entity.getAlias());
-		rv.setLocation(entity.getLocation());
-		rv.setActive(entity.getActive());	
-		rv.setCreationTimeStamp(entity.getCreationTimeStamp());
-		rv.setCreatedBy(entity.getCreatedBy());
-		rv.setObjectDetails(entity.getObjectDetails());
-	
-		return rv;
+		boundary.setObjectId(ob);
+		boundary.setType(entity.getType());
+		boundary.setAlias(entity.getAlias());
+		boundary.setActive(entity.getActive());	
+		boundary.setCreationTimesTamp(entity.getCreationTimeStamp());
+		boundary.setObjectDetails(entity.getObjectDetails());
+		String[] location = entity.getLocation().split("#");
+		boundary.setLocation(new Location(Double.parseDouble(location[0]) 
+				, Double.parseDouble(location[1])));
+		String[] createdBy = entity.getCreatedBy().split("#");
+		UserId userId= new UserId();
+		userId.setSuperapp(createdBy[0]);
+		userId.setEmail(createdBy[1]);
+		boundary.setCreatedBy(new CreatedBy(userId));
+
+		return boundary;
 	}
 	
 
 	public ObjectEntity toEntity (ObjectBoundary boundary) {
-		ObjectEntity rv = new ObjectEntity();
+		ObjectEntity entity = new ObjectEntity();
 		
-		rv.setObjectID(String.join("_",boundary.getObjectID().getId(), boundary.getObjectID().getSuperApp()));
-		rv.setType(boundary.getType());
-		rv.setAlias(boundary.getAlias());
-		rv.setCreationTimeStamp(boundary.getCreationTimeStamp());
-		rv.setObjectDetails(boundary.getObjectDetails());
-		rv.setLocation(boundary.getLocation());
+		entity.setObjectID(String.join("_",boundary.getObjectId().getId(), boundary.getObjectId().getSuperApp()));
+		entity.setType(boundary.getType());
+		entity.setAlias(boundary.getAlias());
+		entity.setCreationTimeStamp(boundary.getCreationTimesTamp());
+		entity.setObjectDetails(boundary.getObjectDetails());
 		if (boundary.getActive() != null) {
-			rv.setActive(boundary.getActive());
+			entity.setActive(boundary.getActive());
 		}else {
-			rv.setActive(false);
+			entity.setActive(false);
 		}
 		
-		if (boundary.getCreatedBy() != null) {
-			rv.setCreatedBy(boundary.getCreatedBy());
-		}else {
-			rv.setCreatedBy(new CreatedBy());
+		String createdBy = boundary
+				.getCreatedBy()
+				.getUserId()
+				.getSuperapp()
+				+ "#" 
+				+ boundary
+				.getCreatedBy()
+				.getUserId()
+				.getEmail();
+		if (
+				boundary.getLocation() != null) {
+			entity.setLocation(
+					boundary.getLocation().getLat()
+					+ "#" 
+					+ boundary.getLocation().getLng());
+		} else {
+			entity.setLocation("0#0");
 		}
+		entity.setActive(boundary.getActive());
+		entity.setCreatedBy(createdBy);
 		
-		if (boundary.getCreatedBy() != null) {
-			rv.setCreatedBy(boundary.getCreatedBy());
-		}else {
-			CreatedBy cb = new CreatedBy();
-			/// check with eyal
-			rv.setCreatedBy(new CreatedBy());
-		}
-		
-		return rv;
+		return entity;
 
 	}
 	
