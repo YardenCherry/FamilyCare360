@@ -19,31 +19,7 @@ public class MiniAppCommandBoundary {
     public MiniAppCommandBoundary() {
     }
 
-    public MiniAppCommandBoundary(MiniAppCommandEntity entity) {
-        String[] splitId = entity.getCommandId().split("_");
-        this.commandId = new CommandId();
-        this.getCommandId().setSuperApp(splitId[0]);
-        this.getCommandId().setMiniApp(splitId[1]);
-        this.getCommandId().setId(splitId[2]);
-        this.setCommand(entity.getCommand());
-        this.setTargetObject(entity.getTargetObject());
-        this.setInvocationTimeStamp(entity.getInvocationTimeStamp());
-        this.setInvokedBy(entity.getInvokedBy());
-        this.setCommandAttributes(entity.getCommandAttributes());
-    }
-
-    public MiniAppCommandEntity toEntity() {
-        MiniAppCommandEntity entity = new MiniAppCommandEntity();
-        entity.setCommand(this.getCommand());
-        entity.setCommandId(this.getCommandId().getSuperApp() + "_" + this.getCommandId().getMiniApp() + "_" + this.getCommandId().getId());
-        entity.setMiniAppName(this.getCommandId().getMiniApp());
-        entity.setTargetObject(this.getTargetObject());
-        entity.setCommandAttributes(this.getCommandAttributes());
-        entity.setInvokedBy(this.getInvokedBy());
-        entity.setInvocationTimeStamp(this.getInvocationTimeStamp());
-        return entity;
-    }
-
+    
     public CommandId getCommandId() {
         return commandId;
     }

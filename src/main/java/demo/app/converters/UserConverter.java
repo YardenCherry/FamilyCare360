@@ -2,6 +2,7 @@ package demo.app.converters;
 
 import org.springframework.stereotype.Component;
 
+import demo.app.boundaries.NewUserBoundary;
 import demo.app.boundaries.UserBoundary;
 import demo.app.entities.UserEntity;
 import demo.app.objects.UserId;
@@ -9,34 +10,52 @@ import demo.app.objects.UserId;
 public class UserConverter {
 
     public UserBoundary toBoundary(UserEntity entity) {
-        UserBoundary rv = new UserBoundary();
+        UserBoundary boundary = new UserBoundary();
         UserId userId = new UserId();
         
         String[] idParts = entity.getId().split("_");
         userId.setEmail(idParts[0]);
         userId.setSuperapp(idParts[1]);
         
-        rv.setUserId(userId);
-        rv.setUserName(entity.getUserName());
-        rv.setRole(entity.getRole());
-        rv.setAvatar(entity.getAvatar());
+        boundary.setUserId(userId);
+        boundary.setUserName(entity.getUserName());
+        boundary.setRole(entity.getRole());
+        boundary.setAvatar(entity.getAvatar());
         
-        return rv;
+        return boundary;
     }
 
     public UserEntity toEntity(UserBoundary boundary) {
-        UserEntity rv = new UserEntity();
+        UserEntity entity = new UserEntity();
         
-        rv.setId(boundary.getUserId().getEmail() + "_" + boundary.getUserId().getSuperapp());
-        rv.setUserName(boundary.getUserName());
-        rv.setRole(boundary.getRole());
+        entity.setId(boundary.getUserId().getEmail() + "_" + boundary.getUserId().getSuperapp());
+        entity.setUserName(boundary.getUserName());
+        entity.setRole(boundary.getRole());
         
         if (boundary.getAvatar() != null) {
-            rv.setAvatar(boundary.getAvatar());
+        	entity.setAvatar(boundary.getAvatar());
         } else {
-            rv.setAvatar("");
+        	entity.setAvatar("");
         }
         
-        return rv;
+        return entity;
     }
+    
+public UserEntity toEntity(NewUserBoundary boundary) {
+		
+		if ( boundary.getEmail().isBlank() ||
+			 boundary.getUserName().isBlank() ||
+			 boundary.getRole() == null ||
+			 boundary.getAvatar().isBlank()
+			) {
+				throw new RuntimeException("You must enter all the details correct!");
+			} 
+		UserEntity entity = new UserEntity();		
+		entity.setUserName(boundary.getUserName());
+		entity.setAvatar(boundary.getAvatar());
+		entity.setRole(boundary.getRole());
+
+		return entity;
+
+	}
 }

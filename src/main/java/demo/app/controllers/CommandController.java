@@ -1,66 +1,28 @@
 package demo.app.controllers;
 
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import demo.app.boundaries.*;
 import demo.app.logics.CommandLogic;
-import demo.app.objects.CommandId;
-
 
 @RestController
-@RequestMapping(path = {"/miniapp"})
+@RequestMapping(path = { "/superapp/miniapp" })
 public class CommandController {
 
-    private CommandLogic commandLogic;
+	private CommandLogic commandLogic;
 
-    public CommandController(CommandLogic commandLogic) {
-        this.commandLogic = commandLogic;
-    }
-
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public MiniAppCommandBoundary storeInDatabase(@RequestBody MiniAppCommandBoundary miniAppCommandBoundary) {
-		System.err.println(miniAppCommandBoundary);
-		return this.commandLogic.storeInDatabase(miniAppCommandBoundary);
-	}
-    
-    @GetMapping(
-			path = { "/{id}" }, 
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public MiniAppCommandBoundary getSpecificMessage(@PathVariable("id") CommandId id) {
-		return this.commandLogic
-			.getSpecificDemoFromDatabase(id.getId())
-			.orElseThrow(()->new RuntimeException("coulde not find demo in database"));
+	public CommandController(CommandLogic commandLogic) {
+		this.commandLogic = commandLogic;
 	}
 
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public MiniAppCommandBoundary[] getManyMessages() {
-		return this.commandLogic
-			.getAll()
-			.toArray(new MiniAppCommandBoundary[0]);
-	}
-	
-	@DeleteMapping
-	public void deleteAll() {
-		this.commandLogic
-			.deleteAll();
-	}
-
-	@PutMapping(
-		path = {"/{id}"},
-		consumes = {MediaType.APPLICATION_JSON_VALUE})
-	public void update (
-			@PathVariable("id") String id,
-			@RequestBody MiniAppCommandBoundary update) {
-		this.commandLogic
-			.updateById(id, update);
-	}
+	 @PostMapping(path = "/{miniAppName}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	    public MiniAppCommandBoundary storeInDatabase(@PathVariable("miniAppName") String miniAppName, @RequestBody MiniAppCommandBoundary commandBoundary) {
+	        System.err.println(miniAppName);
+	        return this.commandLogic.storeInDatabase(miniAppName, commandBoundary);
+	    }
 }

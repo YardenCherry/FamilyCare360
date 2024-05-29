@@ -23,18 +23,17 @@ public class UserController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public UserBoundary storeInDatabase(@RequestBody UserBoundary userBoundary) {
-		System.err.println(userBoundary);
-		return this.userLogic.storeInDatabase(userBoundary);
+	public UserBoundary createUser(@RequestBody NewUserBoundary userBoundary) {
+		return this.userLogic.createNewUser(userBoundary);
 	}
     
     @GetMapping(
-			path = { "/{id}" }, 
+			path = { "/{superapp}/{email}/" }, 
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public UserBoundary getSpecificMessage(@PathVariable("id") UserId id) {
+	public UserBoundary getSpecificUser(@PathVariable("superapp") String superapp , @PathVariable("email") String email) {
 		return this.userLogic
-			.getSpecificDemoFromDatabase(id.getEmail()+"_"+id.getSuperapp())
-			.orElseThrow(()->new RuntimeException("coulde not find demo in database"));
+			.getSpecificUser(superapp,email)
+			.orElseThrow(()->new MyNotFoundException("coulde not find user in database"));
 	}
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -43,20 +42,15 @@ public class UserController {
 			.getAll()
 			.toArray(new UserBoundary[0]);
 	}
-	@DeleteMapping
-	public void deleteAll() {
-		this.userLogic
-			.deleteAll();
-	}
-
+	
 	@PutMapping(
-		path = {"/{id}"},
+		path = {"/{superapp}/{email}"},
 		consumes = {MediaType.APPLICATION_JSON_VALUE})
 	public void update (
-			@PathVariable("id") String id,
+			@PathVariable("superapp") String superapp , @PathVariable("email") String email,
 			@RequestBody UserBoundary update) {
 		this.userLogic
-			.updateById(id, update);
+			.updateById(superapp,email, update);
 	}
 	
 }

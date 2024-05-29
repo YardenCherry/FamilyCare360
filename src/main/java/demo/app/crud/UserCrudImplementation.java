@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import demo.app.boundaries.NewUserBoundary;
 import demo.app.boundaries.UserBoundary;
 import demo.app.converters.UserConverter;
 import demo.app.entities.UserEntity;
@@ -17,6 +18,8 @@ import demo.app.logics.UserLogic;
 public class UserCrudImplementation implements UserLogic {
 	private final UserCrud userCrud;
     private final UserConverter userConverter;
+	private String springApplicationName;
+
 
     public UserCrudImplementation(UserCrud userCrud, UserConverter userConverter) {
         this.userCrud = userCrud;
@@ -27,18 +30,22 @@ public class UserCrudImplementation implements UserLogic {
     public void setup(String name) {
         System.err.println("*** " + name);
     }
+	
 	@Override
     @Transactional
-    public UserBoundary storeInDatabase(UserBoundary userBoundary) {
-        UserEntity entity = userConverter.toEntity(userBoundary);
-        entity = this.userCrud.save(entity);
-        return userConverter.toBoundary(entity);
+    public UserBoundary createNewUser(NewUserBoundary userBoundary) {
+		UserEntity entity = userConverter.toEntity(userBoundary);
+		entity.setId(springApplicationName 
+						+ "_" 
+						+ userBoundary.getEmail());
+		entity = userCrud.save(entity);
+		return userConverter.toBoundary(entity);		
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<UserBoundary> getSpecificDemoFromDatabase(String id) {
-        return this.userCrud.findById(id)
+    public Optional<UserBoundary> getSpecificUser(String superapp,String email) {
+        return this.userCrud.findById(email+ "_" + superapp)
             .map(userConverter::toBoundary);
     }
 
@@ -55,13 +62,25 @@ public class UserCrudImplementation implements UserLogic {
 
     @Override
     @Transactional
-    public void deleteAll() {
-        this.userCrud.deleteAll();
-    }
+    public void updateById(String superapp,String email, UserBoundary update) {
+    		String id = email + "_" + superapp;
+    		UserEntity entity = this.userCrud
+    				.findById(id)
+    				.orElseThrow(() -> new RuntimeException("UserEntity with email: " + email 
+    						+ " and superapp " + superapp + " Does not exist in database"));
 
-    @Override
-    @Transactional
-    public void updateById(String id, UserBoundary update) {
-        // Implement the update logic as needed
-    }
+    		if (update.getUserName() != null)
+    			entity.setUserName(update.getUserName());
+    		
+    		if (update.getRole() != null) 
+    			entity.setRole(update.getRole());
+    			
+    		if (update.getAvatar() != null) 
+    				entity.setAvatar(update.getAvatar());
+    		
+    		this.userCrud.save(entity);
+    	
+    		System.err.println("updated in database: " + entity );
+
+    	}
 }

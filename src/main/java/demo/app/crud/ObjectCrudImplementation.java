@@ -1,6 +1,7 @@
 package demo.app.crud;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -42,7 +43,9 @@ public class ObjectCrudImplementation implements ObjectLogic {
 	{
 		ObjectId objectId=new ObjectId();
 		objectId.setId(UUID.randomUUID().toString());
+		objectId.setSuperApp(objectBoundary.getObjectId().getSuperApp());
 		objectBoundary.setObjectId(objectId);
+		objectBoundary.setCreationTimesTamp(new Date());
 		ObjectEntity entity = this.objectConverter.toEntity(objectBoundary);
 		
 		entity = this.objectCrud.save(entity);
@@ -51,9 +54,10 @@ public class ObjectCrudImplementation implements ObjectLogic {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Optional<ObjectBoundary> getSpecificDemoFromDatabase(String id) {
+	public Optional<ObjectBoundary> getSpecificObject(String id, String superapp) {
+		String objectId = id + "_" + superapp;
 		return this.objectCrud
-			.findById(id)
+			.findById(objectId)
 			.map(entity->this.objectConverter.toBoundary(entity));
 	}
 
@@ -73,25 +77,21 @@ public class ObjectCrudImplementation implements ObjectLogic {
 		return rv;
 	}
 
-	@Override
-	@Transactional//(readOnly = false)
-	public void deleteAll() {
-		this.objectCrud.deleteAll();
-		
-	}
 
 	@Override
-	public void updateById(String id, ObjectBoundary update) {
+	public void updateById(String id, String superapp, ObjectBoundary update) {
+		String objectId = id + "_" + superapp;
 		ObjectEntity existing = 
 				  this.objectCrud
-					.findById(id)
+					.findById(objectId)
 					.orElseThrow(()->new RuntimeException("could not find demo with id: " + id));
-		
-		// add the checks after ask eyal
-		
-		this.objectCrud
-		.save(existing);
-		
+		ObjectEntity temp = objectConverter.toEntity(update);
+		if (temp.getActive()!=null) existing.setActive(temp.getActive());
+		if (temp.getType()!=null) existing.setType(temp.getType());
+		if (temp.getAlias()!=null) existing.setAlias(temp.getAlias());
+		if (temp.getLocation()!=null) existing.setLocation(temp.getLocation());
+		if (temp.getObjectDetails()!=null) existing.setObjectDetails(temp.getObjectDetails());
+		this.objectCrud.save(existing);
 	}
 	
 	

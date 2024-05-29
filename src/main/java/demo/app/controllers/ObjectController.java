@@ -18,6 +18,7 @@ public class ObjectController {
     public ObjectController(ObjectLogic objectLogic) {
         this.objectLogic = objectLogic;
     }
+    
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ObjectBoundary storeInDatabase(@RequestBody ObjectBoundary objectBoundary) {
@@ -26,34 +27,29 @@ public class ObjectController {
 	}
     
     @GetMapping(
-			path = { "/{id}" }, 
+			path = { "/{superapp}/{id}" }, 
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ObjectBoundary getSpecificMessage(@PathVariable("id") ObjectId id) {
+	public ObjectBoundary getSpecificObject(@PathVariable("id") String id , @PathVariable("superapp") String superapp) {
 		return this.objectLogic
-			.getSpecificDemoFromDatabase(id.getId())
-			.orElseThrow(()->new RuntimeException("coulde not find demo in database"));
+			.getSpecificObject(id,superapp)
+			.orElseThrow(()->new MyNotFoundException("could not find object in database"));
 	}
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ObjectBoundary[] getManyMessages() {
+	public ObjectBoundary[] getObjects() {
 		return this.objectLogic
 			.getAll()
 			.toArray(new ObjectBoundary[0]);
 	}
 
-	@DeleteMapping
-	public void deleteAll() {
-		this.objectLogic
-			.deleteAll();
-	}
 
 	@PutMapping(
-		path = {"/{id}"},
+		path = {"/{superapp}/{id}"},
 		consumes = {MediaType.APPLICATION_JSON_VALUE})
 	public void update (
-			@PathVariable("id") String id,
+			@PathVariable("id") String id , @PathVariable("superapp") String superapp,
 			@RequestBody ObjectBoundary update) {
 		this.objectLogic
-			.updateById(id, update);
+			.updateById(id,superapp, update);
 	}
 }

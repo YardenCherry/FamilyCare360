@@ -7,10 +7,6 @@ import demo.app.boundaries.*;
 
 
 public interface CommandLogic {
-	public Optional<MiniAppCommandBoundary> getSpecificDemoFromDatabase(String id);
-	public List<MiniAppCommandBoundary> getAll();
-	public MiniAppCommandBoundary storeInDatabase(MiniAppCommandBoundary miniAppCommandBoundary);
-	public void deleteAll();
-	public void updateById(String id, MiniAppCommandBoundary update);
+	public MiniAppCommandBoundary storeInDatabase(String miniAppName,MiniAppCommandBoundary commandBoundary);
 }
 

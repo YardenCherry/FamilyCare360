@@ -1,19 +1,17 @@
 package demo.app.crud;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import jakarta.annotation.PostConstruct;
 
 import demo.app.boundaries.MiniAppCommandBoundary;
+import demo.app.converters.CommandConverter;
 import demo.app.entities.MiniAppCommandEntity;
 import demo.app.logics.CommandLogic;
-import demo.app.converters.CommandConverter;
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class CommandCrudImplementation implements CommandLogic {
@@ -37,49 +35,16 @@ public class CommandCrudImplementation implements CommandLogic {
 
     @Override
     @Transactional(readOnly = false)
-    public MiniAppCommandBoundary storeInDatabase(MiniAppCommandBoundary commandBoundary) {
-        commandBoundary.getCommandId().setId(UUID.randomUUID().toString());
+    public MiniAppCommandBoundary storeInDatabase(String miniAppName,MiniAppCommandBoundary commandBoundary) {
+    	commandBoundary.getCommandId().setId(UUID.randomUUID().toString());
+        commandBoundary.getCommandId().setSuperApp(commandBoundary.getCommandId().getSuperApp());
+        commandBoundary.getCommandId().setMiniApp(miniAppName);
         commandBoundary.setInvocationTimeStamp(new Date());
 
         MiniAppCommandEntity entity = this.commandConverter.toEntity(commandBoundary);
         entity = this.commandCrud.save(entity);
+
         return this.commandConverter.toBoundary(entity);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public Optional<MiniAppCommandBoundary> getSpecificDemoFromDatabase(String id) {
-        return this.commandCrud.findById(id).map(this.commandConverter::toBoundary);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<MiniAppCommandBoundary> getAll() {
-        List<MiniAppCommandEntity> entities = this.commandCrud.findAll();
-        List<MiniAppCommandBoundary> boundaries = new ArrayList<>();
-        for (MiniAppCommandEntity entity : entities) {
-            boundaries.add(this.commandConverter.toBoundary(entity));
-        }
-        return boundaries;
-    }
-
-    @Override
-    @Transactional(readOnly = false)
-    public void deleteAll() {
-        this.commandCrud.deleteAll();
-    }
-
-    @Override
-    @Transactional(readOnly = false)
-    public void updateById(String id, MiniAppCommandBoundary update) {
-        MiniAppCommandEntity existing = this.commandCrud.findById(id).orElseThrow(() -> new RuntimeException("could not find command with id: " + id));
-
-        // ignore input id and timestamp
-        existing.setCommand(update.getCommand());
-        existing.setTargetObject(update.getTargetObject());
-        existing.setCommandAttributes(update.getCommandAttributes());
-        existing.setInvokedBy(update.getInvokedBy());
-        
-        this.commandCrud.save(existing);
-    }
 }

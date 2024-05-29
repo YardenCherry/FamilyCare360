@@ -2,7 +2,6 @@ package demo.app.objects;
 
 public class ObjectId {
     private String superApp;
-
     private String id;
 
     public ObjectId() {
