@@ -41,13 +41,19 @@ public class AdminCrudImplementation implements AdminLogic {
 	@Override
 	@Transactional
 	public void deleteAllUsers() {
-		this.userCrud.deleteAll();
+		if (!userCrud.existsById(springApplicationName + "_admin")) {
+            throw new MyForbiddenException("Only admins can delete all users");
+        }
+        this.userCrud.deleteAll();
 		System.err.println("All user entries Deleted");
 	}
 
 	@Override
 	@Transactional
 	public void deleteAllObjects() {
+		if (!objectCrud.existsById(springApplicationName + "_admin")) {
+            throw new MyForbiddenException("Only admins can delete all objects");
+        }
 		this.objectCrud.deleteAll();
 		System.err.println("All object entries Deleted");
 	}
@@ -55,6 +61,9 @@ public class AdminCrudImplementation implements AdminLogic {
 	@Override
 	@Transactional
 	public void deleteAllCommandsHistory() {
+		if (!commandCrud.existsById(springApplicationName + "_admin")) {
+            throw new MyForbiddenException("Only admins can delete all command histories");
+        }
 		this.commandCrud.deleteAll();
 		System.err.println("All commands entries Deleted");
 	}
@@ -76,6 +85,9 @@ public class AdminCrudImplementation implements AdminLogic {
 	@Override
 	@Transactional(readOnly = true)
 	public List<MiniAppCommandBoundary> getAllCommandsByMiniAppName(String miniAppName) {
+		if (miniAppName == null || miniAppName.trim().isEmpty()) {
+            throw new MyBadRequestException("Invalid miniAppName");
+        }
 		return this.commandCrud.findAllByMiniAppName(miniAppName).stream().map(this.commandConverter::toBoundary)
 				.peek(System.err::println).toList();
 	}

@@ -43,7 +43,9 @@ public class UserController {
 	@PutMapping(path = { "/{superapp}/{email}" }, consumes = { MediaType.APPLICATION_JSON_VALUE })
 	public void update(@PathVariable("superapp") String superapp, @PathVariable("email") String email,
 			@RequestBody UserBoundary update) {
-		this.userLogic.updateById(superapp, email, update);
+		 this.userLogic.updateById(superapp, email, update)
+		.orElseThrow(() -> new MyNotFoundException(
+                "UserEntity with email: " + email + " and superapp " + superapp + " does not exist in database"));
 	}
 
 }

@@ -13,5 +13,5 @@ public interface UserLogic {
 
 	public List<UserBoundary> getAll();
 
-	public void updateById(String superapp, String email, UserBoundary update);
+	public Optional<UserBoundary> updateById(String superapp, String email, UserBoundary update);
 }
