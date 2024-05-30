@@ -21,7 +21,6 @@ public class AdminCrudImplementation implements AdminLogic {
     private UserCrud userCrud;
     private UserConverter userConverter;
     private ObjectCrud objectCrud;
-    private ObjectConverter objectConverter;
     private CommandCrud commandCrud;
     private CommandConverter commandConverter;
 
@@ -34,11 +33,10 @@ public class AdminCrudImplementation implements AdminLogic {
     }
 
     public AdminCrudImplementation(UserCrud userCrud, UserConverter userConverter, ObjectCrud objectCrud,
-                                   ObjectConverter objectConverter, CommandCrud commandCrud, CommandConverter commandConverter) {
+                                    CommandCrud commandCrud, CommandConverter commandConverter) {
         this.userCrud = userCrud;
         this.userConverter = userConverter;
         this.objectCrud = objectCrud;
-        this.objectConverter = objectConverter;
         this.commandCrud = commandCrud;
         this.commandConverter = commandConverter;
     }
@@ -86,17 +84,13 @@ public class AdminCrudImplementation implements AdminLogic {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ObjectBoundary> getAllObjects() {
-        return this.objectCrud.findAll()
-                .stream()
-                .peek(entity -> System.err.println("* " + entity))
-                .map(this.objectConverter::toBoundary)
-                .toList();
+    public List<MiniAppCommandBoundary> getAllCommandsByMiniAppName(String miniAppName) {
+        return this.commandCrud
+        		.findAllByMiniAppName(miniAppName)
+        		.stream()
+        		.map(this.commandConverter::toBoundary)
+        		.peek(System.err::println)
+        		.toList();
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public Optional<MiniAppCommandBoundary> getCommandsOfSpecificMiniApp(String miniAppName) {
-        return Optional.empty();
-    }
 }

@@ -62,6 +62,7 @@ public class CommandConverter {
         
         if (boundary.getCommandId() != null) {
             entity.setCommandId(String.join("_", boundary.getCommandId().getSuperApp(), boundary.getCommandId().getMiniApp(),boundary.getCommandId().getId() ));
+            entity.setMiniAppName(boundary.getCommandId().getMiniApp());
         } else {
             throw new IllegalArgumentException("Command ID cannot be null");
         }

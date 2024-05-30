@@ -18,9 +18,7 @@ public interface AdminLogic {
 	public List<UserBoundary> getAllUsers();
 	
 	public List<MiniAppCommandBoundary> getAllCommands();
-	
-	public List<ObjectBoundary> getAllObjects();
-	
-	public Optional<MiniAppCommandBoundary> getCommandsOfSpecificMiniApp(String miniAppName);
+		
+	public List<MiniAppCommandBoundary> getAllCommandsByMiniAppName(String miniAppName);
 
 }

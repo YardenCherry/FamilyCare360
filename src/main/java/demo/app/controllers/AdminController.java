@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -63,30 +64,12 @@ public class AdminController {
 		}
 		
 		@GetMapping(
-				path = {"/superapp/admin/objects"},
+				path = {"/superapp/admin/miniapp/{miniAppName}"},
 				produces = MediaType.APPLICATION_JSON_VALUE)
-		public ObjectBoundary[] getAllObjects() {
+		public MiniAppCommandBoundary[] getCommandsOfSpecificMiniApp(@PathVariable ("miniAppName") String miniAppName) {
 			return adminLogic
-					.getAllObjects()
-					.toArray(new ObjectBoundary[0]);
+					.getAllCommandsByMiniAppName(miniAppName)
+					.toArray(new MiniAppCommandBoundary[0]);
 		}
 
-//		@Override
-//		@Transactional(readOnly = true)
-//		public Optional<MiniAppCommandBoundary> getCommandsOfSpecificMiniApp(String miniAppName) {
-//			
-//		//	String id = superapp + "#" + email;
-//			Optional<UserEntity> optionalEntity = this.commandCrud.findBy(id);	
-//			
-//			if (!optionalEntity.isEmpty()) {
-//				System.err.println("Read from Database: " + optionalEntity.get());
-//			}else {
-//				System.err.println("UserEntity with email: " + email 
-//						+ " and superapp " + superapp + " Does not exist in database");
-//			}
-//			
-//			return optionalEntity
-//					.map(this.userConverter::toBoundary);
-//			return Optional.empty();
-//		}
 }

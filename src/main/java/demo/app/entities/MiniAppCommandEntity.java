@@ -19,6 +19,7 @@ public class MiniAppCommandEntity {
 	
 	@Id
 	private String commandId;
+	private String miniAppName; //to search specific miniapp by name
 	private String command;
 	private String targetObject;
 	@Temporal(TemporalType.TIMESTAMP)
@@ -41,6 +42,14 @@ public class MiniAppCommandEntity {
 		this.commandId = commandId;
 	}
 	
+	public String getMiniAppName() {
+        return miniAppName;
+    }
+
+    public void setMiniAppName(String miniAppName) {
+        this.miniAppName = miniAppName;
+    }
+
 	public String getTargetObject() {
 		return targetObject;
 	}
@@ -85,6 +94,7 @@ public class MiniAppCommandEntity {
 	@Override
 	public String toString() {
 		return "CommandEntity [commandId=" + commandId 
+				+ ", miniAppName=" + miniAppName 
 				+ ", targtObject=" + targetObject 
 				+ ", command=" + command
 				+ ", invocationTimeStamp=" + invocationTimeStamp 
