@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import demo.app.boundaries.*;
+import demo.app.boundaries.MiniAppCommandBoundary;
 import demo.app.logics.CommandLogic;
 
 @RestController
@@ -20,9 +20,10 @@ public class CommandController {
 		this.commandLogic = commandLogic;
 	}
 
-	 @PostMapping(path = "/{miniAppName}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	    public MiniAppCommandBoundary storeInDatabase(@PathVariable("miniAppName") String miniAppName, @RequestBody MiniAppCommandBoundary commandBoundary) {
-	        System.err.println(miniAppName);
-	        return this.commandLogic.storeInDatabase(miniAppName, commandBoundary);
-	    }
+	@PostMapping(path = "/{miniAppName}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public MiniAppCommandBoundary storeInDatabase(@PathVariable("miniAppName") String miniAppName,
+			@RequestBody MiniAppCommandBoundary commandBoundary) {
+		System.err.println(miniAppName);
+		return this.commandLogic.storeInDatabase(miniAppName, commandBoundary);
+	}
 }

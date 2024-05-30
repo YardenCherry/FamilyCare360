@@ -1,14 +1,16 @@
 package demo.app.objects;
 
 public class CreatedBy {
-	
+
 	private UserId userId;
-	
-	public CreatedBy() {}
-	
+
+	public CreatedBy() {
+	}
+
 	public CreatedBy(UserId userId) {
 		this.userId = userId;
 	}
+
 	public UserId getUserId() {
 		return userId;
 	}
@@ -19,8 +21,6 @@ public class CreatedBy {
 
 	@Override
 	public String toString() {
-		return "CreatedBy{" +
-				"userId=" + userId +
-				'}';
+		return "CreatedBy{" + "userId=" + userId + '}';
 	}
 }

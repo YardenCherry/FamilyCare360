@@ -1,12 +1,7 @@
 package demo.app.logics;
 
-import java.util.List;
-import java.util.Optional;
-
-import demo.app.boundaries.*;
-
+import demo.app.boundaries.MiniAppCommandBoundary;
 
 public interface CommandLogic {
-	public MiniAppCommandBoundary storeInDatabase(String miniAppName,MiniAppCommandBoundary commandBoundary);
+	public MiniAppCommandBoundary storeInDatabase(String miniAppName, MiniAppCommandBoundary commandBoundary);
 }
-

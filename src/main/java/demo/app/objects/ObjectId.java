@@ -1,33 +1,30 @@
 package demo.app.objects;
 
 public class ObjectId {
-    private String superApp;
-    private String id;
+	private String superapp;
+	private String id;
 
-    public ObjectId() {
-    }
+	public ObjectId() {
+	}
 
-    public void setSuperApp(String superApp) {
-        this.superApp = superApp;
-    }
+	public void setSuperApp(String superapp) {
+		this.superapp = superapp;
+	}
 
-    public String getSuperApp() {
-        return this.superApp;
-    }
+	public String getSuperApp() {
+		return this.superapp;
+	}
 
-    public String getId() {
-        return this.id;
-    }
+	public String getId() {
+		return this.id;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    @Override
-    public String toString() {
-        return "ObjectId{" +
-                "id='" + id + "/n" +
-                ", superApp='" + superApp + "/n" +
-                '}';
-    }
+	@Override
+	public String toString() {
+		return "ObjectId{" + "id='" + id + "/n" + ", superapp='" + superapp + "/n" + '}';
+	}
 }

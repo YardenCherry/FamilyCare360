@@ -15,36 +15,36 @@ import jakarta.annotation.PostConstruct;
 
 @Service
 public class CommandCrudImplementation implements CommandLogic {
-    private CommandCrud commandCrud;
-    private CommandConverter commandConverter;
+	private CommandCrud commandCrud;
+	private CommandConverter commandConverter;
 
-    public CommandCrudImplementation(CommandCrud commandCrud, CommandConverter commandConverter) {
-        this.commandCrud = commandCrud;
-        this.commandConverter = commandConverter;
-    }
+	public CommandCrudImplementation(CommandCrud commandCrud, CommandConverter commandConverter) {
+		this.commandCrud = commandCrud;
+		this.commandConverter = commandConverter;
+	}
 
-    @Value("${spring.application.name:supperApp}")
-    public void setup(String name) {
-        System.err.println("*** " + name);
-    }
+	@Value("${spring.application.name:supperapp}")
+	public void setup(String name) {
+		System.err.println("*** " + name);
+	}
 
-    @PostConstruct
-    public void setupIsDone() {
-        System.err.println("Command logic implementation is ready");
-    }
+	@PostConstruct
+	public void setupIsDone() {
+		System.err.println("Command logic implementation is ready");
+	}
 
-    @Override
-    @Transactional(readOnly = false)
-    public MiniAppCommandBoundary storeInDatabase(String miniAppName,MiniAppCommandBoundary commandBoundary) {
-    	commandBoundary.getCommandId().setId(UUID.randomUUID().toString());
-        commandBoundary.getCommandId().setSuperApp(commandBoundary.getCommandId().getSuperApp());
-        commandBoundary.getCommandId().setMiniApp(miniAppName);
-        commandBoundary.setInvocationTimeStamp(new Date());
+	@Override
+	@Transactional(readOnly = false)
+	public MiniAppCommandBoundary storeInDatabase(String miniAppName, MiniAppCommandBoundary commandBoundary) {
+		commandBoundary.getCommandId().setId(UUID.randomUUID().toString());
+		commandBoundary.getCommandId().setSuperApp(commandBoundary.getCommandId().getSuperApp());
+		commandBoundary.getCommandId().setMiniApp(miniAppName);
+		commandBoundary.setInvocationTimeStamp(new Date());
 
-        MiniAppCommandEntity entity = this.commandConverter.toEntity(commandBoundary);
-        entity = this.commandCrud.save(entity);
+		MiniAppCommandEntity entity = this.commandConverter.toEntity(commandBoundary);
+		entity = this.commandCrud.save(entity);
 
-        return this.commandConverter.toBoundary(entity);
-    }
+		return this.commandConverter.toBoundary(entity);
+	}
 
 }

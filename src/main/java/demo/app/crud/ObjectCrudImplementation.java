@@ -19,35 +19,34 @@ import jakarta.annotation.PostConstruct;
 
 @Service
 public class ObjectCrudImplementation implements ObjectLogic {
-	private ObjectCrud objectCrud ;
+	private ObjectCrud objectCrud;
 	private ObjectConverter objectConverter;
 
-	public ObjectCrudImplementation(ObjectCrud objectCrud,ObjectConverter objectConverter ) {
+	public ObjectCrudImplementation(ObjectCrud objectCrud, ObjectConverter objectConverter) {
 		this.objectCrud = objectCrud;
 		this.objectConverter = objectConverter;
 	}
-	
-	@Value("${spring.application.name:supperApp}")
+
+	@Value("${spring.application.name:supperapp}")
 	public void setup(String name) {
 		System.err.println("*** " + name);
 	}
 
-	@PostConstruct  
+	@PostConstruct
 	public void setupIsDone() {
 		System.err.println("demo logic implementation is ready");
 	}
-	
+
 	@Override
 	@Transactional(readOnly = false)
-	public ObjectBoundary storeInDatabase(ObjectBoundary objectBoundary)
-	{
-		ObjectId objectId=new ObjectId();
+	public ObjectBoundary storeInDatabase(ObjectBoundary objectBoundary) {
+		ObjectId objectId = new ObjectId();
 		objectId.setId(UUID.randomUUID().toString());
 		objectId.setSuperApp(objectBoundary.getObjectId().getSuperApp());
 		objectBoundary.setObjectId(objectId);
-		objectBoundary.setCreationTimesTamp(new Date());
+		objectBoundary.setCreationTimestamp(new Date());
 		ObjectEntity entity = this.objectConverter.toEntity(objectBoundary);
-		
+
 		entity = this.objectCrud.save(entity);
 		return this.objectConverter.toBoundary(entity);
 	}
@@ -56,43 +55,40 @@ public class ObjectCrudImplementation implements ObjectLogic {
 	@Transactional(readOnly = true)
 	public Optional<ObjectBoundary> getSpecificObject(String id, String superapp) {
 		String objectId = id + "_" + superapp;
-		return this.objectCrud
-			.findById(objectId)
-			.map(entity->this.objectConverter.toBoundary(entity));
+		return this.objectCrud.findById(objectId).map(entity -> this.objectConverter.toBoundary(entity));
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public List<ObjectBoundary> getAll() {
-		List<ObjectEntity> entities = 
-		  this.objectCrud
-			.findAll();
-		
+		List<ObjectEntity> entities = this.objectCrud.findAll();
+
 		List<ObjectBoundary> rv = new ArrayList<>();
-		
+
 		for (ObjectEntity entity : entities) {
 			rv.add(this.objectConverter.toBoundary(entity));
 		}
-		
+
 		return rv;
 	}
-
 
 	@Override
 	public void updateById(String id, String superapp, ObjectBoundary update) {
 		String objectId = id + "_" + superapp;
-		ObjectEntity existing = 
-				  this.objectCrud
-					.findById(objectId)
-					.orElseThrow(()->new RuntimeException("could not find demo with id: " + id));
+		ObjectEntity existing = this.objectCrud.findById(objectId)
+				.orElseThrow(() -> new RuntimeException("could not find demo with id: " + id));
 		ObjectEntity temp = objectConverter.toEntity(update);
-		if (temp.getActive()!=null) existing.setActive(temp.getActive());
-		if (temp.getType()!=null) existing.setType(temp.getType());
-		if (temp.getAlias()!=null) existing.setAlias(temp.getAlias());
-		if (temp.getLocation()!=null) existing.setLocation(temp.getLocation());
-		if (temp.getObjectDetails()!=null) existing.setObjectDetails(temp.getObjectDetails());
+		if (temp.getActive() != null)
+			existing.setActive(temp.getActive());
+		if (temp.getType() != null)
+			existing.setType(temp.getType());
+		if (temp.getAlias() != null)
+			existing.setAlias(temp.getAlias());
+		if (temp.getLocation() != null)
+			existing.setLocation(temp.getLocation());
+		if (temp.getObjectDetails() != null)
+			existing.setObjectDetails(temp.getObjectDetails());
 		this.objectCrud.save(existing);
 	}
-	
-	
+
 }

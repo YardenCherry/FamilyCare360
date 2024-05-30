@@ -1,37 +1,35 @@
 package demo.app.objects;
 
 public class Location {
-    private double lat;
-    private double lng;
-    
-    public Location() {}
+	private double lat;
+	private double lng;
 
-    public Location(double lat, double lng) {
-        this.lat = lat;
-        this.lng = lng;
-    }
+	public Location() {
+	}
 
-    public double getLat() {
-        return lat;
-    }
+	public Location(double lat, double lng) {
+		this.lat = lat;
+		this.lng = lng;
+	}
 
-    public void setLat(double lat) {
-        this.lat = lat;
-    }
+	public double getLat() {
+		return lat;
+	}
 
-    public double getLng() {
-        return lng;
-    }
+	public void setLat(double lat) {
+		this.lat = lat;
+	}
 
-    public void setLng(double lng) {
-        this.lng = lng;
-    }
+	public double getLng() {
+		return lng;
+	}
 
-    @Override
-    public String toString() {
-        return "Location{" +
-               "lat=" + lat +
-               ", lng=" + lng +
-               '}';
-    }
+	public void setLng(double lng) {
+		this.lng = lng;
+	}
+
+	@Override
+	public String toString() {
+		return "Location{" + "lat=" + lat + ", lng=" + lng + '}';
+	}
 }

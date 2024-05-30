@@ -1,29 +1,28 @@
 package demo.app.objects;
 
 public class CommandId {
-	
-	private String superApp;
-	private String miniApp;
+
+	private String superapp;
+	private String miniapp;
 	private String id;
-	
-	public CommandId () {}
-	
-	
+
+	public CommandId() {
+	}
 
 	public String getSuperApp() {
-		return superApp;
+		return superapp;
 	}
 
 	public void setSuperApp(String superApp) {
-		this.superApp = superApp;
+		this.superapp = superApp;
 	}
 
 	public String getMiniApp() {
-		return miniApp;
+		return miniapp;
 	}
 
 	public void setMiniApp(String miniApp) {
-		this.miniApp = miniApp;
+		this.miniapp = miniApp;
 	}
 
 	public String getId() {
@@ -33,13 +32,10 @@ public class CommandId {
 	public void setId(String id) {
 		this.id = id;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "CommandId:/n "
-				+ "{superApp=" + superApp + "/n"
-						+ ", miniApp=" + miniApp 
-						+ "/n, id=" + id + "}";
+		return "CommandId:/n " + "{superapp=" + superapp + "/n" + ", miniApp=" + miniapp + "/n, id=" + id + "}";
 	}
 
 }

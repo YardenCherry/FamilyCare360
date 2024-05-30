@@ -3,94 +3,74 @@ package demo.app.boundaries;
 import java.util.Date;
 import java.util.Map;
 
-import demo.app.entities.MiniAppCommandEntity;
 import demo.app.objects.CommandId;
 import demo.app.objects.CreatedBy;
 import demo.app.objects.TargetObject;
 
 public class MiniAppCommandBoundary {
-    private CommandId commandId;
-    private String command;
-    private TargetObject targetObject;
-    private Date invocationTimeStamp;
-    private CreatedBy invokedBy;
-    private Map<String, Object> commandAttributes;
+	private CommandId commandId;
+	private String command;
+	private TargetObject targetObject;
+	private Date invocationTimeStamp;
+	private CreatedBy invokedBy;
+	private Map<String, Object> commandAttributes;
 
-    public MiniAppCommandBoundary() {
-    }
+	public MiniAppCommandBoundary() {
+	}
 
-    
-    public CommandId getCommandId() {
-        return commandId;
-    }
+	public CommandId getCommandId() {
+		return commandId;
+	}
 
+	public void setCommandId(CommandId commandId) {
+		this.commandId = commandId;
+	}
 
-    public void setCommandId(CommandId commandId) {
-        this.commandId = commandId;
-    }
+	public String getCommand() {
+		return command;
+	}
 
+	public void setCommand(String command) {
+		this.command = command;
+	}
 
-    public String getCommand() {
-        return command;
-    }
+	public TargetObject getTargetObject() {
+		return targetObject;
+	}
 
+	public void setTargetObject(TargetObject targetObject) {
+		this.targetObject = targetObject;
+	}
 
-    public void setCommand(String command) {
-        this.command = command;
-    }
+	public Date getInvocationTimeStamp() {
+		return invocationTimeStamp;
+	}
 
+	public void setInvocationTimeStamp(Date invocationTimeStamp) {
+		this.invocationTimeStamp = invocationTimeStamp;
+	}
 
-    public TargetObject getTargetObject() {
-        return targetObject;
-    }
+	public CreatedBy getInvokedBy() {
+		return invokedBy;
+	}
 
+	public void setInvokedBy(CreatedBy invokedBy) {
+		this.invokedBy = invokedBy;
+	}
 
-    public void setTargetObject(TargetObject targetObject) {
-        this.targetObject = targetObject;
-    }
+	public Map<String, Object> getCommandAttributes() {
+		return commandAttributes;
+	}
 
+	public void setCommandAttributes(Map<String, Object> commandAttributes) {
+		this.commandAttributes = commandAttributes;
+	}
 
-    public Date getInvocationTimeStamp() {
-        return invocationTimeStamp;
-    }
-
-
-    public void setInvocationTimeStamp(Date invocationTimeStamp) {
-        this.invocationTimeStamp = invocationTimeStamp;
-    }
-
-
-    public CreatedBy getInvokedBy() {
-        return invokedBy;
-    }
-
-
-    public void setInvokedBy(CreatedBy invokedBy) {
-        this.invokedBy = invokedBy;
-    }
-
-
-    public Map<String, Object> getCommandAttributes() {
-        return commandAttributes;
-    }
-
-
-    public void setCommandAttributes(Map<String, Object> commandAttributes) {
-        this.commandAttributes = commandAttributes;
-    }
-
-
-    @Override
-    public String toString() {
-        return "MiniAppCommandBoundary{" +
-                "commandId=" + commandId +
-                ", command='" + command + '\'' +
-                ", targetObject=" + targetObject +
-                ", invocationTimeStamp=" + invocationTimeStamp +
-                ", invokedBy=" + invokedBy +
-                ", commandAttributes=" + commandAttributes +
-                '}';
-    }
-
+	@Override
+	public String toString() {
+		return "MiniAppCommandBoundary{" + "commandId=" + commandId + ", command='" + command + '\'' + ", targetObject="
+				+ targetObject + ", invocationTimeStamp=" + invocationTimeStamp + ", invokedBy=" + invokedBy
+				+ ", commandAttributes=" + commandAttributes + '}';
+	}
 
 }
