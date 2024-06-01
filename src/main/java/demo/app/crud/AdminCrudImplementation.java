@@ -25,7 +25,6 @@ public class AdminCrudImplementation implements AdminLogic {
 
 	@Value("${spring.application.name:supperApp}")
 	public void setSpringApplicationName(String springApplicationName) {
-		this.springApplicationName = springApplicationName;
 		System.err.println("The Spring Application name is: " + this.springApplicationName);
 	}
 
@@ -41,9 +40,6 @@ public class AdminCrudImplementation implements AdminLogic {
 	@Override
 	@Transactional
 	public void deleteAllUsers() {
-		if (!userCrud.existsById(springApplicationName + "_admin")) {
-            throw new MyForbiddenException("Only admins can delete all users");
-        }
         this.userCrud.deleteAll();
 		System.err.println("All user entries Deleted");
 	}
@@ -51,9 +47,6 @@ public class AdminCrudImplementation implements AdminLogic {
 	@Override
 	@Transactional
 	public void deleteAllObjects() {
-		if (!objectCrud.existsById(springApplicationName + "_admin")) {
-            throw new MyForbiddenException("Only admins can delete all objects");
-        }
 		this.objectCrud.deleteAll();
 		System.err.println("All object entries Deleted");
 	}
@@ -61,9 +54,7 @@ public class AdminCrudImplementation implements AdminLogic {
 	@Override
 	@Transactional
 	public void deleteAllCommandsHistory() {
-		if (!commandCrud.existsById(springApplicationName + "_admin")) {
-            throw new MyForbiddenException("Only admins can delete all command histories");
-        }
+
 		this.commandCrud.deleteAll();
 		System.err.println("All commands entries Deleted");
 	}

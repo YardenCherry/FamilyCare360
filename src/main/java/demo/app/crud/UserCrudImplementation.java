@@ -37,8 +37,14 @@ public class UserCrudImplementation implements UserLogic {
     @Transactional
     public UserBoundary createNewUser(NewUserBoundary userBoundary) {
         validateNewUserBoundary(userBoundary);
+
+        String userId = springApplicationName + "_" + userBoundary.getEmail();
+        if (userCrud.existsById(userId)) {
+            throw new MyBadRequestException("User with email " + userBoundary.getEmail() + " already exists.");
+        }
+
         UserEntity entity = userConverter.toEntity(userBoundary);
-        entity.setId(springApplicationName + "_" + userBoundary.getEmail());
+        entity.setId(userId);
         entity = userCrud.save(entity);
         return userConverter.toBoundary(entity);
     }
@@ -65,11 +71,15 @@ public class UserCrudImplementation implements UserLogic {
     @Transactional
     public Optional<UserBoundary> updateById(String superapp, String email, UserBoundary update) {
         validateEmail(email);
-        validateUserBoundary(update);
         String id = superapp + "_" + email;
         UserEntity entity = this.userCrud.findById(id).orElseThrow(() -> new MyBadRequestException(
                 "UserEntity with email: " + email + " and superapp " + superapp + " does not exist in database"));
-
+        
+        if (update.getUserId().getEmail() != null ) {
+            validateEmail(update.getUserId().getEmail());
+            entity.setId(superapp + "_" + update.getUserId().getEmail());
+        }
+        
         if (update.getUserName() != null && !update.getUserName().trim().isEmpty()) {
             entity.setUserName(update.getUserName());
         }
@@ -97,21 +107,6 @@ public class UserCrudImplementation implements UserLogic {
         }
         if (userBoundary.getUserName() == null || userBoundary.getUserName().length() < 2) {
             throw new MyBadRequestException("Username must be at least 2 characters");
-        }
-        if (userBoundary.getAvatar() == null || userBoundary.getAvatar().isEmpty()) {
-            throw new MyBadRequestException("Avatar is required");
-        }
-    }
-
-    private void validateUserBoundary(UserBoundary userBoundary) {
-        if (userBoundary.getUserId() == null || userBoundary.getUserId().getEmail() == null || !isValidEmail(userBoundary.getUserId().getEmail())) {
-            throw new MyBadRequestException("Invalid email format");
-        }
-        if (userBoundary.getRole() == null || !isValidRole(userBoundary.getRole().toString())) {
-            throw new MyBadRequestException("Invalid role");
-        }
-        if (userBoundary.getUserName() == null || userBoundary.getUserName().length() < 1) {
-            throw new MyBadRequestException("Username must be at least 1 characters");
         }
         if (userBoundary.getAvatar() == null || userBoundary.getAvatar().isEmpty()) {
             throw new MyBadRequestException("Avatar is required");

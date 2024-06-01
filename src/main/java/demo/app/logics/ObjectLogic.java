@@ -12,5 +12,5 @@ public interface ObjectLogic {
 
 	public List<ObjectBoundary> getAll();
 
-	public void updateById(String id, String superapp, ObjectBoundary update);
+	public Optional<ObjectBoundary> updateById(String id, String superapp, ObjectBoundary update);
 }

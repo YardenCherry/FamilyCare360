@@ -17,6 +17,7 @@ import jakarta.annotation.PostConstruct;
 public class CommandCrudImplementation implements CommandLogic {
 	private CommandCrud commandCrud;
 	private CommandConverter commandConverter;
+    private String springApplicationName;
 
 	public CommandCrudImplementation(CommandCrud commandCrud, CommandConverter commandConverter) {
 		this.commandCrud = commandCrud;
@@ -25,6 +26,7 @@ public class CommandCrudImplementation implements CommandLogic {
 
 	@Value("${spring.application.name:supperapp}")
 	public void setup(String name) {
+        this.springApplicationName = name;
 		System.err.println("*** " + name);
 	}
 
@@ -36,15 +38,31 @@ public class CommandCrudImplementation implements CommandLogic {
 	@Override
 	@Transactional(readOnly = false)
 	public MiniAppCommandBoundary storeInDatabase(String miniAppName, MiniAppCommandBoundary commandBoundary) {
+        validateCommandBoundary(commandBoundary);
+
 		commandBoundary.getCommandId().setId(UUID.randomUUID().toString());
-		commandBoundary.getCommandId().setSuperApp(commandBoundary.getCommandId().getSuperApp());
+		commandBoundary.getCommandId().setSuperApp(springApplicationName);
 		commandBoundary.getCommandId().setMiniApp(miniAppName);
 		commandBoundary.setInvocationTimeStamp(new Date());
-
+		commandBoundary.getTargetObject().getObjectId().setSuperApp(springApplicationName);
+		commandBoundary.getInvokedBy().getUserId().setSuperapp(springApplicationName);
 		MiniAppCommandEntity entity = this.commandConverter.toEntity(commandBoundary);
 		entity = this.commandCrud.save(entity);
 
 		return this.commandConverter.toBoundary(entity);
 	}
-
+	 private void validateCommandBoundary(MiniAppCommandBoundary commandBoundary) {
+	        if (commandBoundary == null) {
+	            throw new MyBadRequestException("CommandBoundary cannot be null.");
+	        }
+	        if (commandBoundary.getCommandId() == null || commandBoundary.getCommandId().getSuperApp() == null) {
+	            throw new MyBadRequestException("Command ID and SuperApp cannot be null.");
+	        }
+	        if (commandBoundary.getCommandId().getMiniApp() == null || commandBoundary.getCommandId().getMiniApp().trim().isEmpty()) {
+	            throw new MyBadRequestException("MiniApp cannot be null or empty.");
+	        }
+	        if (commandBoundary.getCommand() == null || commandBoundary.getCommand().trim().isEmpty()) {
+	            throw new MyBadRequestException("Command cannot be null or empty.");
+	        }
+	    }
 }

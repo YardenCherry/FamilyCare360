@@ -42,6 +42,8 @@ public class ObjectController {
 	@PutMapping(path = { "/{superapp}/{id}" }, consumes = { MediaType.APPLICATION_JSON_VALUE })
 	public void update(@PathVariable("id") String id, @PathVariable("superapp") String superapp,
 			@RequestBody ObjectBoundary update) {
-		this.objectLogic.updateById(id, superapp, update);
+		this.objectLogic.updateById(id, superapp, update)
+		.orElseThrow(() -> new MyNotFoundException(
+                "ObjectEntity with id: " + id + " and superapp " + superapp + " does not exist in database"));
 	}
 }
