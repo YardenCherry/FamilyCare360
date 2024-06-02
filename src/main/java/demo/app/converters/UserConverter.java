@@ -44,12 +44,10 @@ public class UserConverter {
 
 	public UserEntity toEntity(NewUserBoundary boundary) {
 
-		if (boundary.getEmail().isBlank() || boundary.getUserName().isBlank() || boundary.getRole() == null
-				|| boundary.getAvatar().isBlank()) {
-			throw new RuntimeException("You must enter all the details correct!");
-		}
 		UserEntity entity = new UserEntity();
 		entity.setUserName(boundary.getUserName());
+		if(boundary.getAvatar()==null || boundary.getAvatar().trim().isBlank())
+			boundary.setAvatar("");
 		entity.setAvatar(boundary.getAvatar());
 		entity.setRole(boundary.getRole());
 

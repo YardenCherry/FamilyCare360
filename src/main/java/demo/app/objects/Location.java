@@ -1,8 +1,8 @@
 package demo.app.objects;
 
 public class Location {
-	private double lat;
-	private double lng;
+	private Double lat;
+	private Double lng;
 
 	public Location() {
 	}
@@ -12,7 +12,7 @@ public class Location {
 		this.lng = lng;
 	}
 
-	public double getLat() {
+	public Double getLat() {
 		return lat;
 	}
 
@@ -20,7 +20,7 @@ public class Location {
 		this.lat = lat;
 	}
 
-	public double getLng() {
+	public Double getLng() {
 		return lng;
 	}
 

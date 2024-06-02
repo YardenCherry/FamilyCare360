@@ -49,6 +49,7 @@ public class ObjectCrudImplementation implements ObjectLogic {
 		objectBoundary.setObjectId(objectId);
 		objectBoundary.setCreationTimestamp(new Date());
 		objectBoundary.getCreatedBy().getUserId().setSuperapp(springApplicationName);
+		
 		ObjectEntity entity = this.objectConverter.toEntity(objectBoundary);
 
 		entity = this.objectCrud.save(entity);
@@ -85,14 +86,11 @@ public class ObjectCrudImplementation implements ObjectLogic {
 		ObjectEntity temp = objectConverter.toEntity(update);
 		if (update.getActive() != null)
 			existing.setActive(temp.getActive());
-		if (update.getType() != null)
-			existing.setType(temp.getType());
-		if (update.getAlias() != null)
-			existing.setAlias(temp.getAlias());
 		if (update.getLocation() != null)
 			existing.setLocation(temp.getLocation());
 		if (update.getObjectDetails() != null )
 			existing.setObjectDetails(temp.getObjectDetails());
+		
 		this.objectCrud.save(existing);
 		
 		System.err.println("Updated in database: " + existing);
@@ -105,6 +103,18 @@ public class ObjectCrudImplementation implements ObjectLogic {
         }
         if (objectBoundary.getObjectId() == null || objectBoundary.getObjectId().getSuperApp() == null) {
             throw new MyBadRequestException("Object ID and SuperApp cannot be null.");
+        }
+        
+        if (objectBoundary.getType() == null || objectBoundary.getType().isBlank()) {
+            throw new MyBadRequestException("Object type cannot be null.");
+        }
+        
+        if (objectBoundary.getAlias() == null || objectBoundary.getAlias().isBlank()) {
+            throw new MyBadRequestException("Object alias cannot be null.");
+        }
+        
+        if (objectBoundary.getCreatedBy() == null || objectBoundary.getCreatedBy().getUserId()==null || objectBoundary.getCreatedBy().getUserId().getEmail().isBlank()) {
+            throw new MyBadRequestException("CreatedBy and email cannot be null.");
         }
 	}
 

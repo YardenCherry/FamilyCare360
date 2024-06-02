@@ -60,13 +60,6 @@ public class ObjectConverter {
 	public ObjectEntity toEntity(ObjectBoundary boundary) {
 		ObjectEntity entity = new ObjectEntity();
 
-		if (boundary.getObjectId() != null || boundary.getObjectId().getId() != null
-				|| boundary.getObjectId().getSuperApp() != null) {
-			entity.setObjectID(boundary.getObjectId().getId() + "_" + boundary.getObjectId().getSuperApp());
-		} else {
-			throw new IllegalArgumentException("Object ID and SuperApp cannot be null");
-		}
-
 		entity.setType(boundary.getType());
 		entity.setAlias(boundary.getAlias());
 		entity.setCreationTimestamp(boundary.getCreationTimestamp());
@@ -79,7 +72,7 @@ public class ObjectConverter {
 		}
 
 		Location location = boundary.getLocation();
-		if (location != null) {
+		if (location != null && location.getLat()!=null && location.getLng()!=null) {
 			entity.setLocation(location.getLat() + "_" + location.getLng());
 		} else {
 			entity.setLocation("0_0");

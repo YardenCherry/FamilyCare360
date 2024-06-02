@@ -75,10 +75,12 @@ public class UserCrudImplementation implements UserLogic {
         UserEntity entity = this.userCrud.findById(id).orElseThrow(() -> new MyBadRequestException(
                 "UserEntity with email: " + email + " and superapp " + superapp + " does not exist in database"));
         
-        if (update.getUserId().getEmail() != null ) {
-            validateEmail(update.getUserId().getEmail());
-            entity.setId(superapp + "_" + update.getUserId().getEmail());
-        }
+//        if (update.getUserId().getEmail() != null ) {
+//        	if(userCrud.existsById(springApplicationName + "_" + update.getUserId().getEmail()) && !update.getUserId().getEmail().equals(email) )
+//                throw new MyBadRequestException("User with email " + update.getUserId().getEmail() + " already exists.");
+//            validateEmail(update.getUserId().getEmail());
+//            entity.setId(superapp + "_" + update.getUserId().getEmail());
+//        }
         
         if (update.getUserName() != null && !update.getUserName().trim().isEmpty()) {
             entity.setUserName(update.getUserName());
@@ -105,11 +107,8 @@ public class UserCrudImplementation implements UserLogic {
         if (userBoundary.getRole() == null || !isValidRole(userBoundary.getRole().toString())) {
             throw new MyBadRequestException("Invalid role");
         }
-        if (userBoundary.getUserName() == null || userBoundary.getUserName().length() < 2) {
-            throw new MyBadRequestException("Username must be at least 2 characters");
-        }
-        if (userBoundary.getAvatar() == null || userBoundary.getAvatar().isEmpty()) {
-            throw new MyBadRequestException("Avatar is required");
+        if (userBoundary.getUserName() == null || userBoundary.getUserName().length() < 1) {
+            throw new MyBadRequestException("Username must be at least 1 characters");
         }
     }
 

@@ -61,8 +61,8 @@ public class CommandCrudImplementation implements CommandLogic {
 	        if (commandBoundary.getCommandId().getMiniApp() == null || commandBoundary.getCommandId().getMiniApp().trim().isEmpty()) {
 	            throw new MyBadRequestException("MiniApp cannot be null or empty.");
 	        }
-	        if (commandBoundary.getCommand() == null || commandBoundary.getCommand().trim().isEmpty()) {
-	            throw new MyBadRequestException("Command cannot be null or empty.");
+	        if (commandBoundary.getInvokedBy() == null || commandBoundary.getInvokedBy().getUserId().getEmail().trim().isEmpty()) {
+	            throw new MyBadRequestException("User's email cannot be null or empty.");
 	        }
 	    }
 }
