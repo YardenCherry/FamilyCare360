@@ -59,7 +59,7 @@ public class ObjectConverter {
 
 	public ObjectEntity toEntity(ObjectBoundary boundary) {
 		ObjectEntity entity = new ObjectEntity();
-
+entity.setObjectID(boundary.getObjectId().getId()+"_"+boundary.getObjectId().getSuperApp());
 		entity.setType(boundary.getType());
 		entity.setAlias(boundary.getAlias());
 		entity.setCreationTimestamp(boundary.getCreationTimestamp());
