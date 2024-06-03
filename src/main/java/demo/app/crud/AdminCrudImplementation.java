@@ -40,7 +40,7 @@ public class AdminCrudImplementation implements AdminLogic {
 	@Override
 	@Transactional
 	public void deleteAllUsers() {
-        this.userCrud.deleteAll();
+		this.userCrud.deleteAll();
 		System.err.println("All user entries Deleted");
 	}
 
@@ -77,8 +77,8 @@ public class AdminCrudImplementation implements AdminLogic {
 	@Transactional(readOnly = true)
 	public List<MiniAppCommandBoundary> getAllCommandsByMiniAppName(String miniAppName) {
 		if (miniAppName == null || miniAppName.trim().isEmpty()) {
-            throw new MyBadRequestException("Invalid miniAppName");
-        }
+			throw new MyBadRequestException("Invalid miniAppName");
+		}
 		return this.commandCrud.findAllByMiniAppName(miniAppName).stream().map(this.commandConverter::toBoundary)
 				.peek(System.err::println).toList();
 	}

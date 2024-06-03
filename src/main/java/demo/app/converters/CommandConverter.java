@@ -60,29 +60,19 @@ public class CommandConverter {
 	public MiniAppCommandEntity toEntity(MiniAppCommandBoundary boundary) {
 		MiniAppCommandEntity entity = new MiniAppCommandEntity();
 
-		if (boundary.getCommandId() != null) {
-			entity.setCommandId(String.join("_", boundary.getCommandId().getSuperApp(),
-					boundary.getCommandId().getMiniApp(), boundary.getCommandId().getId()));
-			entity.setMiniAppName(boundary.getCommandId().getMiniApp());
-		} else {
-			throw new IllegalArgumentException("Command ID cannot be null");
-		}
+		entity.setCommandId(String.join("_", boundary.getCommandId().getSuperApp(),
+				boundary.getCommandId().getMiniApp(), boundary.getCommandId().getId()));
+		entity.setMiniAppName(boundary.getCommandId().getMiniApp());
 
 		entity.setCommand(boundary.getCommand());
 		entity.setInvocationTimeStamp(boundary.getInvocationTimeStamp());
 
-		// Handle TargetObject
-		if (boundary.getTargetObject() != null && boundary.getTargetObject().getObjectId() != null) {
-			TargetObject targetObject = boundary.getTargetObject();
-			entity.setTargetObject(
-					String.join("_", targetObject.getObjectId().getSuperApp(), targetObject.getObjectId().getId()));
-		}
+		TargetObject targetObject = boundary.getTargetObject();
+		entity.setTargetObject(
+				String.join("_", targetObject.getObjectId().getSuperApp(), targetObject.getObjectId().getId()));
 
-		// Handle InvokedBy
-		if (boundary.getInvokedBy() != null && boundary.getInvokedBy().getUserId() != null) {
-			UserId userId = boundary.getInvokedBy().getUserId();
-			entity.setInvokedBy(String.join("_", userId.getSuperapp(), userId.getEmail()));
-		}
+		UserId userId = boundary.getInvokedBy().getUserId();
+		entity.setInvokedBy(String.join("_", userId.getSuperapp(), userId.getEmail()));
 
 		entity.setCommandAttributes(boundary.getCommandAttributes());
 

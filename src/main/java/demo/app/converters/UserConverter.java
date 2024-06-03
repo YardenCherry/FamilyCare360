@@ -32,12 +32,7 @@ public class UserConverter {
 		entity.setId(boundary.getUserId().getSuperapp() + "_" + boundary.getUserId().getEmail() + "_");
 		entity.setUserName(boundary.getUserName());
 		entity.setRole(boundary.getRole());
-
-		if (boundary.getAvatar() != null) {
-			entity.setAvatar(boundary.getAvatar());
-		} else {
-			entity.setAvatar("");
-		}
+		entity.setAvatar(boundary.getAvatar() != null ? boundary.getAvatar() : "");
 
 		return entity;
 	}
@@ -46,9 +41,7 @@ public class UserConverter {
 
 		UserEntity entity = new UserEntity();
 		entity.setUserName(boundary.getUserName());
-		if(boundary.getAvatar()==null || boundary.getAvatar().trim().isBlank())
-			boundary.setAvatar("");
-		entity.setAvatar(boundary.getAvatar());
+		entity.setAvatar(boundary.getAvatar() != null ? boundary.getAvatar() : "");
 		entity.setRole(boundary.getRole());
 
 		return entity;
