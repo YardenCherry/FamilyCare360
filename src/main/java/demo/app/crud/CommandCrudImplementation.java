@@ -67,6 +67,9 @@ public class CommandCrudImplementation implements CommandLogic {
 				|| commandBoundary.getTargetObject().getObjectId().getId() == null) {
 			throw new MyBadRequestException("Target object cannot be null or empty.");
 		}
+		if (commandBoundary.getInvokedBy() == null) {
+			throw new MyBadRequestException("Invoke by cannot be null.");
+		}
 		if (commandBoundary.getInvokedBy() == null
 				|| !InputValidation.isValidEmail(commandBoundary.getInvokedBy().getUserId().getEmail())) {
 			throw new MyBadRequestException("You must enter valid email.");

@@ -83,7 +83,6 @@ public class ObjectCrudImplementation implements ObjectLogic {
 
 	@Override
 	public Optional<ObjectBoundary> updateById(String id, String superapp, ObjectBoundary update) {
-		validateObjectBoundary(update);
 		String objectId = id + "_" + superapp;
 		ObjectEntity existing = this.objectCrud.findById(objectId)
 				.orElseThrow(() -> new RuntimeException("could not find demo with id: " + id));
