@@ -5,18 +5,20 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import demo.app.boundaries.NewUserBoundary;
 import demo.app.boundaries.UserBoundary;
 import demo.app.converters.UserConverter;
 import demo.app.entities.UserEntity;
+import demo.app.logics.EnhancedUserLogic;
 import demo.app.logics.UserLogic;
 import demo.app.objects.InputValidation;
 
 @Service
-public class UserCrudImplementation implements UserLogic {
+public class UserCrudImplementation implements EnhancedUserLogic {
 	private final UserCrud userCrud;
 	private final UserConverter userConverter;
 	private String springApplicationName;
@@ -57,13 +59,31 @@ public class UserCrudImplementation implements UserLogic {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
+	@Deprecated
 	public List<UserBoundary> getAll() {
-		List<UserEntity> entities = this.userCrud.findAll();
+		throw new MyBadRequestException("deprecated operation");
+//		List<UserEntity> entities = this.userCrud.findAll();
+//		List<UserBoundary> rv = new ArrayList<>();
+//		for (UserEntity entity : entities) {
+//			rv.add(userConverter.toBoundary(entity));
+//		}
+//		return rv;
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<UserBoundary> getAll(int size, int page) {
+		List<UserEntity> entities = 
+		  this.userCrud
+			.findAll(PageRequest.of(page, size, Direction.ASC,"id"))
+			.toList();
+		
 		List<UserBoundary> rv = new ArrayList<>();
+		
 		for (UserEntity entity : entities) {
-			rv.add(userConverter.toBoundary(entity));
+			rv.add(this.userConverter.toBoundary(entity));
 		}
+		
 		return rv;
 	}
 

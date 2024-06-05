@@ -7,19 +7,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import demo.app.boundaries.NewUserBoundary;
 import demo.app.boundaries.UserBoundary;
-import demo.app.logics.UserLogic;
+import demo.app.logics.EnhancedUserLogic;
 
 @RestController
 @RequestMapping(path = { "/users" })
 public class UserController {
 
-	private UserLogic userLogic;
+	private EnhancedUserLogic userLogic;
 
-	public UserController(UserLogic userLogic) {
+	public UserController(EnhancedUserLogic userLogic) {
 		this.userLogic = userLogic;
 	}
 
@@ -36,8 +37,10 @@ public class UserController {
 	}
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public UserBoundary[] getManyMessages() {
-		return this.userLogic.getAll().toArray(new UserBoundary[0]);
+	public UserBoundary[] getManyMessages(
+		@RequestParam(name = "size", defaultValue = "5", required = false) int size,
+		@RequestParam(name = "page", defaultValue = "0", required = false) int page) {
+		return this.userLogic.getAll(size, page).toArray(new UserBoundary[0]);
 	}
 
 	@PutMapping(path = { "/{superapp}/{email}" }, consumes = { MediaType.APPLICATION_JSON_VALUE })

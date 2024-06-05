@@ -25,7 +25,11 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'org.postgresql:postgresql' // note postgresql support
 	
+<<<<<<< HEAD
+	developmentOnly 'org.springframework.boot:spring-boot-docker-compose' // note docker compose support	
+=======
 	developmentOnly 'org.springframework.boot:spring-boot-docker-compose' // note docker compose support
+>>>>>>> branch 'master' of https://YardenCherry@bitbucket.org/afekaprojectnoagilboa/2024b.yarden.cherry.git
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 <<<<<<< HEAD
@@ -35,7 +39,14 @@ dependencies {
 
 =======
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // note test plan management support
+<<<<<<< HEAD
+
+=======
 	
+<<<<<<< HEAD
+>>>>>>> branch 'master' of https://netanelbcn@bitbucket.org/afekaprojectnoagilboa/2024b.yarden.cherry.git
+=======
+>>>>>>> branch 'master' of https://YardenCherry@bitbucket.org/afekaprojectnoagilboa/2024b.yarden.cherry.git
 >>>>>>> branch 'master' of https://netanelbcn@bitbucket.org/afekaprojectnoagilboa/2024b.yarden.cherry.git
 }
 
