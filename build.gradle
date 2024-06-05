@@ -28,10 +28,15 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-docker-compose' // note docker compose support
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+<<<<<<< HEAD
 
 
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // note test plan management support
 
+=======
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // note test plan management support
+	
+>>>>>>> branch 'master' of https://netanelbcn@bitbucket.org/afekaprojectnoagilboa/2024b.yarden.cherry.git
 }
 
 tasks.named('test') {
