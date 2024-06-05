@@ -13,13 +13,16 @@ import org.springframework.transaction.annotation.Transactional;
 import demo.app.boundaries.ObjectBoundary;
 import demo.app.converters.ObjectConverter;
 import demo.app.entities.ObjectEntity;
+import demo.app.logics.EnhancedObjectLogic;
 import demo.app.logics.ObjectLogic;
 import demo.app.objects.InputValidation;
 import demo.app.objects.ObjectId;
 import jakarta.annotation.PostConstruct;
-
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 @Service
-public class ObjectCrudImplementation implements ObjectLogic {
+public class ObjectCrudImplementation implements EnhancedObjectLogic {
 	private ObjectCrud objectCrud;
 	private ObjectConverter objectConverter;
 	private String springApplicationName;
@@ -68,19 +71,36 @@ public class ObjectCrudImplementation implements ObjectLogic {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
+	@Deprecated
 	public List<ObjectBoundary> getAll() {
-		List<ObjectEntity> entities = this.objectCrud.findAll();
-
-		List<ObjectBoundary> rv = new ArrayList<>();
-
-		for (ObjectEntity entity : entities) {
-			rv.add(this.objectConverter.toBoundary(entity));
-		}
-
-		return rv;
+		throw new MyBadRequestException("deprecated operation");
+//		List<ObjectEntity> entities = this.objectCrud.findAll();
+//
+//		List<ObjectBoundary> rv = new ArrayList<>();
+//
+//		for (ObjectEntity entity : entities) {
+//			rv.add(this.objectConverter.toBoundary(entity));
+//		}
+//
+//		return rv;
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public List<ObjectBoundary> getAll(int size, int page) {
+		List<ObjectEntity> entities =
+				this.objectCrud
+				.findAll(PageRequest.of(page, size, Direction.ASC, "objectID"))
+				.toList();
+	
+				List<ObjectBoundary> rv = new ArrayList<>();
+		
+				for (ObjectEntity entity : entities) {
+					rv.add(this.objectConverter.toBoundary(entity));
+				}
+		
+				return rv;
+	}
 	@Override
 	public Optional<ObjectBoundary> updateById(String id, String superapp, ObjectBoundary update) {
 		String objectId = id + "_" + superapp;
@@ -117,6 +137,30 @@ public class ObjectCrudImplementation implements ObjectLogic {
 				|| !InputValidation.isValidEmail(objectBoundary.getCreatedBy().getUserId().getEmail())) {
 			throw new MyBadRequestException("CreatedBy and email cannot be null.");
 		}
+	}
+
+	@Override
+	public List<ObjectBoundary> getObjectByType(String type, int size, int page) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ObjectBoundary> getObjectByAlias(String alias, int size, int page) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ObjectBoundary> getObjectByAliasPattern(String aliasPattern, int size, int page) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ObjectBoundary> getObjectByLocation(String location, int size, int page) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

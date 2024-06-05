@@ -7,18 +7,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import demo.app.boundaries.ObjectBoundary;
-import demo.app.logics.ObjectLogic;
+import demo.app.logics.EnhancedObjectLogic;
 
 @RestController
 @RequestMapping(path = { "/objects" })
 public class ObjectController {
 
-	private ObjectLogic objectLogic;
+	private EnhancedObjectLogic objectLogic;
 
-	public ObjectController(ObjectLogic objectLogic) {
+	public ObjectController(EnhancedObjectLogic objectLogic) {
 		this.objectLogic = objectLogic;
 	}
 
@@ -35,8 +36,10 @@ public class ObjectController {
 	}
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ObjectBoundary[] getObjects() {
-		return this.objectLogic.getAll().toArray(new ObjectBoundary[0]);
+	public ObjectBoundary[] getObjects(
+			@RequestParam(name = "size", defaultValue = "5", required = false) int size,
+			@RequestParam(name = "page", defaultValue = "0", required = false) int page) {
+		return this.objectLogic.getAll(size,page).toArray(new ObjectBoundary[0]);
 	}
 
 	@PutMapping(path = { "/{superapp}/{id}" }, consumes = { MediaType.APPLICATION_JSON_VALUE })
