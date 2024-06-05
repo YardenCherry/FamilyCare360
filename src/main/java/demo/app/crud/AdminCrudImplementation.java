@@ -1,8 +1,11 @@
 package demo.app.crud;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +13,7 @@ import demo.app.boundaries.MiniAppCommandBoundary;
 import demo.app.boundaries.UserBoundary;
 import demo.app.converters.CommandConverter;
 import demo.app.converters.UserConverter;
+import demo.app.entities.UserEntity;
 import demo.app.logics.AdminLogic;
 
 @Service
@@ -60,10 +64,24 @@ public class AdminCrudImplementation implements AdminLogic {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
+	@Deprecated
 	public List<UserBoundary> getAllUsers() {
-		return this.userCrud.findAll().stream().peek(entity -> System.err.println("* " + entity))
-				.map(this.userConverter::toBoundary).toList();
+
+		throw new MyBadRequestException("Deprecated opeation");
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<UserBoundary> getAllUsers(int size, int page) {
+		List<UserEntity> entities=
+				this.userCrud
+					.findAll(PageRequest.of(page, size,Direction.ASC,"id"))
+					.toList();
+		List<UserBoundary> rv=new ArrayList<>();
+		for(UserEntity entity:entities) 
+			rv.add(this.userConverter.toBoundary(entity));
+
+		return rv;
 	}
 
 	@Override
@@ -82,5 +100,7 @@ public class AdminCrudImplementation implements AdminLogic {
 		return this.commandCrud.findAllByMiniAppName(miniAppName).stream().map(this.commandConverter::toBoundary)
 				.peek(System.err::println).toList();
 	}
+
+	
 
 }

@@ -13,10 +13,16 @@ public interface AdminLogic {
 
 	public void deleteAllCommandsHistory();
 
+	@Deprecated
 	public List<UserBoundary> getAllUsers();
-
+	
+	@Deprecated
 	public List<MiniAppCommandBoundary> getAllCommands();
-
+	
+	@Deprecated
 	public List<MiniAppCommandBoundary> getAllCommandsByMiniAppName(String miniAppName);
+
+	
+	public List<UserBoundary> getAllUsers(int size, int page);
 
 }
