@@ -39,18 +39,17 @@ public class AdminController {
 	}
 
 	@GetMapping(path = { "/users" }, produces = MediaType.APPLICATION_JSON_VALUE)
-	public UserBoundary[] getAllUsers(
-		@RequestParam(name= "size",defaultValue = "5",required = false) int size,
-		@RequestParam(name= "page",defaultValue = "0",required = false) int page){
-			
-		
-		return adminLogic.getAllUsers(size,page).toArray(new UserBoundary[0]);
+	public UserBoundary[] getAllUsers(@RequestParam(name = "size", defaultValue = "5", required = false) int size,
+			@RequestParam(name = "page", defaultValue = "0", required = false) int page) {
+
+		return adminLogic.getAllUsers(size, page).toArray(new UserBoundary[0]);
 	}
 
-	//@GetMapping(path = { "/miniapp" }, produces = MediaType.APPLICATION_JSON_VALUE)
+	// @GetMapping(path = { "/miniapp" }, produces =
+	// MediaType.APPLICATION_JSON_VALUE)
 //	public MiniAppCommandBoundary[] getAllCommands() {
-	//	return adminLogic.getAllCommands().toArray(new MiniAppCommandBoundary[0]);
-	//}
+	// return adminLogic.getAllCommands().toArray(new MiniAppCommandBoundary[0]);
+	// }
 
 	@GetMapping(path = { "/miniapp/{miniAppName}" }, produces = MediaType.APPLICATION_JSON_VALUE)
 	public MiniAppCommandBoundary[] getCommandsOfSpecificMiniApp(@PathVariable("miniAppName") String miniAppName) {

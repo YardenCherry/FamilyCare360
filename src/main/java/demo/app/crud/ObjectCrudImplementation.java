@@ -7,29 +7,33 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import demo.app.boundaries.ObjectBoundary;
 import demo.app.converters.ObjectConverter;
 import demo.app.entities.ObjectEntity;
+import demo.app.entities.UserEntity;
+import demo.app.enums.Role;
 import demo.app.logics.EnhancedObjectLogic;
-import demo.app.logics.ObjectLogic;
 import demo.app.objects.InputValidation;
 import demo.app.objects.ObjectId;
 import jakarta.annotation.PostConstruct;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
+
 @Service
 public class ObjectCrudImplementation implements EnhancedObjectLogic {
 	private ObjectCrud objectCrud;
 	private ObjectConverter objectConverter;
 	private String springApplicationName;
+	private UserCrud userCrud;
 
-	public ObjectCrudImplementation(ObjectCrud objectCrud, ObjectConverter objectConverter) {
+	public ObjectCrudImplementation(ObjectCrud objectCrud, ObjectConverter objectConverter, UserCrud userCrud) {
 		this.objectCrud = objectCrud;
 		this.objectConverter = objectConverter;
+		this.userCrud = userCrud;
+
 	}
 
 	@Value("${spring.application.name:supperapp}")
@@ -40,7 +44,7 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 
 	@PostConstruct
 	public void setupIsDone() {
-		System.err.println("demo logic implementation is ready");
+		System.err.println("Object logic implementation is ready");
 	}
 
 	@Override
@@ -65,9 +69,23 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Optional<ObjectBoundary> getSpecificObject(String id, String superapp) {
+	public Optional<ObjectBoundary> getSpecificObject(String id, String superapp, String userSuperapp,
+			String userEmail) {
+		UserEntity user = userCrud.findById(userSuperapp + "_" + userEmail)
+				.orElseThrow(() -> new MyForbiddenException("User not authorized"));
+
+		if (!user.getRole().equals(Role.SUPERAPP_USER) && !user.getRole().equals(Role.MINIAPP_USER)) {
+			throw new MyForbiddenException("User is not authorized");
+		}
+
 		String objectId = id + "_" + superapp;
-		return this.objectCrud.findById(objectId).map(entity -> this.objectConverter.toBoundary(entity));
+		ObjectEntity entity = this.objectCrud.findById(objectId).orElse(null);
+
+		if (entity == null) {
+			return Optional.empty();
+		}
+
+		return Optional.of(this.objectConverter.toBoundary(entity));
 	}
 
 	@Override
@@ -87,25 +105,43 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<ObjectBoundary> getAll(int size, int page) {
-		List<ObjectEntity> entities =
-				this.objectCrud
-				.findAll(PageRequest.of(page, size, Direction.ASC, "objectID"))
-				.toList();
-	
-				List<ObjectBoundary> rv = new ArrayList<>();
-		
-				for (ObjectEntity entity : entities) {
-					rv.add(this.objectConverter.toBoundary(entity));
-				}
-		
-				return rv;
+	public List<ObjectBoundary> getAll(int size, int page, String userSuperapp, String userEmail) {
+		UserEntity user = userCrud.findById(userSuperapp + "_" + userEmail)
+				.orElseThrow(() -> new MyForbiddenException("User not authorized"));
+
+		if (!user.getRole().equals(Role.SUPERAPP_USER) && !user.getRole().equals(Role.MINIAPP_USER)) {
+			throw new MyForbiddenException("User is not authorized");
+		}
+
+		List<ObjectEntity> entities;
+		if (user.getRole().equals(Role.MINIAPP_USER)) {
+			entities = this.objectCrud.findAllByActive(true, PageRequest.of(page, size, Direction.ASC, "objectID"))
+					.stream().toList();
+		} else {
+			entities = this.objectCrud.findAll(PageRequest.of(page, size, Direction.ASC, "objectID")).toList();
+		}
+		List<ObjectBoundary> rv = new ArrayList<>();
+
+		for (ObjectEntity entity : entities) {
+			rv.add(this.objectConverter.toBoundary(entity));
+		}
+
+		return rv;
 	}
+
 	@Override
-	public Optional<ObjectBoundary> updateById(String id, String superapp, ObjectBoundary update) {
+	public Optional<ObjectBoundary> updateById(String id, String superapp, String userSuperapp, String userEmail,
+			ObjectBoundary update) {
+		UserEntity user = userCrud.findById(userSuperapp + "_" + userEmail)
+				.orElseThrow(() -> new MyForbiddenException("User not authorized"));
+
+		if (!user.getRole().equals(Role.SUPERAPP_USER)) {
+			throw new MyForbiddenException("User is not authorized");
+		}
+
 		String objectId = id + "_" + superapp;
-		ObjectEntity existing = this.objectCrud.findById(objectId)
-				.orElseThrow(() -> new RuntimeException("could not find demo with id: " + id));
+		ObjectEntity existing = this.objectCrud.findById(objectId).orElse(null);
+
 		ObjectEntity temp = objectConverter.toEntity(update);
 		if (update.getActive() != null)
 			existing.setActive(temp.getActive());
@@ -140,27 +176,142 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 	}
 
 	@Override
-	public List<ObjectBoundary> getObjectByType(String type, int size, int page) {
-		// TODO Auto-generated method stub
-		return null;
+	@Transactional(readOnly = true)
+	public List<ObjectBoundary> getAllByAlias(String alias, int size, int page, String userSuperapp, String userEmail) {
+		UserEntity user = userCrud.findById(userSuperapp + "_" + userEmail)
+				.orElseThrow(() -> new MyForbiddenException("User not authorized"));
+
+		if (!user.getRole().equals(Role.SUPERAPP_USER) && !user.getRole().equals(Role.MINIAPP_USER)) {
+			throw new MyForbiddenException("User is not authorized");
+		}
+
+		List<ObjectEntity> entities;
+		if (user.getRole().equals(Role.MINIAPP_USER)) {
+			entities = this.objectCrud.findAllByAliasAndActive(alias, true,
+					PageRequest.of(page, size, Direction.ASC, "alias", "objectID")).stream().toList();
+		} else {
+			entities = this.objectCrud
+					.findAllByAlias(alias, PageRequest.of(page, size, Direction.ASC, "alias", "objectID")).stream()
+					.toList();
+		}
+
+		List<ObjectBoundary> rv = new ArrayList<>();
+
+		for (ObjectEntity entity : entities) {
+			rv.add(this.objectConverter.toBoundary(entity));
+		}
+
+		return rv;
 	}
 
 	@Override
-	public List<ObjectBoundary> getObjectByAlias(String alias, int size, int page) {
-		// TODO Auto-generated method stub
-		return null;
+	@Transactional(readOnly = true)
+	public List<ObjectBoundary> getAllByType(String type, int size, int page, String userSuperapp, String userEmail) {
+		UserEntity user = userCrud.findById(userSuperapp + "_" + userEmail)
+				.orElseThrow(() -> new MyForbiddenException("User not authorized"));
+
+		if (!user.getRole().equals(Role.SUPERAPP_USER) && !user.getRole().equals(Role.MINIAPP_USER)) {
+			throw new MyForbiddenException("User is not authorized");
+		}
+
+		List<ObjectEntity> entities;
+		if (user.getRole().equals(Role.MINIAPP_USER)) {
+			entities = this.objectCrud
+					.findAllByTypeAndActive(type, true, PageRequest.of(page, size, Direction.ASC, "type", "objectID"))
+					.stream().toList();
+		} else {
+			entities = this.objectCrud
+					.findAllByType(type, PageRequest.of(page, size, Direction.ASC, "type", "objectID")).stream()
+					.toList();
+		}
+
+		List<ObjectBoundary> rv = new ArrayList<>();
+
+		for (ObjectEntity entity : entities) {
+			rv.add(this.objectConverter.toBoundary(entity));
+		}
+
+		return rv;
 	}
 
 	@Override
-	public List<ObjectBoundary> getObjectByAliasPattern(String aliasPattern, int size, int page) {
-		// TODO Auto-generated method stub
+	public List<ObjectBoundary> getAllByAliasPattern(String aliasPattern, int size, int page, String userSuperapp,
+			String userEmail) {
+		UserEntity user = userCrud.findById(userSuperapp + "_" + userEmail)
+				.orElseThrow(() -> new MyForbiddenException("User not authorized"));
+
+		if (!user.getRole().equals(Role.SUPERAPP_USER) && !user.getRole().equals(Role.MINIAPP_USER)) {
+			throw new MyForbiddenException("User is not authorized");
+		}
+
+		List<ObjectEntity> entities;
+		if (user.getRole().equals(Role.MINIAPP_USER)) {
+
+		} else {
+
+		}
+
 		return null;
+
 	}
 
 	@Override
-	public List<ObjectBoundary> getObjectByLocation(String location, int size, int page) {
-		// TODO Auto-generated method stub
-		return null;
+	@Transactional(readOnly = true)
+	public List<ObjectBoundary> getAllByLocation(double lat, double lng, double distance, String distanceUnits,
+			int size, int page, String userSuperapp, String userEmail) {
+		UserEntity user = userCrud.findById(userSuperapp + "_" + userEmail)
+				.orElseThrow(() -> new MyForbiddenException("User not authorized"));
+
+		if (!user.getRole().equals(Role.SUPERAPP_USER) && !user.getRole().equals(Role.MINIAPP_USER)) {
+			throw new MyForbiddenException("User is not authorized");
+		}
+
+		// Convert distance to neutral units (assume kilometers for simplicity)
+		final double radius;
+		if ("MILES".equalsIgnoreCase(distanceUnits)) {
+			radius = distance * 1.60934; // Convert miles to kilometers
+		} else {
+			radius = distance; // Assume the distance is in kilometers
+		}
+
+		List<ObjectEntity> entities;
+		if (user.getRole().equals(Role.MINIAPP_USER)) {
+			entities = this.objectCrud
+					.findAllByLocationWithinAndActive(
+							lat, lng, radius, true, PageRequest.of(page, size, Direction.ASC, "location", "objectID"))
+					.stream()
+					.filter(entity -> calculateDistance(lat, lng,
+							Double.parseDouble(entity.getLocation().split("_")[0]),
+							Double.parseDouble(entity.getLocation().split("_")[1])) <= radius)
+					.toList();
+		} else {
+			entities = this.objectCrud
+					.findAllByLocationWithin(
+							lat, lng, radius, PageRequest.of(page, size, Direction.ASC, "location", "objectID"))
+					.stream()
+					.filter(entity -> calculateDistance(lat, lng,
+							Double.parseDouble(entity.getLocation().split("_")[0]),
+							Double.parseDouble(entity.getLocation().split("_")[1])) <= radius)
+					.toList();
+		}
+
+		List<ObjectBoundary> rv = new ArrayList<>();
+		for (ObjectEntity entity : entities) {
+			rv.add(this.objectConverter.toBoundary(entity));
+		}
+
+		return rv;
+	}
+
+	// Utility method to calculate distance between two coordinates in kilometers
+	private double calculateDistance(double lat1, double lng1, double lat2, double lng2) {
+		final int EARTH_RADIUS = 6371; // Radius of the earth in kilometers
+		double latDistance = Math.toRadians(lat2 - lat1);
+		double lngDistance = Math.toRadians(lng2 - lng1);
+		double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2) + Math.cos(Math.toRadians(lat1))
+				* Math.cos(Math.toRadians(lat2)) * Math.sin(lngDistance / 2) * Math.sin(lngDistance / 2);
+		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		return EARTH_RADIUS * c; // Distance in kilometers
 	}
 
 }

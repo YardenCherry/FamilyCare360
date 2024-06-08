@@ -69,16 +69,13 @@ public class AdminCrudImplementation implements AdminLogic {
 
 		throw new MyBadRequestException("Deprecated opeation");
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<UserBoundary> getAllUsers(int size, int page) {
-		List<UserEntity> entities=
-				this.userCrud
-					.findAll(PageRequest.of(page, size,Direction.ASC,"id"))
-					.toList();
-		List<UserBoundary> rv=new ArrayList<>();
-		for(UserEntity entity:entities) 
+		List<UserEntity> entities = this.userCrud.findAll(PageRequest.of(page, size, Direction.ASC, "id")).toList();
+		List<UserBoundary> rv = new ArrayList<>();
+		for (UserEntity entity : entities)
 			rv.add(this.userConverter.toBoundary(entity));
 
 		return rv;
@@ -100,7 +97,5 @@ public class AdminCrudImplementation implements AdminLogic {
 		return this.commandCrud.findAllByMiniAppName(miniAppName).stream().map(this.commandConverter::toBoundary)
 				.peek(System.err::println).toList();
 	}
-
-	
 
 }

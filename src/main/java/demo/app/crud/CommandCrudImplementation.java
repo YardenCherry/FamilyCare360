@@ -10,6 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import demo.app.boundaries.MiniAppCommandBoundary;
 import demo.app.converters.CommandConverter;
 import demo.app.entities.MiniAppCommandEntity;
+import demo.app.entities.ObjectEntity;
+import demo.app.entities.UserEntity;
+import demo.app.enums.Role;
 import demo.app.logics.CommandLogic;
 import demo.app.objects.InputValidation;
 import jakarta.annotation.PostConstruct;
@@ -19,10 +22,15 @@ public class CommandCrudImplementation implements CommandLogic {
 	private CommandCrud commandCrud;
 	private CommandConverter commandConverter;
 	private String springApplicationName;
+	private UserCrud userCrud;
+	private ObjectCrud objectCrud;
 
-	public CommandCrudImplementation(CommandCrud commandCrud, CommandConverter commandConverter) {
+	public CommandCrudImplementation(CommandCrud commandCrud, CommandConverter commandConverter, UserCrud userCrud,
+			ObjectCrud objectCrud) {
 		this.commandCrud = commandCrud;
 		this.commandConverter = commandConverter;
+		this.userCrud = userCrud;
+		this.objectCrud = objectCrud;
 	}
 
 	@Value("${spring.application.name:supperapp}")
@@ -41,6 +49,23 @@ public class CommandCrudImplementation implements CommandLogic {
 	public MiniAppCommandBoundary storeInDatabase(String miniAppName, MiniAppCommandBoundary commandBoundary) {
 		validateCommandBoundary(commandBoundary);
 
+		// Verify user permissions
+		UserEntity user = userCrud
+				.findById(commandBoundary.getInvokedBy().getUserId().getSuperapp() + "_"
+						+ commandBoundary.getInvokedBy().getUserId().getEmail())
+				.orElseThrow(() -> new MyForbiddenException("User not authorized1"));
+		if (!user.getRole().equals(Role.MINIAPP_USER)) {
+			throw new MyForbiddenException("User not authorized2");
+		}
+
+		// Verify target object existence and active status
+		ObjectEntity targetObject = objectCrud
+				.findById(commandBoundary.getTargetObject().getObjectId().getId() + "_"
+						+ commandBoundary.getTargetObject().getObjectId().getSuperApp())
+				.orElseThrow(() -> new MyBadRequestException("Target object not found in the database."));
+		if (!targetObject.getActive()) {
+			throw new MyBadRequestException("Target object is not active.");
+		}
 		commandBoundary.getCommandId().setId(UUID.randomUUID().toString());
 		commandBoundary.getCommandId().setSuperApp(springApplicationName);
 		commandBoundary.getCommandId().setMiniApp(miniAppName);

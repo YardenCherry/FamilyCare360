@@ -9,12 +9,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import demo.app.boundaries.NewUserBoundary;
 import demo.app.boundaries.UserBoundary;
 import demo.app.converters.UserConverter;
 import demo.app.entities.UserEntity;
 import demo.app.logics.EnhancedUserLogic;
-import demo.app.logics.UserLogic;
 import demo.app.objects.InputValidation;
 
 @Service
@@ -69,21 +69,18 @@ public class UserCrudImplementation implements EnhancedUserLogic {
 //		}
 //		return rv;
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<UserBoundary> getAll(int size, int page) {
-		List<UserEntity> entities = 
-		  this.userCrud
-			.findAll(PageRequest.of(page, size, Direction.ASC,"id"))
-			.toList();
-		
+		List<UserEntity> entities = this.userCrud.findAll(PageRequest.of(page, size, Direction.ASC, "id")).toList();
+
 		List<UserBoundary> rv = new ArrayList<>();
-		
+
 		for (UserEntity entity : entities) {
 			rv.add(this.userConverter.toBoundary(entity));
 		}
-		
+
 		return rv;
 	}
 
@@ -96,13 +93,6 @@ public class UserCrudImplementation implements EnhancedUserLogic {
 		String id = superapp + "_" + email;
 		UserEntity entity = this.userCrud.findById(id).orElseThrow(() -> new MyBadRequestException(
 				"UserEntity with email: " + email + " and superapp " + superapp + " does not exist in database"));
-
-//        if (update.getUserId().getEmail() != null ) {
-//        	if(userCrud.existsById(springApplicationName + "_" + update.getUserId().getEmail()) && !update.getUserId().getEmail().equals(email) )
-//                throw new MyBadRequestException("User with email " + update.getUserId().getEmail() + " already exists.");
-//            validateEmail(update.getUserId().getEmail());
-//            entity.setId(superapp + "_" + update.getUserId().getEmail());
-//        }
 
 		if (update.getUserName() != null && !update.getUserName().trim().isEmpty()) {
 			entity.setUserName(update.getUserName());
@@ -134,6 +124,9 @@ public class UserCrudImplementation implements EnhancedUserLogic {
 		}
 		if (userBoundary.getUserName() == null || userBoundary.getUserName().length() < 1) {
 			throw new MyBadRequestException("Username must be at least 1 characters");
+		}
+		if (userBoundary.getAvatar() == null || userBoundary.getAvatar().length() < 1) {
+			throw new MyBadRequestException("Avatar must be at least 1 characters");
 		}
 	}
 

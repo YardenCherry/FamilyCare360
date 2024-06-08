@@ -32,7 +32,7 @@ public class UserConverter {
 		entity.setId(boundary.getUserId().getSuperapp() + "_" + boundary.getUserId().getEmail() + "_");
 		entity.setUserName(boundary.getUserName());
 		entity.setRole(boundary.getRole());
-		entity.setAvatar(boundary.getAvatar() != null ? boundary.getAvatar() : "");
+		entity.setAvatar(boundary.getAvatar());
 
 		return entity;
 	}
