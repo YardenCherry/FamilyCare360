@@ -3,6 +3,7 @@ package demo.app.crud;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.h2.command.Command;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -13,8 +14,10 @@ import demo.app.boundaries.MiniAppCommandBoundary;
 import demo.app.boundaries.UserBoundary;
 import demo.app.converters.CommandConverter;
 import demo.app.converters.UserConverter;
+import demo.app.entities.MiniAppCommandEntity;
 import demo.app.entities.UserEntity;
 import demo.app.logics.AdminLogic;
+import jakarta.persistence.Embedded;
 
 @Service
 public class AdminCrudImplementation implements AdminLogic {
@@ -63,22 +66,23 @@ public class AdminCrudImplementation implements AdminLogic {
 		System.err.println("All commands entries Deleted");
 	}
 
-	@Override
 	@Deprecated
 	public List<UserBoundary> getAllUsers() {
 
 		throw new MyBadRequestException("Deprecated opeation");
 	}
-	
+
+	@Deprecated
+	public List<MiniAppCommandBoundary> getAllCommands() {
+		throw new MyBadRequestException("Deprecated opeation");
+	}
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<UserBoundary> getAllUsers(int size, int page) {
-		List<UserEntity> entities=
-				this.userCrud
-					.findAll(PageRequest.of(page, size,Direction.ASC,"id"))
-					.toList();
-		List<UserBoundary> rv=new ArrayList<>();
-		for(UserEntity entity:entities) 
+		List<UserEntity> entities = this.userCrud.findAll(PageRequest.of(page, size, Direction.ASC, "id")).toList();
+		List<UserBoundary> rv = new ArrayList<>();
+		for (UserEntity entity : entities)
 			rv.add(this.userConverter.toBoundary(entity));
 
 		return rv;
@@ -86,21 +90,31 @@ public class AdminCrudImplementation implements AdminLogic {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<MiniAppCommandBoundary> getAllCommands() {
-		return this.commandCrud.findAll().stream().peek(entity -> System.err.println("* " + entity))
-				.map(this.commandConverter::toBoundary).toList();
+	public List<MiniAppCommandBoundary> getAllCommands(int size, int page) {
+
+		List<MiniAppCommandEntity> entities = this.commandCrud.findAll(PageRequest.of(page, size, Direction.ASC, "commandId")).getContent();
+		List<MiniAppCommandBoundary> rv = new ArrayList<>();
+		for (MiniAppCommandEntity entity : entities)
+			rv.add(this.commandConverter.toBoundary(entity));
+		return rv;
+
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<MiniAppCommandBoundary> getAllCommandsByMiniAppName(String miniAppName) {
+	public List<MiniAppCommandBoundary> getAllCommandsByMiniAppName(String miniAppName, int size, int page) {
 		if (miniAppName == null || miniAppName.trim().isEmpty()) {
 			throw new MyBadRequestException("Invalid miniAppName");
 		}
-		return this.commandCrud.findAllByMiniAppName(miniAppName).stream().map(this.commandConverter::toBoundary)
-				.peek(System.err::println).toList();
+		List<MiniAppCommandEntity> entities = this.commandCrud.findAllByMiniAppName(miniAppName,
+				PageRequest.of(page, size,Direction.ASC, "commandId"));
+		
+		return entities.stream().map(this.commandConverter::toBoundary).peek(System.err::println).toList();
 	}
 
-	
+	@Deprecated
+	public List<MiniAppCommandBoundary> getAllCommandsByMiniAppName(String miniAppName) {
+		throw new MyBadRequestException("Deprecated opeation");
+	}
 
 }

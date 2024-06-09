@@ -47,14 +47,18 @@ public class AdminController {
 		return adminLogic.getAllUsers(size,page).toArray(new UserBoundary[0]);
 	}
 
-	//@GetMapping(path = { "/miniapp" }, produces = MediaType.APPLICATION_JSON_VALUE)
-//	public MiniAppCommandBoundary[] getAllCommands() {
-	//	return adminLogic.getAllCommands().toArray(new MiniAppCommandBoundary[0]);
-	//}
+	@GetMapping(path = { "/miniapp" }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public MiniAppCommandBoundary[] getAllCommands(	
+			@RequestParam(name= "size",defaultValue = "5",required = false) int size,
+			@RequestParam(name= "page",defaultValue = "0",required = false) int page) {
+		return adminLogic.getAllCommands(size,page).toArray(new MiniAppCommandBoundary[0]);
+	}
 
 	@GetMapping(path = { "/miniapp/{miniAppName}" }, produces = MediaType.APPLICATION_JSON_VALUE)
-	public MiniAppCommandBoundary[] getCommandsOfSpecificMiniApp(@PathVariable("miniAppName") String miniAppName) {
-		return adminLogic.getAllCommandsByMiniAppName(miniAppName).toArray(new MiniAppCommandBoundary[0]);
+	public MiniAppCommandBoundary[] getCommandsOfSpecificMiniApp(@PathVariable("miniAppName") String miniAppName,
+			@RequestParam(name= "size",defaultValue = "5",required = false) int size,
+			@RequestParam(name= "page",defaultValue = "0",required = false) int page) {
+		return adminLogic.getAllCommandsByMiniAppName(miniAppName,size,page).toArray(new MiniAppCommandBoundary[0]);
 	}
 
 }
