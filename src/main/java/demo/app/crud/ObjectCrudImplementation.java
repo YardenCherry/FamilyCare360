@@ -58,6 +58,15 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 		objectBoundary.setCreationTimestamp(new Date());
 		objectBoundary.getCreatedBy().getUserId().setSuperapp(springApplicationName);
 
+		// Verify user permissions
+		UserEntity user = userCrud
+				.findById(objectBoundary.getCreatedBy().getUserId().getSuperapp() + "_"
+						+ objectBoundary.getCreatedBy().getUserId().getEmail())
+				.orElseThrow(() -> new MyForbiddenException("User not authorized"));
+		if (!user.getRole().equals(Role.SUPERAPP_USER)) {
+			throw new MyForbiddenException("User not authorized");
+		}
+
 		validateObjectBoundary(objectBoundary);
 
 		ObjectEntity entity = this.objectConverter.toEntity(objectBoundary);
@@ -235,7 +244,7 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 	}
 
 	@Override
-	public List<ObjectBoundary> getAllByAliasPattern(String aliasPattern, int size, int page, String userSuperapp,
+	public List<ObjectBoundary> getAllByAliasPattern(String pattern, int size, int page, String userSuperapp,
 			String userEmail) {
 		UserEntity user = userCrud.findById(userSuperapp + "_" + userEmail)
 				.orElseThrow(() -> new MyForbiddenException("User not authorized"));
@@ -246,9 +255,15 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 
 		List<ObjectEntity> entities;
 		if (user.getRole().equals(Role.MINIAPP_USER)) {
-
+			entities = this.objectCrud
+					.findAllByAliasContainsAndActive(pattern, true,
+							PageRequest.of(page, size, Direction.ASC, "creationTimestamp", "objectID"))
+					.stream().toList();
 		} else {
-
+			entities = this.objectCrud
+					.findAllByAliasContains(pattern,
+							PageRequest.of(page, size, Direction.ASC, "creationTimestamp", "objectID"))
+					.stream().toList();
 		}
 
 		return null;

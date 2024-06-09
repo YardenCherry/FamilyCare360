@@ -22,6 +22,11 @@ public interface ObjectCrud extends JpaRepository<ObjectEntity, String> {
 	public List<ObjectEntity> findAllByAliasAndActive(@Param("alias") String alias, @Param("active") boolean active,
 			Pageable pageable);
 
+	public List<ObjectEntity> findAllByAliasContains(@Param("pattern") String pattern, Pageable pageable);
+
+	public List<ObjectEntity> findAllByAliasContainsAndActive(@Param("pattern") String pattern,
+			@Param("active") boolean active, Pageable pageable);
+
 	public List<ObjectEntity> findAllByLocationWithin(@Param("lat") double lat, @Param("lng") double lng,
 			@Param("distance") double distance, Pageable pageable);
 

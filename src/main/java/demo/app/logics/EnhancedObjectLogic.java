@@ -11,7 +11,7 @@ public interface EnhancedObjectLogic extends ObjectLogic {
 
 	public List<ObjectBoundary> getAllByAlias(String alias, int size, int page, String userSuperapp, String userEmail);
 
-	public List<ObjectBoundary> getAllByAliasPattern(String aliasPattern, int size, int page, String userSuperapp,
+	public List<ObjectBoundary> getAllByAliasPattern(String pattern, int size, int page, String userSuperapp,
 			String userEmail);
 
 	public List<ObjectBoundary> getAllByLocation(double lat, double lng, double distance, String distanceUnits,

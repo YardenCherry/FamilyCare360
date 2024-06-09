@@ -3,7 +3,6 @@ package demo.app.crud;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.h2.command.Command;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -16,8 +15,8 @@ import demo.app.converters.CommandConverter;
 import demo.app.converters.UserConverter;
 import demo.app.entities.MiniAppCommandEntity;
 import demo.app.entities.UserEntity;
+import demo.app.enums.Role;
 import demo.app.logics.AdminLogic;
-import jakarta.persistence.Embedded;
 
 @Service
 public class AdminCrudImplementation implements AdminLogic {
@@ -46,21 +45,44 @@ public class AdminCrudImplementation implements AdminLogic {
 
 	@Override
 	@Transactional
-	public void deleteAllUsers() {
+	public void deleteAllUsers(String userSuperapp, String userEmail) {
+
+		UserEntity user = userCrud.findById(userSuperapp + "_" + userEmail)
+				.orElseThrow(() -> new MyForbiddenException("User not authorized"));
+
+		if (!user.getRole().equals(Role.ADMIN)) {
+			throw new MyForbiddenException("User is not authorized");
+		}
+
 		this.userCrud.deleteAll();
 		System.err.println("All user entries Deleted");
 	}
 
 	@Override
 	@Transactional
-	public void deleteAllObjects() {
+	public void deleteAllObjects(String userSuperapp, String userEmail) {
+
+		UserEntity user = userCrud.findById(userSuperapp + "_" + userEmail)
+				.orElseThrow(() -> new MyForbiddenException("User not authorized"));
+
+		if (!user.getRole().equals(Role.ADMIN)) {
+			throw new MyForbiddenException("User is not authorized");
+		}
+
 		this.objectCrud.deleteAll();
 		System.err.println("All object entries Deleted");
 	}
 
 	@Override
 	@Transactional
-	public void deleteAllCommandsHistory() {
+	public void deleteAllCommandsHistory(String userSuperapp, String userEmail) {
+
+		UserEntity user = userCrud.findById(userSuperapp + "_" + userEmail)
+				.orElseThrow(() -> new MyForbiddenException("User not authorized"));
+
+		if (!user.getRole().equals(Role.ADMIN)) {
+			throw new MyForbiddenException("User is not authorized");
+		}
 
 		this.commandCrud.deleteAll();
 		System.err.println("All commands entries Deleted");
@@ -72,7 +94,6 @@ public class AdminCrudImplementation implements AdminLogic {
 		throw new MyBadRequestException("Deprecated opeation");
 	}
 
-
 	@Deprecated
 	public List<MiniAppCommandBoundary> getAllCommands() {
 		throw new MyBadRequestException("Deprecated opeation");
@@ -80,7 +101,13 @@ public class AdminCrudImplementation implements AdminLogic {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<UserBoundary> getAllUsers(int size, int page) {
+	public List<UserBoundary> getAllUsers(int size, int page, String userSuperapp, String userEmail) {
+		UserEntity user = userCrud.findById(userSuperapp + "_" + userEmail)
+				.orElseThrow(() -> new MyForbiddenException("User not authorized1"));
+
+		if (!user.getRole().equals(Role.ADMIN)) {
+			throw new MyForbiddenException("User is not authorized2");
+		}
 		List<UserEntity> entities = this.userCrud.findAll(PageRequest.of(page, size, Direction.ASC, "id")).toList();
 		List<UserBoundary> rv = new ArrayList<>();
 		for (UserEntity entity : entities)
@@ -91,9 +118,17 @@ public class AdminCrudImplementation implements AdminLogic {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<MiniAppCommandBoundary> getAllCommands(int size, int page) {
+	public List<MiniAppCommandBoundary> getAllCommands(int size, int page, String userSuperapp, String userEmail) {
 
-		List<MiniAppCommandEntity> entities = this.commandCrud.findAll(PageRequest.of(page, size, Direction.ASC, "commandId")).getContent();
+		UserEntity user = userCrud.findById(userSuperapp + "_" + userEmail)
+				.orElseThrow(() -> new MyForbiddenException("User not authorized"));
+
+		if (!user.getRole().equals(Role.ADMIN)) {
+			throw new MyForbiddenException("User is not authorized");
+		}
+
+		List<MiniAppCommandEntity> entities = this.commandCrud
+				.findAll(PageRequest.of(page, size, Direction.ASC, "commandId")).getContent();
 		List<MiniAppCommandBoundary> rv = new ArrayList<>();
 		for (MiniAppCommandEntity entity : entities)
 			rv.add(this.commandConverter.toBoundary(entity));
@@ -103,13 +138,22 @@ public class AdminCrudImplementation implements AdminLogic {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<MiniAppCommandBoundary> getAllCommandsByMiniAppName(String miniAppName, int size, int page) {
+	public List<MiniAppCommandBoundary> getAllCommandsByMiniAppName(String miniAppName, int size, int page,
+			String userSuperapp, String userEmail) {
+
+		UserEntity user = userCrud.findById(userSuperapp + "_" + userEmail)
+				.orElseThrow(() -> new MyForbiddenException("User not authorized"));
+
+		if (!user.getRole().equals(Role.ADMIN)) {
+			throw new MyForbiddenException("User is not authorized");
+		}
+
 		if (miniAppName == null || miniAppName.trim().isEmpty()) {
 			throw new MyBadRequestException("Invalid miniAppName");
 		}
 		List<MiniAppCommandEntity> entities = this.commandCrud.findAllByMiniAppName(miniAppName,
-				PageRequest.of(page, size,Direction.ASC, "commandId"));
-		
+				PageRequest.of(page, size, Direction.ASC, "commandId"));
+
 		return entities.stream().map(this.commandConverter::toBoundary).peek(System.err::println).toList();
 	}
 
@@ -117,6 +161,5 @@ public class AdminCrudImplementation implements AdminLogic {
 	public List<MiniAppCommandBoundary> getAllCommandsByMiniAppName(String miniAppName) {
 		throw new MyBadRequestException("Deprecated opeation");
 	}
-
 
 }

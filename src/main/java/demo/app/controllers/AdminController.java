@@ -23,41 +23,50 @@ public class AdminController {
 	}
 
 	@DeleteMapping(path = { "/users" })
-	public void deleteAllUsers() {
-		this.adminLogic.deleteAllUsers();
+	public void deleteAllUsers(@RequestParam(name = "userSuperapp", required = true) String userSuperapp,
+			@RequestParam(name = "userEmail", required = true) String userEmail) {
+		this.adminLogic.deleteAllUsers(userSuperapp, userEmail);
 	}
 
 	@DeleteMapping(path = { "/objects" })
-	public void deleteAllObjects() {
-		this.adminLogic.deleteAllObjects();
+	public void deleteAllObjects(@RequestParam(name = "userSuperapp", required = true) String userSuperapp,
+			@RequestParam(name = "userEmail", required = true) String userEmail) {
+		this.adminLogic.deleteAllObjects(userSuperapp, userEmail);
 
 	}
 
 	@DeleteMapping(path = { "/miniapp" })
-	public void deleteAllCommandsHistory() {
-		this.adminLogic.deleteAllCommandsHistory();
+	public void deleteAllCommandsHistory(@RequestParam(name = "userSuperapp", required = true) String userSuperapp,
+			@RequestParam(name = "userEmail", required = true) String userEmail) {
+		this.adminLogic.deleteAllCommandsHistory(userSuperapp, userEmail);
 	}
 
 	@GetMapping(path = { "/users" }, produces = MediaType.APPLICATION_JSON_VALUE)
-	public UserBoundary[] getAllUsers(@RequestParam(name = "size", defaultValue = "5", required = false) int size,
+	public UserBoundary[] getAllUsers(@RequestParam(name = "userSuperapp", required = true) String userSuperapp,
+			@RequestParam(name = "userEmail", required = true) String userEmail,
+			@RequestParam(name = "size", defaultValue = "5", required = false) int size,
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page) {
 
-		return adminLogic.getAllUsers(size, page).toArray(new UserBoundary[0]);
+		return adminLogic.getAllUsers(size, page, userSuperapp, userEmail).toArray(new UserBoundary[0]);
 	}
 
 	@GetMapping(path = { "/miniapp" }, produces = MediaType.APPLICATION_JSON_VALUE)
-	public MiniAppCommandBoundary[] getAllCommands(	
-			@RequestParam(name= "size",defaultValue = "5",required = false) int size,
-			@RequestParam(name= "page",defaultValue = "0",required = false) int page) {
-		return adminLogic.getAllCommands(size,page).toArray(new MiniAppCommandBoundary[0]);
+	public MiniAppCommandBoundary[] getAllCommands(
+			@RequestParam(name = "userSuperapp", required = true) String userSuperapp,
+			@RequestParam(name = "userEmail", required = true) String userEmail,
+			@RequestParam(name = "size", defaultValue = "5", required = false) int size,
+			@RequestParam(name = "page", defaultValue = "0", required = false) int page) {
+		return adminLogic.getAllCommands(size, page, userSuperapp, userEmail).toArray(new MiniAppCommandBoundary[0]);
 	}
-
 
 	@GetMapping(path = { "/miniapp/{miniAppName}" }, produces = MediaType.APPLICATION_JSON_VALUE)
 	public MiniAppCommandBoundary[] getCommandsOfSpecificMiniApp(@PathVariable("miniAppName") String miniAppName,
-			@RequestParam(name= "size",defaultValue = "5",required = false) int size,
-			@RequestParam(name= "page",defaultValue = "0",required = false) int page) {
-		return adminLogic.getAllCommandsByMiniAppName(miniAppName,size,page).toArray(new MiniAppCommandBoundary[0]);
+			@RequestParam(name = "userSuperapp", required = true) String userSuperapp,
+			@RequestParam(name = "userEmail", required = true) String userEmail,
+			@RequestParam(name = "size", defaultValue = "5", required = false) int size,
+			@RequestParam(name = "page", defaultValue = "0", required = false) int page) {
+		return adminLogic.getAllCommandsByMiniAppName(miniAppName, size, page, userSuperapp, userEmail)
+				.toArray(new MiniAppCommandBoundary[0]);
 	}
 
 }

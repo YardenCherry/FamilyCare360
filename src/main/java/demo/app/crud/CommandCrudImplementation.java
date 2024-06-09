@@ -53,9 +53,9 @@ public class CommandCrudImplementation implements CommandLogic {
 		UserEntity user = userCrud
 				.findById(commandBoundary.getInvokedBy().getUserId().getSuperapp() + "_"
 						+ commandBoundary.getInvokedBy().getUserId().getEmail())
-				.orElseThrow(() -> new MyForbiddenException("User not authorized1"));
+				.orElseThrow(() -> new MyForbiddenException("User not authorized"));
 		if (!user.getRole().equals(Role.MINIAPP_USER)) {
-			throw new MyForbiddenException("User not authorized2");
+			throw new MyForbiddenException("User not authorized");
 		}
 
 		// Verify target object existence and active status
