@@ -37,9 +37,8 @@ public class UserController {
 	}
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public UserBoundary[] getManyMessages(
-		@RequestParam(name = "size", defaultValue = "5", required = false) int size,
-		@RequestParam(name = "page", defaultValue = "0", required = false) int page) {
+	public UserBoundary[] getManyMessages(@RequestParam(name = "size", defaultValue = "5", required = false) int size,
+			@RequestParam(name = "page", defaultValue = "0", required = false) int page) {
 		return this.userLogic.getAll(size, page).toArray(new UserBoundary[0]);
 	}
 

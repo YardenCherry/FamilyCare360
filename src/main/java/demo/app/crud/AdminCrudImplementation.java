@@ -72,6 +72,7 @@ public class AdminCrudImplementation implements AdminLogic {
 		throw new MyBadRequestException("Deprecated opeation");
 	}
 
+
 	@Deprecated
 	public List<MiniAppCommandBoundary> getAllCommands() {
 		throw new MyBadRequestException("Deprecated opeation");
@@ -116,5 +117,6 @@ public class AdminCrudImplementation implements AdminLogic {
 	public List<MiniAppCommandBoundary> getAllCommandsByMiniAppName(String miniAppName) {
 		throw new MyBadRequestException("Deprecated opeation");
 	}
+
 
 }
