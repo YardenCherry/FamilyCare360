@@ -1,12 +1,9 @@
 package demo.app.crud;
 
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,11 +11,11 @@ import demo.app.boundaries.NewUserBoundary;
 import demo.app.boundaries.UserBoundary;
 import demo.app.converters.UserConverter;
 import demo.app.entities.UserEntity;
-import demo.app.logics.EnhancedUserLogic;
+import demo.app.logics.UserLogic;
 import demo.app.objects.InputValidation;
 
 @Service
-public class UserCrudImplementation implements EnhancedUserLogic {
+public class UserCrudImplementation implements UserLogic {
 	private final UserCrud userCrud;
 	private final UserConverter userConverter;
 	private String springApplicationName;
@@ -58,31 +55,6 @@ public class UserCrudImplementation implements EnhancedUserLogic {
 		return this.userCrud.findById(superapp + "_" + email).map(userConverter::toBoundary);
 	}
 
-	@Override
-	@Deprecated
-	public List<UserBoundary> getAll() {
-		throw new MyBadRequestException("deprecated operation");
-//		List<UserEntity> entities = this.userCrud.findAll();
-//		List<UserBoundary> rv = new ArrayList<>();
-//		for (UserEntity entity : entities) {
-//			rv.add(userConverter.toBoundary(entity));
-//		}
-//		return rv;
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public List<UserBoundary> getAll(int size, int page) {
-		List<UserEntity> entities = this.userCrud.findAll(PageRequest.of(page, size, Direction.ASC, "id")).toList();
-
-		List<UserBoundary> rv = new ArrayList<>();
-
-		for (UserEntity entity : entities) {
-			rv.add(this.userConverter.toBoundary(entity));
-		}
-
-		return rv;
-	}
 
 	@Override
 	@Transactional
@@ -94,11 +66,11 @@ public class UserCrudImplementation implements EnhancedUserLogic {
 		UserEntity entity = this.userCrud.findById(id).orElseThrow(() -> new MyBadRequestException(
 				"UserEntity with email: " + email + " and superapp " + superapp + " does not exist in database"));
 
-		if (update.getUserName() != null && !update.getUserName().trim().isEmpty()) {
-			entity.setUserName(update.getUserName());
+		if (update.getUsername() != null && !update.getUsername().trim().isEmpty()) {
+			entity.setUserName(update.getUsername());
 		}
 
-		if (update.getRole() != null && !InputValidation.isValidRole(update.getRole().toString())) {
+		if (update.getRole() != null && InputValidation.isValidRole(update.getRole().toString())) {
 			entity.setRole(update.getRole());
 		}
 
@@ -122,7 +94,7 @@ public class UserCrudImplementation implements EnhancedUserLogic {
 		if (userBoundary.getRole() == null || !InputValidation.isValidRole(userBoundary.getRole().toString())) {
 			throw new MyBadRequestException("Invalid role");
 		}
-		if (userBoundary.getUserName() == null || userBoundary.getUserName().length() < 1) {
+		if (userBoundary.getUsername() == null || userBoundary.getUsername().length() < 1) {
 			throw new MyBadRequestException("Username must be at least 1 characters");
 		}
 		if (userBoundary.getAvatar() == null || userBoundary.getAvatar().length() < 1) {

@@ -1,6 +1,8 @@
 package demo.app.crud;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -46,7 +48,7 @@ public class CommandCrudImplementation implements CommandLogic {
 
 	@Override
 	@Transactional(readOnly = false)
-	public MiniAppCommandBoundary storeInDatabase(String miniAppName, MiniAppCommandBoundary commandBoundary) {
+	public List<MiniAppCommandBoundary> storeInDatabase(String miniAppName, MiniAppCommandBoundary commandBoundary) {
 		validateCommandBoundary(commandBoundary);
 
 		// Verify user permissions
@@ -61,29 +63,27 @@ public class CommandCrudImplementation implements CommandLogic {
 		// Verify target object existence and active status
 		ObjectEntity targetObject = objectCrud
 				.findById(commandBoundary.getTargetObject().getObjectId().getId() + "_"
-						+ commandBoundary.getTargetObject().getObjectId().getSuperApp())
+						+ commandBoundary.getTargetObject().getObjectId().getSuperapp())
 				.orElseThrow(() -> new MyBadRequestException("Target object not found in the database."));
 		if (!targetObject.getActive()) {
 			throw new MyBadRequestException("Target object is not active.");
 		}
 		commandBoundary.getCommandId().setId(UUID.randomUUID().toString());
-		commandBoundary.getCommandId().setSuperApp(springApplicationName);
-		commandBoundary.getCommandId().setMiniApp(miniAppName);
+		commandBoundary.getCommandId().setSuperapp(springApplicationName);
+		commandBoundary.getCommandId().setMiniapp(miniAppName);
 		commandBoundary.setInvocationTimeStamp(new Date());
-		commandBoundary.getTargetObject().getObjectId().setSuperApp(springApplicationName);
+		commandBoundary.getTargetObject().getObjectId().setSuperapp(springApplicationName);
 		commandBoundary.getInvokedBy().getUserId().setSuperapp(springApplicationName);
 		MiniAppCommandEntity entity = this.commandConverter.toEntity(commandBoundary);
 		entity = this.commandCrud.save(entity);
-
-		return this.commandConverter.toBoundary(entity);
+		List<MiniAppCommandBoundary> boundaries=new ArrayList<>();
+		boundaries.add(this.commandConverter.toBoundary(entity));
+		return boundaries;
 	}
 
 	private void validateCommandBoundary(MiniAppCommandBoundary commandBoundary) {
 		if (commandBoundary == null) {
 			throw new MyBadRequestException("CommandBoundary cannot be null.");
-		}
-		if (commandBoundary.getCommandId() == null || commandBoundary.getCommandId().getMiniApp() == null) {
-			throw new MyBadRequestException("Command ID and miniApp cannot be null.");
 		}
 		if (commandBoundary.getCommand() == null || commandBoundary.getCommand().trim().isEmpty()) {
 			throw new MyBadRequestException("Command cannot be null or empty.");

@@ -19,7 +19,7 @@ public class UserConverter {
 		userId.setSuperapp(idParts[0]);
 
 		boundary.setUserId(userId);
-		boundary.setUserName(entity.getUserName());
+		boundary.setUsername(entity.getUserName());
 		boundary.setRole(entity.getRole());
 		boundary.setAvatar(entity.getAvatar());
 
@@ -30,7 +30,7 @@ public class UserConverter {
 		UserEntity entity = new UserEntity();
 
 		entity.setId(boundary.getUserId().getSuperapp() + "_" + boundary.getUserId().getEmail() + "_");
-		entity.setUserName(boundary.getUserName());
+		entity.setUserName(boundary.getUsername());
 		entity.setRole(boundary.getRole());
 		entity.setAvatar(boundary.getAvatar());
 
@@ -40,7 +40,7 @@ public class UserConverter {
 	public UserEntity toEntity(NewUserBoundary boundary) {
 
 		UserEntity entity = new UserEntity();
-		entity.setUserName(boundary.getUserName());
+		entity.setUserName(boundary.getUsername());
 		entity.setAvatar(boundary.getAvatar() != null ? boundary.getAvatar() : "");
 		entity.setRole(boundary.getRole());
 

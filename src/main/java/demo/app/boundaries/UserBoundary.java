@@ -1,6 +1,5 @@
 package demo.app.boundaries;
 
-import demo.app.entities.UserEntity;
 import demo.app.enums.Role;
 import demo.app.objects.UserId;
 
@@ -8,22 +7,12 @@ public class UserBoundary {
 
 	private UserId userId;
 	private Role role;
-	private String userName;
+	private String username;
 	private String avatar;
 
 	public UserBoundary() {
 	}
 
-	public UserBoundary(UserEntity userEntity) {
-		this.userId = new UserId();
-		String[] splitId = userEntity.getId().split("_");
-		this.getUserId().setEmail(splitId[0]);
-		this.getUserId().setSuperapp(splitId[1]);
-		this.setUserName(userEntity.getUserName());
-		this.setRole(userEntity.getRole());
-		this.setAvatar(userEntity.getAvatar());
-
-	}
 
 	public UserId getUserId() {
 		return userId;
@@ -41,12 +30,12 @@ public class UserBoundary {
 		this.role = role;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getAvatar() {
@@ -59,18 +48,7 @@ public class UserBoundary {
 
 	@Override
 	public String toString() {
-		return "UserBoundary{" + "userId=" + userId + ", role=" + role + ", userName='" + userName + '\'' + ", avatar='"
+		return "UserBoundary{" + "userId=" + userId + ", role=" + role + ", username='" + username + '\'' + ", avatar='"
 				+ avatar + '\'' + '}';
-	}
-
-	public UserEntity toEntity() {
-		UserEntity userEntity = new UserEntity();
-
-		userEntity.setId(this.getUserId().getEmail() + "_" + this.getUserId().getSuperapp());
-		userEntity.setRole(this.getRole());
-		userEntity.setUserName(this.getUserName());
-		userEntity.setAvatar(this.getAvatar());
-
-		return userEntity;
 	}
 }

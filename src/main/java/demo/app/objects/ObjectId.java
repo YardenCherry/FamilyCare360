@@ -7,11 +7,11 @@ public class ObjectId {
 	public ObjectId() {
 	}
 
-	public void setSuperApp(String superapp) {
+	public void setSuperapp(String superapp) {
 		this.superapp = superapp;
 	}
 
-	public String getSuperApp() {
+	public String getSuperapp() {
 		return this.superapp;
 	}
 

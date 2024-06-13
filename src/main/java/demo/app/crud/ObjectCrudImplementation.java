@@ -52,7 +52,7 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 	public ObjectBoundary storeInDatabase(ObjectBoundary objectBoundary) {
 		ObjectId objectId = new ObjectId();
 		objectId.setId(UUID.randomUUID().toString());
-		objectId.setSuperApp(springApplicationName);
+		objectId.setSuperapp(springApplicationName);
 		objectBoundary.setObjectId(objectId);
 
 		objectBoundary.setCreationTimestamp(new Date());
@@ -152,6 +152,11 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 		ObjectEntity existing = this.objectCrud.findById(objectId).orElse(null);
 
 		ObjectEntity temp = objectConverter.toEntity(update);
+	
+		if (update.getType() != null)
+			existing.setType(temp.getType());
+		if (update.getAlias() != null)
+			existing.setAlias(temp.getAlias());
 		if (update.getActive() != null)
 			existing.setActive(temp.getActive());
 		if (update.getLocation() != null)
@@ -266,8 +271,13 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 					.stream().toList();
 		}
 
-		return null;
+		List<ObjectBoundary> rv = new ArrayList<>();
 
+		for (ObjectEntity entity : entities) {
+			rv.add(this.objectConverter.toBoundary(entity));
+		}
+
+		return rv;
 	}
 
 	@Override

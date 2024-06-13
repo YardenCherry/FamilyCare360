@@ -83,7 +83,7 @@ public class Initializer implements CommandLineRunner {
 	private ObjectId createObjectId(String id, String superApp) {
 		ObjectId objectId = new ObjectId();
 		objectId.setId(id);
-		objectId.setSuperApp(superApp);
+		objectId.setSuperapp(superApp);
 		return objectId;
 	}
 
@@ -128,7 +128,7 @@ public class Initializer implements CommandLineRunner {
 		NewUserBoundary user = new NewUserBoundary();
 		user.setEmail(email);
 		user.setRole(role);
-		user.setUserName(userName);
+		user.setUsername(userName);
 		user.setAvatar(avatar);
 		return user;
 	}

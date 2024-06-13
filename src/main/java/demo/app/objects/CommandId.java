@@ -9,20 +9,20 @@ public class CommandId {
 	public CommandId() {
 	}
 
-	public String getSuperApp() {
+	public String getSuperapp() {
 		return superapp;
 	}
 
-	public void setSuperApp(String superApp) {
-		this.superapp = superApp;
+	public void setSuperapp(String superapp) {
+		this.superapp = superapp;
 	}
 
-	public String getMiniApp() {
+	public String getMiniapp() {
 		return miniapp;
 	}
 
-	public void setMiniApp(String miniApp) {
-		this.miniapp = miniApp;
+	public void setMiniapp(String miniapp) {
+		this.miniapp = miniapp;
 	}
 
 	public String getId() {
@@ -35,7 +35,7 @@ public class CommandId {
 
 	@Override
 	public String toString() {
-		return "CommandId:/n " + "{superapp=" + superapp + "/n" + ", miniApp=" + miniapp + "/n, id=" + id + "}";
+		return "CommandId:/n " + "{superapp=" + superapp + "/n" + ", miniapp=" + miniapp + "/n, id=" + id + "}";
 	}
 
 }

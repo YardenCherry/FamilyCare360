@@ -1,6 +1,5 @@
 package demo.app.boundaries;
 
-import demo.app.entities.UserEntity;
 import demo.app.enums.Role;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -10,7 +9,7 @@ public class NewUserBoundary {
 	private String email;
 	@Enumerated(EnumType.STRING)
 	private Role role;
-	private String userName;
+	private String username;
 	private String avatar;
 
 	public NewUserBoundary() {
@@ -32,12 +31,12 @@ public class NewUserBoundary {
 		return role;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUsername(String userName) {
+		this.username = userName;
 	}
 
 	public String getAvatar() {
@@ -48,21 +47,10 @@ public class NewUserBoundary {
 		this.avatar = avatar;
 	}
 
-	public UserEntity toEntity() {
-		UserEntity entity = new UserEntity();
-
-		entity.setId(this.getEmail());
-		entity.setRole(this.getRole());
-		entity.setUserName(this.getUserName() == null ? "Anonymous" : this.getUserName());
-		entity.setAvatar(this.getAvatar() == null ? "F" : this.getAvatar());
-
-		return entity;
-
-	}
 
 	@Override
 	public String toString() {
-		return "NewUserBoundary{" + "email='" + email + '\'' + ", role=" + role + ", userName='" + userName + '\''
+		return "NewUserBoundary{" + "email='" + email + '\'' + ", role=" + role + ", username='" + username + '\''
 				+ ", avatar='" + avatar + '\'' + '}';
 	}
 }

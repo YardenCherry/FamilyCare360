@@ -25,7 +25,7 @@ public class ObjectConverter {
 
 		ObjectId ob = new ObjectId();
 		ob.setId(objectIdParts[0]);
-		ob.setSuperApp(objectIdParts[1]);
+		ob.setSuperapp(objectIdParts[1]);
 		boundary.setObjectId(ob);
 
 		boundary.setType(entity.getType());
@@ -59,7 +59,7 @@ public class ObjectConverter {
 
 	public ObjectEntity toEntity(ObjectBoundary boundary) {
 		ObjectEntity entity = new ObjectEntity();
-		entity.setObjectID(boundary.getObjectId().getId() + "_" + boundary.getObjectId().getSuperApp());
+		entity.setObjectID(boundary.getObjectId().getId() + "_" + boundary.getObjectId().getSuperapp());
 		entity.setType(boundary.getType());
 		entity.setAlias(boundary.getAlias());
 		entity.setCreationTimestamp(boundary.getCreationTimestamp());

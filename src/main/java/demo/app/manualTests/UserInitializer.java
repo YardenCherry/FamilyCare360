@@ -50,7 +50,7 @@
 //		NewUserBoundary user = new NewUserBoundary();
 //		user.setEmail(email);
 //		user.setRole(role);
-//		user.setUserName(userName);
+//		user.setUsername(userName);
 //		user.setAvatar(avatar);
 //		return user;
 //	}
