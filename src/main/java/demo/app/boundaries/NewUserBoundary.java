@@ -1,13 +1,11 @@
 package demo.app.boundaries;
 
 import demo.app.enums.Role;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+
 
 public class NewUserBoundary {
 
 	private String email;
-	@Enumerated(EnumType.STRING)
 	private Role role;
 	private String username;
 	private String avatar;

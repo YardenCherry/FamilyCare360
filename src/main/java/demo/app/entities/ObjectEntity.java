@@ -3,6 +3,8 @@ package demo.app.entities;
 import java.util.Date;
 import java.util.Map;
 
+import org.springframework.data.geo.Point;
+
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -23,18 +25,34 @@ public class ObjectEntity {
 	@Lob
 	@Convert(converter = ApplicationMapToStringConverter.class)
 	private Map<String, Object> objectDetails;
-	public String location;
+    
+	private double latitude;
+    private double longitude;
 
 	public ObjectEntity() {
+
 	}
 
-	public String getLocation() {
-		return location;
+
+	public double getLatitude() {
+		return latitude;
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
 	}
+
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
 
 	public String getObjectID() {
 		return objectID;
@@ -95,7 +113,13 @@ public class ObjectEntity {
 	@Override
 	public String toString() {
 		return "ObjectEntity{" + "objectID='" + objectID + '\'' + ", type='" + type + '\'' + ", alias='" + alias + '\''
-				+ ", location='" + location + '\'' + ", active=" + active + ", creationTimestamp=" + creationTimestamp
+				+ ", latitude='" + latitude + ", longitude='" + longitude +'\'' + ", active=" + active + ", creationTimestamp=" + creationTimestamp
 				+ ", createdBy=" + createdBy + ", objectDetails=" + objectDetails + '}';
+	}
+
+
+	public void setLocation(double latitude, double longitude) {
+		setLatitude(latitude);
+		setLongitude(longitude);
 	}
 }

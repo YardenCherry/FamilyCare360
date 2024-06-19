@@ -9,6 +9,9 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.geo.Circle;
+import org.springframework.data.geo.Metrics;
+import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -160,7 +163,7 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 		if (update.getActive() != null)
 			existing.setActive(temp.getActive());
 		if (update.getLocation() != null)
-			existing.setLocation(temp.getLocation());
+			existing.setLocation(temp.getLatitude(),temp.getLongitude());
 		if (update.getObjectDetails() != null)
 			existing.setObjectDetails(temp.getObjectDetails());
 
@@ -261,12 +264,12 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 		List<ObjectEntity> entities;
 		if (user.getRole().equals(Role.MINIAPP_USER)) {
 			entities = this.objectCrud
-					.findAllByAliasContainsAndActive(pattern, true,
+					.findAllByAliasLikeAndActive(pattern, true,
 							PageRequest.of(page, size, Direction.ASC, "creationTimestamp", "objectID"))
 					.stream().toList();
 		} else {
 			entities = this.objectCrud
-					.findAllByAliasContains(pattern,
+					.findAllByAliasLike(pattern,
 							PageRequest.of(page, size, Direction.ASC, "creationTimestamp", "objectID"))
 					.stream().toList();
 		}
@@ -279,7 +282,7 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 
 		return rv;
 	}
-
+	
 	@Override
 	@Transactional(readOnly = true)
 	public List<ObjectBoundary> getAllByLocation(double lat, double lng, double distance, String distanceUnits,
@@ -290,33 +293,28 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 		if (!user.getRole().equals(Role.SUPERAPP_USER) && !user.getRole().equals(Role.MINIAPP_USER)) {
 			throw new MyForbiddenException("User is not authorized");
 		}
-
-		// Convert distance to neutral units (assume kilometers for simplicity)
-		final double radius;
-		if ("MILES".equalsIgnoreCase(distanceUnits)) {
-			radius = distance * 1.60934; // Convert miles to kilometers
-		} else {
-			radius = distance; // Assume the distance is in kilometers
+		distanceUnits = distanceUnits.toUpperCase();
+		Double units= null;
+		for(Metrics val : Metrics.values()) {
+			if(val.toString().equals(distanceUnits))
+				units=Metrics.valueOf(distanceUnits).getMultiplier();
 		}
+		if(units==null)
+			throw new MyBadRequestException("Distance Units is not authorized");
 
 		List<ObjectEntity> entities;
 		if (user.getRole().equals(Role.MINIAPP_USER)) {
+			
 			entities = this.objectCrud
-					.findAllByLocationWithinAndActive(
-							lat, lng, radius, true, PageRequest.of(page, size, Direction.ASC, "location", "objectID"))
+					.findAllByLocationWithinAndActive(lat, lng, distance, units,
+							true, PageRequest.of(page, size, Direction.ASC,"objectID"))
 					.stream()
-					.filter(entity -> calculateDistance(lat, lng,
-							Double.parseDouble(entity.getLocation().split("_")[0]),
-							Double.parseDouble(entity.getLocation().split("_")[1])) <= radius)
 					.toList();
 		} else {
 			entities = this.objectCrud
-					.findAllByLocationWithin(
-							lat, lng, radius, PageRequest.of(page, size, Direction.ASC, "location", "objectID"))
+					.findAllByLocationWithin(lat, lng, distance, units,
+						PageRequest.of(page, size, Direction.ASC,"objectID"))
 					.stream()
-					.filter(entity -> calculateDistance(lat, lng,
-							Double.parseDouble(entity.getLocation().split("_")[0]),
-							Double.parseDouble(entity.getLocation().split("_")[1])) <= radius)
 					.toList();
 		}
 
@@ -328,15 +326,63 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 		return rv;
 	}
 
+//	@Override
+//	@Transactional(readOnly = true)
+//	public List<ObjectBoundary> getAllByLocation(double lat, double lng, double distance, String distanceUnits,
+//			int size, int page, String userSuperapp, String userEmail) {
+//		UserEntity user = userCrud.findById(userSuperapp + "_" + userEmail)
+//				.orElseThrow(() -> new MyForbiddenException("User not authorized"));
+//
+//		if (!user.getRole().equals(Role.SUPERAPP_USER) && !user.getRole().equals(Role.MINIAPP_USER)) {
+//			throw new MyForbiddenException("User is not authorized");
+//		}
+//
+//		// Convert distance to neutral units (assume kilometers for simplicity)
+//		final double radius;
+//		if ("MILES".equalsIgnoreCase(distanceUnits)) {
+//			radius = distance * 1.60934; // Convert miles to kilometers
+//		} else {
+//			radius = distance; // Assume the distance is in kilometers
+//		}
+//
+//		List<ObjectEntity> entities;
+//		if (user.getRole().equals(Role.MINIAPP_USER)) {
+//			entities = this.objectCrud
+//					.findAllByLocationWithinAndActive(
+//							lat, lng, radius, true, PageRequest.of(page, size, Direction.ASC, "location", "objectID"))
+//					.stream()
+//					.filter(entity -> calculateDistance(lat, lng,
+//							Double.parseDouble(entity.getLocation().split("_")[0]),
+//							Double.parseDouble(entity.getLocation().split("_")[1])) <= radius)
+//					.toList();
+//		} else {
+//			entities = this.objectCrud
+//					.findAllByLocationWithin(
+//							lat, lng, radius, PageRequest.of(page, size, Direction.ASC, "location", "objectID"))
+//					.stream()
+//					.filter(entity -> calculateDistance(lat, lng,
+//							Double.parseDouble(entity.getLocation().split("_")[0]),
+//							Double.parseDouble(entity.getLocation().split("_")[1])) <= radius)
+//					.toList();
+//		}
+//
+//		List<ObjectBoundary> rv = new ArrayList<>();
+//		for (ObjectEntity entity : entities) {
+//			rv.add(this.objectConverter.toBoundary(entity));
+//		}
+//
+//		return rv;
+//	}
+
 	// Utility method to calculate distance between two coordinates in kilometers
-	private double calculateDistance(double lat1, double lng1, double lat2, double lng2) {
-		final int EARTH_RADIUS = 6371; // Radius of the earth in kilometers
-		double latDistance = Math.toRadians(lat2 - lat1);
-		double lngDistance = Math.toRadians(lng2 - lng1);
-		double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2) + Math.cos(Math.toRadians(lat1))
-				* Math.cos(Math.toRadians(lat2)) * Math.sin(lngDistance / 2) * Math.sin(lngDistance / 2);
-		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-		return EARTH_RADIUS * c; // Distance in kilometers
-	}
+//	private double calculateDistance(double lat1, double lng1, double lat2, double lng2) {
+//		final int EARTH_RADIUS = 6371; // Radius of the earth in kilometers
+//		double latDistance = Math.toRadians(lat2 - lat1);
+//		double lngDistance = Math.toRadians(lng2 - lng1);
+//		double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2) + Math.cos(Math.toRadians(lat1))
+//				* Math.cos(Math.toRadians(lat2)) * Math.sin(lngDistance / 2) * Math.sin(lngDistance / 2);
+//		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+//		return EARTH_RADIUS * c; // Distance in kilometers
+//	}
 
 }

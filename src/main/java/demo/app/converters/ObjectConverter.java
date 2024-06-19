@@ -2,6 +2,7 @@ package demo.app.converters;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Component;
 
 import demo.app.boundaries.ObjectBoundary;
@@ -34,16 +35,17 @@ public class ObjectConverter {
 		boundary.setCreationTimestamp(entity.getCreationTimestamp());
 		boundary.setObjectDetails(entity.getObjectDetails());
 
-		String[] locationParts = entity.getLocation().split("_");
-		if (locationParts.length == 2) {
-			try {
-				double lat = Double.parseDouble(locationParts[0]);
-				double lng = Double.parseDouble(locationParts[1]);
-				boundary.setLocation(new Location(lat, lng));
-			} catch (NumberFormatException e) {
-				throw new IllegalArgumentException("Invalid location format", e);
-			}
-		}
+		Location location = new Location(entity.getLatitude(),entity.getLongitude());
+		boundary.setLocation(location);
+//		if (locationParts.length == 2) {
+//			try {
+//				double lat = Double.parseDouble(locationParts[0]);
+//				double lng = Double.parseDouble(locationParts[1]);
+//				boundary.setLocation(new Location(lat, lng));
+//			} catch (NumberFormatException e) {
+//				throw new IllegalArgumentException("Invalid location format", e);
+//			}
+//		}
 
 		String[] createdByParts = entity.getCreatedBy().split("_");
 		if (createdByParts.length == 2) {
@@ -73,9 +75,9 @@ public class ObjectConverter {
 
 		Location location = boundary.getLocation();
 		if (location != null && location.getLat() != null && location.getLng() != null) {
-			entity.setLocation(location.getLat() + "_" + location.getLng());
+			entity.setLocation(location.getLat(),location.getLng());
 		} else {
-			entity.setLocation("0_0");
+			entity.setLocation(0,0);
 		}
 
 		logger.debug("Converted to entity: {}", entity);
