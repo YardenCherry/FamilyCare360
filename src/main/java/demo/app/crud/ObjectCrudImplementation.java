@@ -119,7 +119,7 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 	@Transactional(readOnly = true)
 	public List<ObjectBoundary> getAll(int size, int page, String userSuperapp, String userEmail) {
 		UserEntity user = userCrud.findById(userSuperapp + "_" + userEmail)
-				.orElseThrow(() -> new MyForbiddenException("User not authorized"));
+				.orElseThrow(() -> new MyForbiddenException("User not authorized1"));
 
 		if (!user.getRole().equals(Role.SUPERAPP_USER) && !user.getRole().equals(Role.MINIAPP_USER)) {
 			throw new MyForbiddenException("User is not authorized");
@@ -225,20 +225,20 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 	@Transactional(readOnly = true)
 	public List<ObjectBoundary> getAllByType(String type, int size, int page, String userSuperapp, String userEmail) {
 		UserEntity user = userCrud.findById(userSuperapp + "_" + userEmail)
-				.orElseThrow(() -> new MyForbiddenException("User not authorized"));
+				.orElseThrow(() -> new MyForbiddenException("User not authorized1"));
 
 		if (!user.getRole().equals(Role.SUPERAPP_USER) && !user.getRole().equals(Role.MINIAPP_USER)) {
-			throw new MyForbiddenException("User is not authorized");
+			throw new MyForbiddenException("User is not authorized2");
 		}
 
 		List<ObjectEntity> entities;
 		if (user.getRole().equals(Role.MINIAPP_USER)) {
 			entities = this.objectCrud
-					.findAllByTypeAndActive(type, true, PageRequest.of(page, size, Direction.ASC, "type", "objectID"))
+					.findAllByTypeAndActive(type, true, PageRequest.of(page, size, Direction.ASC, "objectID"))
 					.stream().toList();
 		} else {
 			entities = this.objectCrud
-					.findAllByType(type, PageRequest.of(page, size, Direction.ASC, "type", "objectID")).stream()
+					.findAllByType(type, PageRequest.of(page, size, Direction.ASC, "objectID")).stream()
 					.toList();
 		}
 
@@ -252,6 +252,7 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<ObjectBoundary> getAllByAliasPattern(String pattern, int size, int page, String userSuperapp,
 			String userEmail) {
 		UserEntity user = userCrud.findById(userSuperapp + "_" + userEmail)
@@ -264,12 +265,12 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 		List<ObjectEntity> entities;
 		if (user.getRole().equals(Role.MINIAPP_USER)) {
 			entities = this.objectCrud
-					.findAllByAliasLikeAndActive(pattern, true,
+					.findAllByAliasLikeIgnoreCaseAndActive(pattern, true,
 							PageRequest.of(page, size, Direction.ASC, "creationTimestamp", "objectID"))
 					.stream().toList();
 		} else {
 			entities = this.objectCrud
-					.findAllByAliasLike(pattern,
+					.findAllByAliasLikeIgnoreCase(pattern,
 							PageRequest.of(page, size, Direction.ASC, "creationTimestamp", "objectID"))
 					.stream().toList();
 		}
