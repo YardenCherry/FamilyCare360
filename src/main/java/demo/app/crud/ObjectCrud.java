@@ -50,5 +50,11 @@ public interface ObjectCrud extends JpaRepository<ObjectEntity, String> {
 			@Param("units") double units, 
 			@Param("active") boolean active, 
 			Pageable pageable);
+	 
+//	 finds all entities with a latitude and longitude within a specified rectangular area
+//	 public List<ObjectEntity> findAllByLatitudeBetweenAndLongitudeBetween(
+//	            double startLat, double endLat, 
+//	            double startLng, double endLng, 
+//	            Pageable pageable);
 
 }

@@ -162,8 +162,6 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 			existing.setAlias(temp.getAlias());
 		if (update.getActive() != null)
 			existing.setActive(temp.getActive());
-		if (update.getLocation() != null)
-			existing.setLocation(temp.getLatitude(),temp.getLongitude());
 		if (update.getObjectDetails() != null)
 			existing.setObjectDetails(temp.getObjectDetails());
 
