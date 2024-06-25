@@ -19,7 +19,6 @@ public class UserController {
 
 	private UserLogic userLogic;
 
-
 	public UserController(UserLogic userLogic) {
 		this.userLogic = userLogic;
 	}
@@ -35,7 +34,6 @@ public class UserController {
 		return this.userLogic.getSpecificUser(superapp, email)
 				.orElseThrow(() -> new MyNotFoundException("coulde not find user in database"));
 	}
-
 
 	@PutMapping(path = { "/{superapp}/{email}" }, consumes = { MediaType.APPLICATION_JSON_VALUE })
 	public void update(@PathVariable("superapp") String superapp, @PathVariable("email") String email,

@@ -2,7 +2,6 @@ package demo.app.boundaries;
 
 import demo.app.enums.Role;
 
-
 public class NewUserBoundary {
 
 	private String email;
@@ -44,7 +43,6 @@ public class NewUserBoundary {
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
 	}
-
 
 	@Override
 	public String toString() {

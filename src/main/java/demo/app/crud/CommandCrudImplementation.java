@@ -48,7 +48,7 @@ public class CommandCrudImplementation implements CommandLogic {
 
 	@Override
 	@Transactional(readOnly = false)
-	public List<Object> storeInDatabase(String miniAppName, MiniAppCommandBoundary commandBoundary) {
+	public List<MiniAppCommandBoundary> storeInDatabase(String miniAppName, MiniAppCommandBoundary commandBoundary) {
 		validateCommandBoundary(commandBoundary);
 
 		// Verify user permissions
@@ -76,7 +76,7 @@ public class CommandCrudImplementation implements CommandLogic {
 		commandBoundary.getInvokedBy().getUserId().setSuperapp(springApplicationName);
 		MiniAppCommandEntity entity = this.commandConverter.toEntity(commandBoundary);
 		entity = this.commandCrud.save(entity);
-		List<Object> boundaries=new ArrayList<>();
+		List<MiniAppCommandBoundary> boundaries = new ArrayList<>();
 		boundaries.add(this.commandConverter.toBoundary(entity));
 		return boundaries;
 	}
