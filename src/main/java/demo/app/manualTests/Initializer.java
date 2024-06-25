@@ -45,7 +45,6 @@ public class Initializer implements CommandLineRunner {
 		storeUsersInDatabase();
 		this.admin.deleteAllObjects("2024b.yarden.cherry", "admin@demo.org");
 		this.admin.deleteAllUsers("2024b.yarden.cherry", "admin@demo.org");
-		//this.admin.deleteAllCommandsHistory("2024b.yarden.cherry", "admin@demo.org");
 		storeUsersInDatabase();
 		storeObjectsInDatabase();
 		storeCommandsInDatabase();
