@@ -1,5 +1,6 @@
 package demo.app.crud;
 
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -53,6 +54,7 @@ public class UserCrudImplementation implements UserLogic {
 			throw new MyBadRequestException("Invalid email format");
 		return this.userCrud.findById(superapp + "_" + email).map(userConverter::toBoundary);
 	}
+
 
 	@Override
 	@Transactional

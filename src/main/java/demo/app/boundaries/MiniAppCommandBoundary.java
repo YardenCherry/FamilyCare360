@@ -73,4 +73,5 @@ public class MiniAppCommandBoundary {
 				+ ", commandAttributes=" + commandAttributes + '}';
 	}
 
+
 }

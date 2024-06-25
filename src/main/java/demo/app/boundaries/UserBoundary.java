@@ -13,6 +13,7 @@ public class UserBoundary {
 	public UserBoundary() {
 	}
 
+
 	public UserId getUserId() {
 		return userId;
 	}
