@@ -30,7 +30,7 @@ public interface ObjectCrud extends JpaRepository<ObjectEntity, String> {
 	public List<ObjectEntity> findAllByAliasLikeIgnoreCaseAndActive(@Param("pattern") String pattern,
 			@Param("active") boolean active, Pageable pageable);
 
-	 @Query(value = "SELECT * FROM objects o WHERE " +
+	 @Query(value = "SELECT * FROM objects o WHERE  " +
              "(:units * acos(cos(radians(:lat)) * cos(radians(o.latitude)) * cos(radians(o.longitude) - radians(:lng)) + sin(radians(:lat)) * sin(radians(o.latitude)))) <= :distance "
              ,nativeQuery = true)
 	public List<ObjectEntity> findAllByLocationWithin(
