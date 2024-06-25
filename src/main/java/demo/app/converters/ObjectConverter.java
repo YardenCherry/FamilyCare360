@@ -2,7 +2,6 @@ package demo.app.converters;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Component;
 
 import demo.app.boundaries.ObjectBoundary;

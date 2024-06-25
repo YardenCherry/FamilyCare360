@@ -17,7 +17,6 @@ import demo.app.enums.Role;
 import demo.app.logics.AdminLogic;
 import demo.app.logics.CommandLogic;
 import demo.app.logics.EnhancedObjectLogic;
-import demo.app.logics.ObjectLogic;
 import demo.app.logics.UserLogic;
 import demo.app.objects.CommandId;
 import demo.app.objects.CreatedBy;
@@ -55,7 +54,7 @@ public class Initializer implements CommandLineRunner {
 	private void storeCommandsInDatabase() {
 		MiniAppCommandBoundary[] commandsStore=new MiniAppCommandBoundary[] {
 				createCommand("2024b.yarden.cherry","dummyApp","1","get All Babysitters", this.objects.getAll(5,0,"2024b.yarden.cherry","superapp1@demo.org").get(0).getObjectId().getId(), "miniapp@demo.org", createObjectDetails()),
-				createCommand("2024b.yarden.cherry","dummy","","get All Parents", this.objects.getAll(5,0,"2024b.yarden.cherry","superapp1@demo.org").get(1).getObjectId().getId(), "miniapp@demo.org", createObjectDetails()),
+				createCommand("2024b.yarden.cherry","dummy","","get All Parents", this.objects.getAll(5,0,"2024b.yarden.cherry","superapp1@demo.org").get(0).getObjectId().getId(), "miniapp@demo.org", createObjectDetails()),
 		};
 		for (MiniAppCommandBoundary boundary : commandsStore) {
 			Object storedBoundary = this.commands.storeInDatabase(boundary.getCommandId().getMiniapp(),boundary);

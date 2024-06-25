@@ -3,8 +3,6 @@ package demo.app.entities;
 import java.util.Date;
 import java.util.Map;
 
-import org.springframework.data.geo.Point;
-
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
