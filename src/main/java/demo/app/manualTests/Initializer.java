@@ -37,7 +37,7 @@ public class Initializer implements CommandLineRunner {
 		this.objects = objects;
 		this.users = users;
 		this.admin = admin;
-		this.commands=commands;
+		this.commands = commands;
 	}
 
 	@Override
@@ -49,24 +49,30 @@ public class Initializer implements CommandLineRunner {
 		storeObjectsInDatabase();
 		storeCommandsInDatabase();
 	}
-	
+
 	private void storeCommandsInDatabase() {
-		MiniAppCommandBoundary[] commandsStore=new MiniAppCommandBoundary[] {
-				createCommand("2024b.yarden.cherry","dummyApp","1","get All Babysitters", this.objects.getAll(5,0,"2024b.yarden.cherry","superapp1@demo.org").get(0).getObjectId().getId(), "miniapp@demo.org", createObjectDetails()),
-				createCommand("2024b.yarden.cherry","dummy","","get All Parents", this.objects.getAll(5,0,"2024b.yarden.cherry","superapp1@demo.org").get(0).getObjectId().getId(), "miniapp@demo.org", createObjectDetails()),
-		};
+		MiniAppCommandBoundary[] commandsStore = new MiniAppCommandBoundary[] {
+				createCommand("2024b.yarden.cherry", "dummyApp", "1", "get All Babysitters",
+						this.objects.getAll(5, 0, "2024b.yarden.cherry", "superapp1@demo.org").get(0).getObjectId()
+								.getId(),
+						"miniapp@demo.org", createObjectDetails()),
+				createCommand(
+						"2024b.yarden.cherry", "dummy", "", "get All Parents", this.objects
+								.getAll(5, 0, "2024b.yarden.cherry", "superapp1@demo.org").get(0).getObjectId().getId(),
+						"miniapp@demo.org", createObjectDetails()), };
 		for (MiniAppCommandBoundary boundary : commandsStore) {
-			Object storedBoundary = this.commands.storeInDatabase(boundary.getCommandId().getMiniapp(),boundary);
+			Object storedBoundary = this.commands.storeInDatabase(boundary.getCommandId().getMiniapp(), boundary);
 			System.err.println("Created: " + storedBoundary);
 		}
-		
+
 	}
 
-	private MiniAppCommandBoundary createCommand(String superapp, String miniapp, String id, String Command, String idObject, String email, Map<String, Object> commandsAttributess) {
-		MiniAppCommandBoundary commandBoundary= new MiniAppCommandBoundary();
-		commandBoundary.setCommandId(createCommandId(superapp,miniapp,id));
+	private MiniAppCommandBoundary createCommand(String superapp, String miniapp, String id, String Command,
+			String idObject, String email, Map<String, Object> commandsAttributess) {
+		MiniAppCommandBoundary commandBoundary = new MiniAppCommandBoundary();
+		commandBoundary.setCommandId(createCommandId(superapp, miniapp, id));
 		commandBoundary.setCommand(Command);
-		TargetObject targetObject=new TargetObject();
+		TargetObject targetObject = new TargetObject();
 		targetObject.setObjectId(createObjectId(idObject, superapp));
 		commandBoundary.setTargetObject(targetObject);
 		commandBoundary.setInvocationTimeStamp(new Date());
@@ -75,28 +81,28 @@ public class Initializer implements CommandLineRunner {
 
 		return commandBoundary;
 	}
-	
+
 	private CommandId createCommandId(String superapp, String miniapp, String id) {
 		CommandId commandId = new CommandId();
-	    commandId.setSuperapp(superapp);
-	    commandId.setMiniapp(miniapp);
-	    commandId.setId(id);
-	    return commandId;
+		commandId.setSuperapp(superapp);
+		commandId.setMiniapp(miniapp);
+		commandId.setId(id);
+		return commandId;
 	}
+
 	private void storeObjectsInDatabase() {
 		ObjectBoundary[] objectsToStore = new ObjectBoundary[] {
-				createBoundary("1", "2024b.yarden.cherry", "dummyType", "demo",
-						new Location(32.115139, 34.817804),true, createCreatedBy("2024b.yarden.cherry", "superapp1@demo.org"),
-						createObjectDetails()),
+				createBoundary("1", "2024b.yarden.cherry", "dummyType", "demo", new Location(32.115139, 34.817804),
+						true, createCreatedBy("2024b.yarden.cherry", "superapp1@demo.org"), createObjectDetails()),
 				createBoundary("2", "2024b.yarden.cherry", "dummyType", "demo instance",
-						new Location(32.115139, 34.817804),true, createCreatedBy("2024b.yarden.cherry", "superapp2@demo.org"),
-						createObjectDetails()),
-				createBoundary("3", "2024b.yarden.cherry", "dummyType", "demo instance",
-						new Location(32.115139, 34.817804),true, createCreatedBy("2024b.yarden.cherry", "superapp1@demo.org"),
-						createObjectDetails()),
-				createBoundary("4", "2024b.yarden.cherry", "dummy", "demo instance", new Location(32.115139, 34.817804),true,
+						new Location(32.115139, 34.817804), true,
 						createCreatedBy("2024b.yarden.cherry", "superapp2@demo.org"), createObjectDetails()),
-				createBoundary("5", "2024b.yarden.cherry", "dummy", "demo instance", null,false,
+				createBoundary("3", "2024b.yarden.cherry", "dummyType", "demo instance",
+						new Location(32.115139, 34.817804), true,
+						createCreatedBy("2024b.yarden.cherry", "superapp1@demo.org"), createObjectDetails()),
+				createBoundary("4", "2024b.yarden.cherry", "dummy", "demo instance", new Location(32.115139, 34.817804),
+						true, createCreatedBy("2024b.yarden.cherry", "superapp2@demo.org"), createObjectDetails()),
+				createBoundary("5", "2024b.yarden.cherry", "dummy", "demo instance", null, false,
 						createCreatedBy("2024b.yarden.cherry", "superapp1@demo.org"), createObjectDetails()) };
 
 		for (ObjectBoundary boundary : objectsToStore) {
@@ -105,8 +111,8 @@ public class Initializer implements CommandLineRunner {
 		}
 	}
 
-	private ObjectBoundary createBoundary(String id, String superApp, String type, String alias, Location location, boolean active,
-			CreatedBy createdBy, Map<String, Object> objectDetails) {
+	private ObjectBoundary createBoundary(String id, String superApp, String type, String alias, Location location,
+			boolean active, CreatedBy createdBy, Map<String, Object> objectDetails) {
 		ObjectBoundary boundary = new ObjectBoundary();
 		boundary.setObjectId(createObjectId(id, superApp));
 		boundary.setType(type);
@@ -152,7 +158,8 @@ public class Initializer implements CommandLineRunner {
 						"https://example.com/avatar1.png"),
 				createNewUserBoundary("superapp2@demo.org", Role.SUPERAPP_USER, "John Doe",
 						"https://example.com/avatar2.png"),
-				createNewUserBoundary("miniapp@demo.org", Role.MINIAPP_USER, "John Doe", "https://example.com/avatar2.png"),
+				createNewUserBoundary("miniapp@demo.org", Role.MINIAPP_USER, "John Doe",
+						"https://example.com/avatar2.png"),
 				createNewUserBoundary("admin@demo.org", Role.ADMIN, "Admin", "https://example.com/avatar2.png")
 
 		};

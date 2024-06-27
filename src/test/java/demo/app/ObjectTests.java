@@ -1,15 +1,9 @@
 package demo.app;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
-class ApplicationTests {
+public class ObjectTests {
 
-	@Test
-	void contextLoads() {
-	}
-	
 }
-

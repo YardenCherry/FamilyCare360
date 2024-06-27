@@ -21,8 +21,7 @@ public class CommandController {
 	}
 
 	@PostMapping(path = "/{miniAppName}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Object[] storeInDatabase(
-			@PathVariable("miniAppName") String miniAppName,
+	public Object[] storeInDatabase(@PathVariable("miniAppName") String miniAppName,
 			@RequestBody MiniAppCommandBoundary commandBoundary) {
 		System.err.println(miniAppName);
 		return this.commandLogic.storeInDatabase(miniAppName, commandBoundary).toArray(new MiniAppCommandBoundary[0]);

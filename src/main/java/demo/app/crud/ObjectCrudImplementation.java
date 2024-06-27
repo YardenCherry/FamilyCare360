@@ -153,7 +153,7 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 		ObjectEntity existing = this.objectCrud.findById(objectId).orElse(null);
 
 		ObjectEntity temp = objectConverter.toEntity(update);
-	
+
 		if (update.getType() != null)
 			existing.setType(temp.getType());
 		if (update.getAlias() != null)
@@ -230,12 +230,11 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 		List<ObjectEntity> entities;
 		if (user.getRole().equals(Role.MINIAPP_USER)) {
 			entities = this.objectCrud
-					.findAllByTypeAndActive(type, true, PageRequest.of(page, size, Direction.ASC, "objectID"))
-					.stream().toList();
-		} else {
-			entities = this.objectCrud
-					.findAllByType(type, PageRequest.of(page, size, Direction.ASC, "objectID")).stream()
+					.findAllByTypeAndActive(type, true, PageRequest.of(page, size, Direction.ASC, "objectID")).stream()
 					.toList();
+		} else {
+			entities = this.objectCrud.findAllByType(type, PageRequest.of(page, size, Direction.ASC, "objectID"))
+					.stream().toList();
 		}
 
 		List<ObjectBoundary> rv = new ArrayList<>();
@@ -279,7 +278,7 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 
 		return rv;
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<ObjectBoundary> getAllByLocation(double lat, double lng, double distance, String distanceUnits,
@@ -291,28 +290,22 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 			throw new MyForbiddenException("User is not authorized");
 		}
 		distanceUnits = distanceUnits.toUpperCase();
-		Double units= null;
-		for(Metrics val : Metrics.values()) {
-			if(val.toString().equals(distanceUnits))
-				units=Metrics.valueOf(distanceUnits).getMultiplier();
+		Double units = null;
+		for (Metrics val : Metrics.values()) {
+			if (val.toString().equals(distanceUnits))
+				units = Metrics.valueOf(distanceUnits).getMultiplier();
 		}
-		if(units==null)
+		if (units == null)
 			throw new MyBadRequestException("Distance Units is not authorized");
 
 		List<ObjectEntity> entities;
 		if (user.getRole().equals(Role.MINIAPP_USER)) {
-			
-			entities = this.objectCrud
-					.findAllByLocationWithinAndActive(lat, lng, distance, units,
-							true, PageRequest.of(page, size, Direction.ASC,"objectID"))
-					.stream()
-					.toList();
+
+			entities = this.objectCrud.findAllByLocationWithinAndActive(lat, lng, distance, units, true,
+					PageRequest.of(page, size, Direction.ASC, "objectID")).stream().toList();
 		} else {
-			entities = this.objectCrud
-					.findAllByLocationWithin(lat, lng, distance, units,
-						PageRequest.of(page, size, Direction.ASC,"objectID"))
-					.stream()
-					.toList();
+			entities = this.objectCrud.findAllByLocationWithin(lat, lng, distance, units,
+					PageRequest.of(page, size, Direction.ASC, "objectID")).stream().toList();
 		}
 
 		List<ObjectBoundary> rv = new ArrayList<>();

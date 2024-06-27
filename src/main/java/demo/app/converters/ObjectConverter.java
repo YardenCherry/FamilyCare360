@@ -34,7 +34,7 @@ public class ObjectConverter {
 		boundary.setCreationTimestamp(entity.getCreationTimestamp());
 		boundary.setObjectDetails(entity.getObjectDetails());
 
-		Location location = new Location(entity.getLatitude(),entity.getLongitude());
+		Location location = new Location(entity.getLatitude(), entity.getLongitude());
 		boundary.setLocation(location);
 //		if (locationParts.length == 2) {
 //			try {
@@ -74,9 +74,9 @@ public class ObjectConverter {
 
 		Location location = boundary.getLocation();
 		if (location != null && location.getLat() != null && location.getLng() != null) {
-			entity.setLocation(location.getLat(),location.getLng());
+			entity.setLocation(location.getLat(), location.getLng());
 		} else {
-			entity.setLocation(0,0);
+			entity.setLocation(0, 0);
 		}
 
 		logger.debug("Converted to entity: {}", entity);

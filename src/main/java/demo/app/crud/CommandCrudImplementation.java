@@ -76,7 +76,7 @@ public class CommandCrudImplementation implements CommandLogic {
 		commandBoundary.getInvokedBy().getUserId().setSuperapp(springApplicationName);
 		MiniAppCommandEntity entity = this.commandConverter.toEntity(commandBoundary);
 		entity = this.commandCrud.save(entity);
-		List<Object> boundaries=new ArrayList<>();
+		List<Object> boundaries = new ArrayList<>();
 		boundaries.add(this.commandConverter.toBoundary(entity));
 		return boundaries;
 	}
@@ -99,5 +99,6 @@ public class CommandCrudImplementation implements CommandLogic {
 				|| !InputValidation.isValidEmail(commandBoundary.getInvokedBy().getUserId().getEmail())) {
 			throw new MyBadRequestException("You must enter valid email.");
 		}
+
 	}
 }
