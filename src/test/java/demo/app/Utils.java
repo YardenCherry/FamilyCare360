@@ -1,11 +1,16 @@
 package demo.app;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Value;
 
 import demo.app.boundaries.MiniAppCommandBoundary;
 import demo.app.boundaries.NewUserBoundary;
 import demo.app.boundaries.ObjectBoundary;
+import demo.app.boundaries.UserBoundary;
 import demo.app.enums.Role;
 import demo.app.objects.CommandId;
 import demo.app.objects.CreatedBy;
@@ -16,22 +21,51 @@ import demo.app.objects.UserId;
 
 public class Utils {
 	private static String adminEmail = "admin@gmail.com";
-	private static String miniappUserEmail = "mini@gmail.com";
-	private static String superappUserEmail = "super@gmail.com";
-
+	private static String miniappEmail = "mini@gmail.com";
+	private static String superappEmail = "super@gmail.com";
+	@Value("${spring.application.name}")
+	private static String superapp;
+	
 	public static NewUserBoundary createNewUserAdmin() {
 		return createNewUserBoundary("admin_avatar", adminEmail, Role.ADMIN,
 				"admin_username");
 	}
 	
 	public static NewUserBoundary createNewUserSuperapp() {
-		return createNewUserBoundary("super_avatar", superappUserEmail,
+		return createNewUserBoundary("super_avatar", superappEmail,
 				Role.SUPERAPP_USER, "super_username");
 	}
 	
 	public static NewUserBoundary createNewUserMiniapp() {
-		return createNewUserBoundary("mini_avatar", miniappUserEmail, Role.MINIAPP_USER,
+		return createNewUserBoundary("mini_avatar", miniappEmail, Role.MINIAPP_USER,
 				"mini_username");
+	}
+	
+	public static ObjectBoundary createNewObjectByAdmin() {
+		return createObjectBoundary("1", superapp , "type", "alias",
+				new Location(0,0), true, createCreatedBy(superapp,adminEmail), createObjectDetails());
+	}
+	
+	public static ObjectBoundary createNewObjectBySuperapp() {
+		return createObjectBoundary("1", superapp , "type", "alias",
+				new Location(0,0), true, createCreatedBy(superapp,superappEmail), createObjectDetails());
+	}
+	
+	public static ObjectBoundary createNewObjectByMiniApp() {
+		return createObjectBoundary("1", superapp , "type", "alias",
+				new Location(0,0), true, createCreatedBy(superapp,miniappEmail), createObjectDetails());
+	}
+	
+	public static MiniAppCommandBoundary createNewCommandByAdmin(String objectId) {
+		return createCommandBoundary(superapp, "miniapp", "1", "command", objectId, adminEmail, createObjectDetails());
+	}
+	
+	public static MiniAppCommandBoundary createNewCommandBySuperapp(String objectId) {
+		return createCommandBoundary(superapp, "miniapp", "1", "command", objectId, superappEmail, createObjectDetails());
+	}
+	
+	public static MiniAppCommandBoundary createNewCommandByMiniapp(String objectId) {
+		return createCommandBoundary(superapp, "miniapp", "1", "command", objectId, miniappEmail, createObjectDetails());
 	}
 	
 	public static NewUserBoundary createNewUserBoundary(String avatar, String email, Role role, String username) {
@@ -42,6 +76,7 @@ public class Utils {
 		newUser.setUsername(username);
 		return newUser;
 	}
+	
 
 	private static CreatedBy createCreatedBy(String superapp, String email) {
 		CreatedBy createdBy = new CreatedBy();
@@ -105,20 +140,31 @@ public class Utils {
 	}
 
 	public static String getMiniappUserEmail() {
-		return miniappUserEmail;
+		return miniappEmail;
 	}
 
 	public static void setMiniappUserEmail(String miniappUserEmail) {
-		Utils.miniappUserEmail = miniappUserEmail;
+		Utils.miniappEmail = miniappUserEmail;
 	}
 
 	public static String getSuperappUserEmail() {
-		return superappUserEmail;
+		return superappEmail;
 	}
 
 	public static void setSuperappUserEmail(String superappUserEmail) {
-		Utils.superappUserEmail = superappUserEmail;
+		Utils.superappEmail = superappUserEmail;
 	}
 	
+	private static Map<String, Object> createObjectDetails() {
+		Map<String, Object> objectDetails = new HashMap<>();
+		objectDetails.put("key1", "can be set to any value you wish");
+		objectDetails.put("key2", "you can also name the attributes any name you like");
+		objectDetails.put("key3", 42.00);
+		objectDetails.put("key4", true);
+		objectDetails.put("key5",
+				Arrays.asList("Array", "of", 1, 2.0, false, Map.of("type", "user defined"), "values"));
+		return objectDetails;
+	}
+
 
 }

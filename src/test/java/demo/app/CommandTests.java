@@ -13,7 +13,7 @@ import demo.app.enums.Role;
 import jakarta.annotation.PostConstruct;
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
-public class AdminTests {
+public class CommandTests {
 	
 	private String url;
 	private int port;

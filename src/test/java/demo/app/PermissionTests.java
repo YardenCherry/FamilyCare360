@@ -13,12 +13,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClient;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 
+
+import demo.app.boundaries.MiniAppCommandBoundary;
 import demo.app.boundaries.NewUserBoundary;
+import demo.app.boundaries.ObjectBoundary;
 import demo.app.boundaries.UserBoundary;
+import demo.app.enums.Role;
 import jakarta.annotation.PostConstruct;
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
@@ -27,7 +28,9 @@ public class PermissionTests {
 	private int port;
 	private RestClient restClient;
 
-	private UserBoundary[] users;
+	private UserBoundary[] users=null;
+	private ObjectBoundary[] objects;
+	private MiniAppCommandBoundary[] commands;
 
 	@Value("${spring.application.name}")
 	private String superapp;
@@ -46,47 +49,13 @@ public class PermissionTests {
 
 	@BeforeEach
 	public void setup() {
-		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
-		UserBoundary adminUser = this.restClient
-				.post().uri("/users")
-				.body(newAdmin)
-				.retrieve()
-				.body(UserBoundary.class);
-
-		NewUserBoundary newSuperappUser = Utils.createNewUserSuperapp();
-		UserBoundary superappUser = this.restClient
-				.post().uri("/users")
-				.body(newSuperappUser)
-				.retrieve()
-				.body(UserBoundary.class);
-
-		NewUserBoundary newMiniappUser = Utils.createNewUserMiniapp();
-		UserBoundary miniappUser = this.restClient
-				.post().uri("/users")
-				.body(newMiniappUser)
-				.retrieve()
-				.body(UserBoundary.class);
-
-		users = new UserBoundary[] { adminUser, superappUser, miniappUser };
+		deleteAllAndAddAdmin();
+		addUsers();
 	}
 
 	@AfterEach
 	public void cleanup() {
-		this.restClient.delete()
-				.uri("/admin/miniapp?userSuperapp={superapp}&userEmail={adminEmail}", superapp, Utils.getAdminEmail())
-				.retrieve();
-
-		this.restClient.delete()
-				.uri("/admin/objects?userSuperapp={superapp}&userEmail={adminEmail}", superapp, Utils.getAdminEmail())
-				.retrieve();
-
-		this.restClient.delete()
-				.uri("/admin/users?userSuperapp={superapp}&userEmail={adminEmail}", superapp, Utils.getAdminEmail())
-				.retrieve();
-	}
-
-	@Test
-	void contextLoads() {
+		deleteAllAndAddAdmin();
 	}
 
 	@Test
@@ -101,7 +70,7 @@ public class PermissionTests {
 		.hasSize(users.length)
 		.usingRecursiveFieldByFieldElementComparator()
         .containsAnyElementsOf(Arrays.asList(users));
-	}
+			}
 	
 	@Test
 	public void testSuperappGetAllUsers() throws Exception {
@@ -132,7 +101,7 @@ public class PermissionTests {
 	}
 	
 	@Test
-	public void testAdminDeleteAllUsers() throws Exception {
+	public void testAdminDeleteAllUsers() throws Exception {		
 		this.restClient
 				.delete()
 				.uri("/admin/users?userSuperapp={superapp}&userEmail={adminEmail}", superapp, Utils.getAdminEmail())
@@ -141,7 +110,6 @@ public class PermissionTests {
 	
 	@Test
 	public void testSuperappDeleteAllUsers() throws Exception {
-
 		assertThatThrownBy(() -> this.restClient
 				.delete()
 				.uri("/admin/users?userSuperapp={superapp}&userEmail={adminEmail}", superapp, Utils.getSuperappUserEmail())
@@ -165,5 +133,52 @@ public class PermissionTests {
 			.extracting("statusCode")
 			.extracting("value")
 			.isEqualTo(403);
+	}
+	
+	public void addUsers() {
+		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
+		UserBoundary adminUser = this.restClient
+				.post().uri("/users")
+				.body(newAdmin)
+				.retrieve()
+				.body(UserBoundary.class);
+
+		NewUserBoundary newSuperappUser = Utils.createNewUserSuperapp();
+		UserBoundary superappUser = this.restClient
+				.post().uri("/users")
+				.body(newSuperappUser)
+				.retrieve()
+				.body(UserBoundary.class);
+
+		NewUserBoundary newMiniappUser = Utils.createNewUserMiniapp();
+		UserBoundary miniappUser = this.restClient
+				.post().uri("/users")
+				.body(newMiniappUser)
+				.retrieve()
+				.body(UserBoundary.class);
+
+		users = new UserBoundary[] { adminUser, superappUser, miniappUser };
+	}
+	
+	public void deleteAllAndAddAdmin() {
+		NewUserBoundary newAdmin = Utils.createNewUserBoundary("admin_avatar", "adminEmail@demo.or", Role.ADMIN,
+				"admin_username");
+		UserBoundary newUserAdmin= this.restClient
+				.post().uri("/users")
+				.body(newAdmin)
+				.retrieve()
+				.body(UserBoundary.class);
+		
+		this.restClient.delete()
+				.uri("/admin/miniapp?userSuperapp={superapp}&userEmail={adminEmail}", newUserAdmin.getUserId().getSuperapp(), newUserAdmin.getUserId().getEmail())
+				.retrieve();
+
+		this.restClient.delete()
+				.uri("/admin/objects?userSuperapp={superapp}&userEmail={adminEmail}", newUserAdmin.getUserId().getSuperapp(), newUserAdmin.getUserId().getEmail())
+				.retrieve();
+
+		this.restClient.delete()
+				.uri("/admin/users?userSuperapp={superapp}&userEmail={adminEmail}", newUserAdmin.getUserId().getSuperapp(), newUserAdmin.getUserId().getEmail())
+				.retrieve();
 	}
 }
