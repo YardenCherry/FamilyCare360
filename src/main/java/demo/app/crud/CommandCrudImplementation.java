@@ -6,11 +6,15 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import demo.app.boundaries.MiniAppCommandBoundary;
+import demo.app.boundaries.ObjectBoundary;
 import demo.app.converters.CommandConverter;
+import demo.app.converters.ObjectConverter;
 import demo.app.entities.MiniAppCommandEntity;
 import demo.app.entities.ObjectEntity;
 import demo.app.entities.UserEntity;
@@ -26,13 +30,16 @@ public class CommandCrudImplementation implements CommandLogic {
 	private String springApplicationName;
 	private UserCrud userCrud;
 	private ObjectCrud objectCrud;
+	private ObjectConverter objectConverter;
+
 
 	public CommandCrudImplementation(CommandCrud commandCrud, CommandConverter commandConverter, UserCrud userCrud,
-			ObjectCrud objectCrud) {
+			ObjectCrud objectCrud, ObjectConverter objectConverter) {
 		this.commandCrud = commandCrud;
 		this.commandConverter = commandConverter;
 		this.userCrud = userCrud;
 		this.objectCrud = objectCrud;
+		this.objectConverter=objectConverter;
 	}
 
 	@Value("${spring.application.name:supperapp}")
@@ -78,7 +85,45 @@ public class CommandCrudImplementation implements CommandLogic {
 		entity = this.commandCrud.save(entity);
 		List<Object> boundaries = new ArrayList<>();
 		boundaries.add(this.commandConverter.toBoundary(entity));
-		return boundaries;
+		
+		
+		String commandString = commandBoundary.getCommand();
+		List<Object> result = handleCommand(entity);
+
+		System.err.println("The command " + commandString + " is invoked successfully");
+		return result;
+	}
+
+	private List<Object> handleCommand(MiniAppCommandEntity commandEntity) {
+		String command = commandEntity.getCommand();
+		List<ObjectEntity> entities;
+		List<Object> rv = new ArrayList<>();
+
+		switch (command) {
+			case "GetAllObjectsByCreatedByAndActive":
+				entities=objectCrud.findAllByCreatedByAndActiveTrue(commandEntity.getInvokedBy(), 
+						PageRequest.of(0, 5, Direction.ASC, "objectID"));
+				for (ObjectEntity entity : entities) 
+					rv.add(this.objectConverter.toBoundary(entity));
+				return rv;
+				
+			case "GetAllObjectsByCreatedByAndTypeAndAliasAndActive":
+				entities=objectCrud.findAllByCreatedByAndActiveTrue(commandEntity.getInvokedBy(), 
+						PageRequest.of(0, 5, Direction.ASC, "objectID"));	
+				for (ObjectEntity entity : entities) 
+					rv.add(this.objectConverter.toBoundary(entity));
+				return rv;
+				
+			case "GetAllObjectsByTypeAndLocation":
+				entities=objectCrud.findAllByCreatedByAndActiveTrue(commandEntity.getInvokedBy(), 
+						PageRequest.of(0, 5, Direction.ASC, "objectID"));	
+				for (ObjectEntity entity : entities) 
+					rv.add(this.objectConverter.toBoundary(entity));
+				return rv;
+				
+				
+		}
+		return null;
 	}
 
 	private void validateCommandBoundary(MiniAppCommandBoundary commandBoundary) {

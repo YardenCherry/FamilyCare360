@@ -45,5 +45,13 @@ public interface ObjectCrud extends JpaRepository<ObjectEntity, String> {
 //	            double startLat, double endLat, 
 //	            double startLng, double endLng, 
 //	            Pageable pageable);
+	
+	public List<ObjectEntity> findAllByCreatedBy(@Param("createdBy") String createdBy, Pageable pageable);
+
+	public List<ObjectEntity> findAllByCreatedByAndActiveTrue(@Param("createdBy") String createdBy, Pageable pageable);
+
+	public List<ObjectEntity> findAllByCreatedByAndTypeAndAlias(@Param("createdBy") String createdBy, @Param("type") String type, @Param("alias") String alias, Pageable pageable);
+
+	public List<ObjectEntity> findAllByCreatedByAndTypeAndAliasAndActiveTrue(@Param("createdBy") String createdBy, @Param("type") String type, @Param("alias") String alias, Pageable pageable);
 
 }
