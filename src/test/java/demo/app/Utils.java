@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import demo.app.boundaries.MiniAppCommandBoundary;
 import demo.app.boundaries.NewUserBoundary;
 import demo.app.boundaries.ObjectBoundary;
+import demo.app.boundaries.UserBoundary;
 import demo.app.enums.Role;
 import demo.app.objects.CommandId;
 import demo.app.objects.CreatedBy;
@@ -78,8 +79,10 @@ public class Utils {
 		return createCommandBoundary(superapp, "miniapp", "1", "command", objectId, superappEmail, createObjectDetails());
 	}
 	
-	public static MiniAppCommandBoundary createNewCommandByMiniapp(String objectId) {
-		return createCommandBoundary(superapp, "miniapp", "1", "command", objectId, miniappEmail, createObjectDetails());
+	public static MiniAppCommandBoundary createNewCommandByMiniapp(String objectId,UserBoundary miniappUser) {
+		superapp=miniappUser.getUserId().getSuperapp();
+		return createCommandBoundary(miniappUser.getUserId().getSuperapp(), "miniapp", "1", "command", objectId, miniappEmail, createObjectDetails());
+	
 	}
 	
 	public static NewUserBoundary createNewUserBoundary(String avatar, String email, Role role, String username) {

@@ -1,16 +1,23 @@
 package demo.app;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.web.client.RestClient;
 
+import demo.app.boundaries.MiniAppCommandBoundary;
 import demo.app.boundaries.NewUserBoundary;
+import demo.app.boundaries.ObjectBoundary;
 import demo.app.boundaries.UserBoundary;
+import demo.app.entities.MiniAppCommandEntity;
 import demo.app.enums.Role;
 import jakarta.annotation.PostConstruct;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 public class CommandTests {
@@ -20,6 +27,7 @@ public class CommandTests {
 	private RestClient restClient;
 	@Value("${spring.application.name}")
 	private String superapp;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
 	@Value("${server.port:8084}")
 	public void setPort(int port) {
@@ -47,14 +55,36 @@ public class CommandTests {
 		deleteAllAndAddAdmin();
 	}
 	
-	public void addUsers() {
-		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
-		UserBoundary adminUser = this.restClient
+	@Test
+	public void testCreateCommandByMiniappAndObjectExiting() throws Exception {
+		UserBoundary miniappUser= addMiniAppUser();
+		ObjectBoundary targetObject=addObjectBySuperapp();
+		MiniAppCommandBoundary miniapp=Utils.createNewCommandByMiniapp(targetObject.getObjectId().getId(),miniappUser);
+		System.err.println(miniapp);
+
+		Object[] response=this.restClient
+				.post()
+				.uri("/miniapp/{miniAppName}",miniapp.getCommandId().getMiniapp())
+				.body(miniapp)
+				.retrieve()
+				.body(Object[].class);
+		        
+		assertThat(response)
+		.usingRecursiveComparison()
+		.isEqualTo(miniapp);
+	}	
+	
+	public UserBoundary addMiniAppUser() {
+		NewUserBoundary newMiniappUser = Utils.createNewUserMiniapp();
+		UserBoundary miniappUser = this.restClient
 				.post().uri("/users")
-				.body(newAdmin)
+				.body(newMiniappUser)
 				.retrieve()
 				.body(UserBoundary.class);
-
+		return miniappUser;
+	}
+	
+	public ObjectBoundary addObjectBySuperapp() {
 		NewUserBoundary newSuperappUser = Utils.createNewUserSuperapp();
 		UserBoundary superappUser = this.restClient
 				.post().uri("/users")
@@ -62,13 +92,16 @@ public class CommandTests {
 				.retrieve()
 				.body(UserBoundary.class);
 
-		NewUserBoundary newMiniappUser = Utils.createNewUserMiniapp();
-		UserBoundary miniappUser = this.restClient
-				.post().uri("/users")
-				.body(newMiniappUser)
-				.retrieve()
-				.body(UserBoundary.class);
+		ObjectBoundary newObject1 = Utils.createNewObjectBySuperapp();
+		ObjectBoundary object1=this.restClient
+		.post().uri("/objects")
+		.body(newObject1)
+		.retrieve()
+		.body(ObjectBoundary.class);
+		
+		return object1;
 	}
+	
 	
 	public void deleteAllAndAddAdmin() {
 		NewUserBoundary newAdmin = Utils.createNewUserBoundary("admin_avatar", "adminEmail@demo.or", Role.ADMIN,

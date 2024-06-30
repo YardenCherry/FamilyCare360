@@ -56,14 +56,15 @@ public class CommandCrudImplementation implements CommandLogic {
 	@Transactional(readOnly = false)
 	public List<Object> storeInDatabase(String miniAppName, MiniAppCommandBoundary commandBoundary) {
 		validateCommandBoundary(commandBoundary);
-
+		String invokedBy=commandBoundary.getInvokedBy().getUserId().getSuperapp() + "_"
+				+ commandBoundary.getInvokedBy().getUserId().getEmail();
 		// Verify user permissions
 		UserEntity user = userCrud
 				.findById(commandBoundary.getInvokedBy().getUserId().getSuperapp() + "_"
 						+ commandBoundary.getInvokedBy().getUserId().getEmail())
-				.orElseThrow(() -> new MyForbiddenException("User not authorized"));
+				.orElseThrow(() -> new MyForbiddenException("User not authorized1: "+ invokedBy));
 		if (!user.getRole().equals(Role.MINIAPP_USER)) {
-			throw new MyForbiddenException("User not authorized");
+			throw new MyForbiddenException("User not authorized2");
 		}
 
 		// Verify target object existence and active status
@@ -87,10 +88,10 @@ public class CommandCrudImplementation implements CommandLogic {
 		
 		
 		String commandString = commandBoundary.getCommand();
-		List<Object> result = handleCommand(entity);
+		//List<Object> result = handleCommand(entity);
 
 		System.err.println("The command " + commandString + " is invoked successfully");
-		return result;
+		return boundaries;
 	}
 
 	private List<Object> handleCommand(MiniAppCommandEntity commandEntity) {
