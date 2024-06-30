@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import demo.app.boundaries.MiniAppCommandBoundary;
-import demo.app.boundaries.ObjectBoundary;
 import demo.app.converters.CommandConverter;
 import demo.app.converters.ObjectConverter;
 import demo.app.entities.MiniAppCommandEntity;

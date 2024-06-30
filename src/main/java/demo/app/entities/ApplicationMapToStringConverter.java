@@ -2,13 +2,11 @@ package demo.app.entities;
 
 import java.util.Map;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jakarta.persistence.Converter;
 import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 
 @Converter
 public class ApplicationMapToStringConverter implements AttributeConverter<Map<String, Object>, String> {
