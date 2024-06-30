@@ -113,9 +113,12 @@ public class CommandCrudImplementation implements CommandLogic {
 					rv.add(this.objectConverter.toBoundary(entity));
 				return rv;
 				
-			case "GetAllObjectsByTypeAndLocation":
-				entities=objectCrud.findAllByCreatedByAndActiveTrue(commandEntity.getInvokedBy(), 
-						PageRequest.of(0, 5, Direction.ASC, "objectID"));	
+			case "GetAllObjectsByTypeAndLocationAndActive":
+				entities=objectCrud.findAllByTypeAndLocationAndActiveTrue
+						(commandEntity.getCommandAttributes().get("type").toString(),
+								(double)commandEntity.getCommandAttributes().get("latitude"), 
+								(double)commandEntity.getCommandAttributes().get("longitude"),
+						PageRequest.of(0, 5, Direction.ASC, "location","objectID"));	
 				for (ObjectEntity entity : entities) 
 					rv.add(this.objectConverter.toBoundary(entity));
 				return rv;
