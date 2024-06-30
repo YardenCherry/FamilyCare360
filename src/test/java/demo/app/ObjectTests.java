@@ -278,17 +278,14 @@ public class ObjectTests {
 		.body(newObject1)
 		.retrieve()
 		.body(ObjectBoundary.class);
-		System.out.println(object1);
 		
 		object1.setLocation(new Location(39.625,32.665));
-		System.out.println(object1);
 
 		this.restClient
 		.put()
 		.uri("/objects/{superapp}/{id}?userSuperapp={userSuperapp}&userEmail={userEmail}",object1.getCreatedBy().getUserId().getSuperapp(), object1.getObjectId().getId(),object1.getCreatedBy().getUserId().getSuperapp(),object1.getCreatedBy().getUserId().getEmail())
 		.body(object1)
 		.retrieve();
-		System.out.println(object1);
 
 		assertThat(this.restClient
 				.get()
