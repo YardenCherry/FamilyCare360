@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import demo.app.boundaries.MiniAppCommandBoundary;
 import demo.app.boundaries.NewUserBoundary;
 import demo.app.boundaries.ObjectBoundary;
-import demo.app.boundaries.UserBoundary;
 import demo.app.enums.Role;
 import demo.app.objects.CommandId;
 import demo.app.objects.CreatedBy;

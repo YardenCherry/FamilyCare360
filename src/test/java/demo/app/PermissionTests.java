@@ -14,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClient;
 
-
 import demo.app.boundaries.MiniAppCommandBoundary;
 import demo.app.boundaries.NewUserBoundary;
 import demo.app.boundaries.ObjectBoundary;

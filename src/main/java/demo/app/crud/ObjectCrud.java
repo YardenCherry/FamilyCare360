@@ -39,11 +39,29 @@ public interface ObjectCrud extends JpaRepository<ObjectEntity, String> {
 	public List<ObjectEntity> findAllByLocationWithinAndActive(@Param("lat") double lat, @Param("lng") double lng,
 			@Param("distance") double distance, @Param("units") double units, @Param("active") boolean active,
 			Pageable pageable);
+	
+	@Query(value = "SELECT * FROM objects o WHERE "
+	        + "o.type = :type AND o.active = true "
+	        + "ORDER BY :1 * acos(cos(radians(:lat)) * cos(radians(o.latitude)) * cos(radians(o.longitude) - radians(:lng)) + sin(radians(:lat)) * sin(radians(o.latitude))) ASC",
+	        nativeQuery = true)
+	public List<ObjectEntity> findAllByTypeAndLocationAndActiveTrue(
+	        @Param("type") String type,
+	        @Param("lat") double lat,
+	        @Param("lng") double lng,
+	        Pageable pageable);
 
 //	 finds all entities with a latitude and longitude within a specified rectangular area
 //	 public List<ObjectEntity> findAllByLatitudeBetweenAndLongitudeBetween(
 //	            double startLat, double endLat, 
 //	            double startLng, double endLng, 
 //	            Pageable pageable);
+	
+	public List<ObjectEntity> findAllByCreatedBy(@Param("createdBy") String createdBy, Pageable pageable);
+
+	public List<ObjectEntity> findAllByCreatedByAndActiveTrue(@Param("createdBy") String createdBy, Pageable pageable);
+
+	public List<ObjectEntity> findAllByCreatedByAndTypeAndAlias(@Param("createdBy") String createdBy, @Param("type") String type, @Param("alias") String alias, Pageable pageable);
+
+	public List<ObjectEntity> findAllByCreatedByAndTypeAndAliasAndActiveTrue(@Param("createdBy") String createdBy, @Param("type") String type, @Param("alias") String alias, Pageable pageable);
 
 }
