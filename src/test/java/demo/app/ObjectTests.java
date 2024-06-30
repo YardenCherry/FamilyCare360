@@ -4,7 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.Arrays;
-
+import java.util.HashMap;
+import java.util.Map;
+import org.checkerframework.checker.lock.qual.NewObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,7 @@ import demo.app.boundaries.NewUserBoundary;
 import demo.app.boundaries.ObjectBoundary;
 import demo.app.boundaries.UserBoundary;
 import demo.app.enums.Role;
+import demo.app.objects.Location;
 import jakarta.annotation.PostConstruct;
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
@@ -92,7 +95,6 @@ public class ObjectTests {
 
 		ObjectBoundary newObject1 = Utils.createNewObjectBySuperapp();
 		newObject1.setAlias(null);
-	
 		assertThatThrownBy(() -> this.restClient
 				.post().uri("/objects")
 				.body(newObject1)
@@ -104,6 +106,201 @@ public class ObjectTests {
 				.isEqualTo(400);
 
 	}
+	
+	@Test
+	public void testSuperAppCreateObjectWithEmptyAlias()  throws Exception {
+		NewUserBoundary newSuperappUser = Utils.createNewUserSuperapp();
+		UserBoundary superappUser = this.restClient
+				.post().uri("/users")
+				.body(newSuperappUser)
+				.retrieve()
+				.body(UserBoundary.class);
+
+		ObjectBoundary newObject1 = Utils.createNewObjectBySuperapp();
+		newObject1.setAlias("");
+		assertThatThrownBy(() -> this.restClient
+				.post().uri("/objects")
+				.body(newObject1)
+				.retrieve()
+				.body(ObjectBoundary.class))
+				.isInstanceOf(HttpStatusCodeException.class)
+				.extracting("statusCode")
+				.extracting("value")
+				.isEqualTo(400);
+
+	}
+	
+	@Test
+	public void testSuperAppCreateObjectWithEmptyCreatedByDetails() throws Exception {
+		NewUserBoundary newSuperappUser = Utils.createNewUserSuperapp();
+		UserBoundary superappUser = this.restClient
+				.post().uri("/users")
+				.body(newSuperappUser)
+				.retrieve()
+				.body(UserBoundary.class);
+
+		ObjectBoundary newObject1 = Utils.createNewObjectBySuperapp();
+		newObject1.getCreatedBy().getUserId().setSuperapp("");
+		newObject1.getCreatedBy().getUserId().setEmail("");
+		assertThatThrownBy(() -> this.restClient
+				.post().uri("/objects")
+				.body(newObject1)
+				.retrieve()
+				.body(ObjectBoundary.class))
+				.isInstanceOf(HttpStatusCodeException.class)
+				.extracting("statusCode")
+				.extracting("value")
+				.isEqualTo(403);
+	}
+	
+	@Test
+	public void testSuperAppCreateObjectWithNullType()  throws Exception {
+		NewUserBoundary newSuperappUser = Utils.createNewUserSuperapp();
+		UserBoundary superappUser = this.restClient
+				.post().uri("/users")
+				.body(newSuperappUser)
+				.retrieve()
+				.body(UserBoundary.class);
+
+		ObjectBoundary newObject1 = Utils.createNewObjectBySuperapp();
+		newObject1.setType(null);
+		assertThatThrownBy(() -> this.restClient
+				.post().uri("/objects")
+				.body(newObject1)
+				.retrieve()
+				.body(ObjectBoundary.class))
+				.isInstanceOf(HttpStatusCodeException.class)
+				.extracting("statusCode")
+				.extracting("value")
+				.isEqualTo(400);
+	}
+	
+	@Test
+	public void testSuperAppCreateObjectWithEmptyType()  throws Exception {
+		NewUserBoundary newSuperappUser = Utils.createNewUserSuperapp();
+		UserBoundary superappUser = this.restClient
+				.post().uri("/users")
+				.body(newSuperappUser)
+				.retrieve()
+				.body(UserBoundary.class);
+
+		ObjectBoundary newObject1 = Utils.createNewObjectBySuperapp();
+		newObject1.setType("");
+		assertThatThrownBy(() -> this.restClient
+				.post().uri("/objects")
+				.body(newObject1)
+				.retrieve()
+				.body(ObjectBoundary.class))
+				.isInstanceOf(HttpStatusCodeException.class)
+				.extracting("statusCode")
+				.extracting("value")
+				.isEqualTo(400);
+	}
+	
+	@Test
+	public void testUpdateObjectTypeToDatabase() throws Exception{
+		NewUserBoundary newSuperappUser = Utils.createNewUserSuperapp();
+		UserBoundary superappUser = this.restClient
+				.post().uri("/users")
+				.body(newSuperappUser)
+				.retrieve()
+				.body(UserBoundary.class);
+		
+		ObjectBoundary newObject1 = Utils.createNewObjectBySuperapp();
+		ObjectBoundary object1=this.restClient
+		.post().uri("/objects")
+		.body(newObject1)
+		.retrieve()
+		.body(ObjectBoundary.class);		
+		object1.setType("newType");
+
+		this.restClient
+		.put()
+		.uri("/objects/{superapp}/{id}?userSuperapp={userSuperapp}&userEmail={userEmail}",object1.getCreatedBy().getUserId().getSuperapp(), object1.getObjectId().getId(),object1.getCreatedBy().getUserId().getSuperapp(),object1.getCreatedBy().getUserId().getEmail())
+		.body(object1)
+		.retrieve();
+
+		assertThat(this.restClient
+				.get()
+				.uri("/objects/{superapp}/{id}?userSuperapp={userSuperapp}&userEmail={userEmail}",object1.getCreatedBy().getUserId().getSuperapp(), object1.getObjectId().getId(),object1.getCreatedBy().getUserId().getSuperapp(),object1.getCreatedBy().getUserId().getEmail())
+				.retrieve()
+				.body(ObjectBoundary.class))
+		.usingRecursiveComparison()
+		.isEqualTo(object1);
+		
+	}
+	
+	@Test
+	public void testUpdateObjectAliasToDatabase() throws Exception{
+		NewUserBoundary newSuperappUser = Utils.createNewUserSuperapp();
+		UserBoundary superappUser = this.restClient
+				.post().uri("/users")
+				.body(newSuperappUser)
+				.retrieve()
+				.body(UserBoundary.class);
+		
+		ObjectBoundary newObject1 = Utils.createNewObjectBySuperapp();
+		ObjectBoundary object1=this.restClient
+		.post().uri("/objects")
+		.body(newObject1)
+		.retrieve()
+		.body(ObjectBoundary.class);
+		object1.setAlias("newAlias");
+
+		this.restClient
+		.put()
+		.uri("/objects/{superapp}/{id}?userSuperapp={userSuperapp}&userEmail={userEmail}",object1.getCreatedBy().getUserId().getSuperapp(), object1.getObjectId().getId(),object1.getCreatedBy().getUserId().getSuperapp(),object1.getCreatedBy().getUserId().getEmail())
+		.body(object1)
+		.retrieve();
+
+		assertThat(this.restClient
+				.get()
+				.uri("/objects/{superapp}/{id}?userSuperapp={userSuperapp}&userEmail={userEmail}",object1.getCreatedBy().getUserId().getSuperapp(), object1.getObjectId().getId(),object1.getCreatedBy().getUserId().getSuperapp(),object1.getCreatedBy().getUserId().getEmail())
+				.retrieve()
+				.body(ObjectBoundary.class))
+		.usingRecursiveComparison()
+		.isEqualTo(object1);
+		
+	}
+	
+	@Test
+	public void testUpdateObjectLocationToDatabase() throws Exception{
+		NewUserBoundary newSuperappUser = Utils.createNewUserSuperapp();
+		UserBoundary superappUser = this.restClient
+				.post().uri("/users")
+				.body(newSuperappUser)
+				.retrieve()
+				.body(UserBoundary.class);
+		
+		ObjectBoundary newObject1 = Utils.createNewObjectBySuperapp();
+		ObjectBoundary object1=this.restClient
+		.post().uri("/objects")
+		.body(newObject1)
+		.retrieve()
+		.body(ObjectBoundary.class);
+		System.out.println(object1);
+		
+		object1.setLocation(new Location(39.625,32.665));
+		System.out.println(object1);
+
+		this.restClient
+		.put()
+		.uri("/objects/{superapp}/{id}?userSuperapp={userSuperapp}&userEmail={userEmail}",object1.getCreatedBy().getUserId().getSuperapp(), object1.getObjectId().getId(),object1.getCreatedBy().getUserId().getSuperapp(),object1.getCreatedBy().getUserId().getEmail())
+		.body(object1)
+		.retrieve();
+		System.out.println(object1);
+
+		assertThat(this.restClient
+				.get()
+				.uri("/objects/{superapp}/{id}?userSuperapp={userSuperapp}&userEmail={userEmail}",object1.getCreatedBy().getUserId().getSuperapp(), object1.getObjectId().getId(),object1.getCreatedBy().getUserId().getSuperapp(),object1.getCreatedBy().getUserId().getEmail())
+				.retrieve()
+				.body(ObjectBoundary.class))
+		.usingRecursiveComparison()
+		.isEqualTo(object1);
+		
+	}
+	
+
 	
 	@Test
 	public void testSuperAppGetAllObjects()  throws Exception {

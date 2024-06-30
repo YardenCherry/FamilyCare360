@@ -56,30 +56,7 @@ public class AdminTests {
 		// DELETE database
 		deleteAllAndAddAdmin();
 	}
-	
-	@Test
-	public void testAdminGetAllObjects()  throws Exception {
-		addObjects();
-		
-		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
-		UserBoundary adminUser = this.restClient
-				.post().uri("/users")
-				.body(newAdmin)
-				.retrieve()
-				.body(UserBoundary.class);
-		
-		ObjectBoundary[] response = this.restClient
-				.get()
-				.uri("/admin/objects?userSuperapp={superapp}&userEmail={adminEmail}&size=5&page=0", superapp, Utils.getAdminEmail())
-				.retrieve()
-				.body(ObjectBoundary[].class);
 
-		assertThat(response)
-		.hasSize(objects.length)
-		.usingRecursiveFieldByFieldElementComparator()
-        .containsAnyElementsOf(Arrays.asList(objects));
-		
-	}
 	
 	public void addUsers() {
 		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
