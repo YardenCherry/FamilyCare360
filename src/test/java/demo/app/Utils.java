@@ -48,7 +48,22 @@ public class Utils {
 	
 	public static ObjectBoundary createNewObjectBySuperapp() {
 		return createObjectBoundary("1", superapp , "type", "alias",
-				new Location(0,0), true, createCreatedBy(superapp,superappEmail), createObjectDetails());
+				new Location(10,0), true, createCreatedBy(superapp,superappEmail), createObjectDetails());
+	}
+	
+	public static ObjectBoundary createNewObject3BySuperapp() {
+		return createObjectBoundary("1", superapp , "type1", "alias",
+				new Location(10,0), true, createCreatedBy(superapp,superappEmail), createObjectDetails());
+	}
+	
+	public static ObjectBoundary createNewObject2BySuperapp() {
+		return createObjectBoundary("1", superapp , "type1", "alias1",
+				new Location(0,10), true, createCreatedBy(superapp,superappEmail), createObjectDetails());
+	}
+	
+	public static ObjectBoundary createNewObject4BySuperapp() {
+		return createObjectBoundary("1", superapp , "type", "alias1",
+				new Location(10,10), true, createCreatedBy(superapp,superappEmail), createObjectDetails());
 	}
 	
 	public static ObjectBoundary createNewObjectByMiniApp() {

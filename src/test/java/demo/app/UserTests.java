@@ -75,6 +75,26 @@ public class UserTests {
 		}
 	
 	@Test
+	public void testCreateNewUserWithAnExistingEmailToDatabase() throws Exception{
+		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
+		UserBoundary adminUser = this.restClient
+				.post().uri("/users")
+				.body(newAdmin)
+				.retrieve()
+				.body(UserBoundary.class);
+		
+		assertThatThrownBy(() -> this.restClient
+				.post().uri("/users")
+				.body(newAdmin)
+				.retrieve()
+				.body(UserBoundary.class))
+				.isInstanceOf(HttpStatusCodeException.class)
+				.extracting("statusCode")
+				.extracting("value")
+				.isEqualTo(400);
+	}
+	
+	@Test
 	public void testCreateNewUserWithNullAvatar() throws Exception{
 		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
 		newAdmin.setAvatar(null);
@@ -163,6 +183,21 @@ public class UserTests {
 				.extracting("value")
 				.isEqualTo(400);
 	}
+	
+//	public void testCreateNewUserWithInvalidRole() throws Exception{
+//		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
+//		newAdmin.setRole(Role.ADMI);
+//		newAdmin.setEmail("admin");
+//		assertThatThrownBy(() -> this.restClient
+//				.post().uri("/users")
+//				.body(newAdmin)
+//				.retrieve()
+//				.body(UserBoundary.class))
+//				.isInstanceOf(HttpStatusCodeException.class)
+//				.extracting("statusCode")
+//				.extracting("value")
+//				.isEqualTo(400);
+//	}
 	
 	@Test
 	public void testCreateNewUserWithInvalidEmail() throws Exception{

@@ -29,8 +29,8 @@ public class PermissionTests {
 	private RestClient restClient;
 
 	private UserBoundary[] users=null;
-	private ObjectBoundary[] objects;
-	private MiniAppCommandBoundary[] commands;
+	private ObjectBoundary[] objects=null;
+	private MiniAppCommandBoundary[] commands=null;
 
 	@Value("${spring.application.name}")
 	private String superapp;
@@ -158,6 +158,47 @@ public class PermissionTests {
 				.body(UserBoundary.class);
 
 		users = new UserBoundary[] { adminUser, superappUser, miniappUser };
+	}
+	
+	public void addObjects() {
+		NewUserBoundary newSuperappUser = Utils.createNewUserSuperapp();
+		UserBoundary superappUser = this.restClient
+				.post().uri("/users")
+				.body(newSuperappUser)
+				.retrieve()
+				.body(UserBoundary.class);
+
+		ObjectBoundary newObject1 = Utils.createNewObjectBySuperapp();
+		this.restClient
+		.post().uri("/users")
+		.body(newObject1)
+		.retrieve()
+		.body(ObjectBoundary.class);
+		
+		ObjectBoundary newObject2 = Utils.createNewObject2BySuperapp();
+		this.restClient
+		.post().uri("/users")
+		.body(newObject2)
+		.retrieve()
+		.body(ObjectBoundary.class);
+		
+		ObjectBoundary newObject3 = Utils.createNewObject3BySuperapp();
+		this.restClient
+		.post().uri("/users")
+		.body(newObject3)
+		.retrieve()
+		.body(ObjectBoundary.class);
+		
+		ObjectBoundary newObject4 = Utils.createNewObject4BySuperapp();
+		this.restClient
+		.post().uri("/users")
+		.body(newObject4)
+		.retrieve()
+		.body(ObjectBoundary.class);
+		
+		objects= new ObjectBoundary[] {newObject1, newObject2, newObject3, newObject4};
+		
+		
 	}
 	
 	public void deleteAllAndAddAdmin() {
