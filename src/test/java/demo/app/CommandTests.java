@@ -68,7 +68,21 @@ public class CommandTests {
 				.body(miniapp)
 				.retrieve()
 				.body(Object[].class);
-		        
+		
+		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
+		UserBoundary adminUser = this.restClient
+				.post().uri("/users")
+				.body(newAdmin)
+				.retrieve()
+				.body(UserBoundary.class);
+		  
+		MiniAppCommandBoundary[] mini= this.restClient
+				.get()
+				.uri("/admin/miniapp?userSuperapp={superapp}&userEmail={adminEmail}&size=5&page=0", adminUser.getUserId().getSuperapp(),adminUser.getUserId().getEmail() )
+				.retrieve()
+				.body(MiniAppCommandBoundary[].class);
+		
+		miniapp.getCommandId().setId(mini[0].getCommandId().getId());	
 		assertThat(response)
 		.usingRecursiveComparison()
 		.isEqualTo(miniapp);

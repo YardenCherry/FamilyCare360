@@ -3,6 +3,8 @@ package demo.app.entities;
 import java.util.Date;
 import java.util.Map;
 
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.*;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -20,8 +22,13 @@ public class ObjectEntity {
 	private Boolean active;
 	private Date creationTimestamp;
 	private String createdBy;
+	
+    @Column(name = "object_details", columnDefinition = "TEXT")	
 	@Lob
 	@Convert(converter = ApplicationMapToStringConverter.class)
+//	@CollectionTable(name="object_Details", joinColumns=@JoinColumn(name="entity_id"))
+//	@MapKeyColumn(name="key")
+//	@Column(name="value")
 	private Map<String, Object> objectDetails;
 
 	private double latitude;

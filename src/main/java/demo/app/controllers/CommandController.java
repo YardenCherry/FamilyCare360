@@ -24,6 +24,6 @@ public class CommandController {
 	public Object[] storeInDatabase(@PathVariable("miniAppName") String miniAppName,
 			@RequestBody MiniAppCommandBoundary commandBoundary) {
 		System.err.println(miniAppName);
-		return this.commandLogic.storeInDatabase(miniAppName, commandBoundary).toArray(new MiniAppCommandBoundary[0]);
+		return this.commandLogic.storeInDatabase(miniAppName, commandBoundary).toArray(new Object[0]);
 	}
 }

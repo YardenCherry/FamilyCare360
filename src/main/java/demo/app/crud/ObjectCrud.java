@@ -41,13 +41,13 @@ public interface ObjectCrud extends JpaRepository<ObjectEntity, String> {
 			Pageable pageable);
 	
 	@Query(value = "SELECT * FROM objects o WHERE "
-	        + "o.type = :type AND o.active = true "
-	        + "ORDER BY :1 * acos(cos(radians(:lat)) * cos(radians(o.latitude)) * cos(radians(o.longitude) - radians(:lng)) + sin(radians(:lat)) * sin(radians(o.latitude))) ASC",
-	        nativeQuery = true)
+            + "o.type = :type AND o.active = true "
+            + "ORDER BY acos(cos(radians(:latitude)) * cos(radians(o.latitude)) * cos(radians(o.longitude) - radians(:longitude)) + sin(radians(:latitude)) * sin(radians(o.latitude))) ASC",
+            nativeQuery = true)
 	public List<ObjectEntity> findAllByTypeAndLocationAndActiveTrue(
 	        @Param("type") String type,
-	        @Param("lat") double lat,
-	        @Param("lng") double lng,
+	        @Param("latitude") double latitude,
+	        @Param("longitude") double longitude,
 	        Pageable pageable);
 
 //	 finds all entities with a latitude and longitude within a specified rectangular area

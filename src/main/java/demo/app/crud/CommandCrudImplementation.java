@@ -83,15 +83,16 @@ public class CommandCrudImplementation implements CommandLogic {
 		commandBoundary.getInvokedBy().getUserId().setSuperapp(springApplicationName);
 		MiniAppCommandEntity entity = this.commandConverter.toEntity(commandBoundary);
 		entity = this.commandCrud.save(entity);
+		
 		List<Object> boundaries = new ArrayList<>();
 		boundaries.add(this.commandConverter.toBoundary(entity));
 		
 		
 		String commandString = commandBoundary.getCommand();
-		//List<Object> result = handleCommand(entity);
+		List<Object> result = handleCommand(entity);
 
 		System.err.println("The command " + commandString + " is invoked successfully");
-		return boundaries;
+		return result!= null ? result : boundaries;
 	}
 
 	private List<Object> handleCommand(MiniAppCommandEntity commandEntity) {
@@ -105,6 +106,7 @@ public class CommandCrudImplementation implements CommandLogic {
 						PageRequest.of(0, 5, Direction.ASC, "objectID"));
 				for (ObjectEntity entity : entities) 
 					rv.add(this.objectConverter.toBoundary(entity));
+				System.out.println("***command****");
 				return rv;
 				
 			case "GetAllObjectsByCreatedByAndTypeAndAliasAndActive":
@@ -115,14 +117,16 @@ public class CommandCrudImplementation implements CommandLogic {
 				return rv;
 				
 			case "GetAllObjectsByTypeAndLocationAndActive":
-				entities=objectCrud.findAllByTypeAndLocationAndActiveTrue
-						(commandEntity.getCommandAttributes().get("type").toString(),
-								(double)commandEntity.getCommandAttributes().get("latitude"), 
-								(double)commandEntity.getCommandAttributes().get("longitude"),
-						PageRequest.of(0, 5, Direction.ASC, "location","objectID"));	
-				for (ObjectEntity entity : entities) 
-					rv.add(this.objectConverter.toBoundary(entity));
-				return rv;
+				double latitude = Double.parseDouble(commandEntity.getCommandAttributes().get("latitude").toString());
+                double longitude = Double.parseDouble(commandEntity.getCommandAttributes().get("longitude").toString());
+                String type = commandEntity.getCommandAttributes().get("type").toString();
+                
+                entities = objectCrud.findAllByTypeAndLocationAndActiveTrue(type, latitude, longitude,
+                        PageRequest.of(0, 5, Direction.ASC, "objectID"));
+                for (ObjectEntity entity : entities) {
+                    rv.add(this.objectConverter.toBoundary(entity));
+                }
+                return rv;
 				
 				
 		}
