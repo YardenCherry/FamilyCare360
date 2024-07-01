@@ -19,6 +19,7 @@ import demo.app.entities.ObjectEntity;
 import demo.app.entities.UserEntity;
 import demo.app.enums.Role;
 import demo.app.logics.CommandLogic;
+import demo.app.objects.CommandId;
 import demo.app.objects.InputValidation;
 import jakarta.annotation.PostConstruct;
 
@@ -75,6 +76,7 @@ public class CommandCrudImplementation implements CommandLogic {
 		if (!targetObject.getActive()) {
 			throw new MyBadRequestException("Target object is not active.");
 		}
+		commandBoundary.setCommandId(new CommandId());
 		commandBoundary.getCommandId().setId(UUID.randomUUID().toString());
 		commandBoundary.getCommandId().setSuperapp(springApplicationName);
 		commandBoundary.getCommandId().setMiniapp(miniAppName);
