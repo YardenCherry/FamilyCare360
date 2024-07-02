@@ -150,6 +150,18 @@ public class Init implements CommandLineRunner {
     private void updateUsersInDatabase() {
     		
         for (UserBoundary user : usersToStore) {
+        	for(ObjectBoundary object : objectsToStore) {
+        		if(user.getUsername().equals(object.getObjectId().getId())) {
+	            	object.getObjectDetails().put("uid", object.getObjectId().getId());
+	            	this.objects.updateById(
+	            			object.getObjectId().getId(),
+	            			object.getObjectId().getSuperapp(),
+	            			object.getObjectId().getSuperapp(),
+	            			user.getUserId().getEmail(),
+	            			object);
+	            			System.err.println("Updated: " + object);
+        		}	
+        	}
         	if(user.getRole()!=Role.ADMIN) {
 	        	user.setRole(Role.MINIAPP_USER);
 	        	user.setUsername(getObjectID(user.getUserId().getEmail()));
@@ -157,6 +169,7 @@ public class Init implements CommandLineRunner {
 	            System.err.println("Updated: " + user);
         	}	
         }
+       
     }
 
     private String getObjectID(String email) {

@@ -2,6 +2,7 @@ package demo.app.crud;
 
 import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -63,5 +64,7 @@ public interface ObjectCrud extends JpaRepository<ObjectEntity, String> {
 	public List<ObjectEntity> findAllByCreatedByAndTypeAndAlias(@Param("createdBy") String createdBy, @Param("type") String type, @Param("alias") String alias, Pageable pageable);
 
 	public List<ObjectEntity> findAllByCreatedByAndTypeAndAliasAndActiveTrue(@Param("createdBy") String createdBy, @Param("type") String type, @Param("alias") String alias, Pageable pageable);
+
+	public List<ObjectEntity> findAllByTypeAndAliasAndActiveTrue(@Param("type") String type, @Param("alias") String alias, PageRequest of);
 
 }

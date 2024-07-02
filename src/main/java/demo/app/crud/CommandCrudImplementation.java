@@ -101,18 +101,15 @@ public class CommandCrudImplementation implements CommandLogic {
 		String command = commandEntity.getCommand();
 		List<ObjectEntity> entities;
 		List<Object> rv = new ArrayList<>();
-
+		String type;
+		
 		switch (command) {
-			case "GetAllObjectsByCreatedByAndActive":
-				entities=objectCrud.findAllByCreatedByAndActiveTrue(commandEntity.getInvokedBy(), 
-						PageRequest.of(0, 5, Direction.ASC, "objectID"));
-				for (ObjectEntity entity : entities) 
-					rv.add(this.objectConverter.toBoundary(entity));
-				System.out.println("***command****");
-				return rv;
 				
-			case "GetAllObjectsByCreatedByAndTypeAndAliasAndActive":
-				entities=objectCrud.findAllByCreatedByAndActiveTrue(commandEntity.getInvokedBy(), 
+			case "GetAllObjectsByTypeAndAliasAndActive":
+                type = commandEntity.getCommandAttributes().get("type").toString();
+                String alias = commandEntity.getCommandAttributes().get("alias").toString();
+
+				entities=objectCrud.findAllByTypeAndAliasAndActiveTrue(type,alias, 
 						PageRequest.of(0, 5, Direction.ASC, "objectID"));	
 				for (ObjectEntity entity : entities) 
 					rv.add(this.objectConverter.toBoundary(entity));
@@ -121,7 +118,7 @@ public class CommandCrudImplementation implements CommandLogic {
 			case "GetAllObjectsByTypeAndLocationAndActive":
 				double latitude = Double.parseDouble(commandEntity.getCommandAttributes().get("latitude").toString());
                 double longitude = Double.parseDouble(commandEntity.getCommandAttributes().get("longitude").toString());
-                String type = commandEntity.getCommandAttributes().get("type").toString();
+                type = commandEntity.getCommandAttributes().get("type").toString();
                 
                 entities = objectCrud.findAllByTypeAndLocationAndActiveTrue(type, latitude, longitude,
                         PageRequest.of(0, 5, Direction.ASC, "objectID"));
