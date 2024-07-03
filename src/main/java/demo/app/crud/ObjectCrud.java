@@ -65,6 +65,6 @@ public interface ObjectCrud extends JpaRepository<ObjectEntity, String> {
 
 	public List<ObjectEntity> findAllByCreatedByAndTypeAndAliasAndActiveTrue(@Param("createdBy") String createdBy, @Param("type") String type, @Param("alias") String alias, Pageable pageable);
 
-	public List<ObjectEntity> findAllByTypeAndAliasAndActiveTrue(@Param("type") String type, @Param("alias") String alias, PageRequest of);
+	public List<ObjectEntity> findAllByTypeAndAliasAndActiveTrue(@Param("type") String type, @Param("alias") String alias, Pageable pageable);
 
 }

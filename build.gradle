@@ -8,7 +8,9 @@ group = 'il.ac.afeka'
 version = 'class03-DAL-and-RESTApi'
 
 java {
- sourceCompatibility = '21'
+	toolchain{
+		languageVersion=JavaLanguageVersion.of(21)
+	}
 }
 
 repositories {
@@ -22,7 +24,7 @@ dependencies {
 
  
  // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
- implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+ implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
  
  runtimeOnly 'com.h2database:h2'
  runtimeOnly 'org.postgresql:postgresql' // note postgresql support

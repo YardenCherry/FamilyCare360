@@ -50,13 +50,13 @@ public class Init implements CommandLineRunner {
 
     private void storeObjectsInDatabase() {
         objectsToStore = new ObjectBoundary[]{
-                createBoundary("1", "2024b.yarden.cherry", "com.example.babysitter.models.Babysitter", "Aa,12345", new Location(32.1785837, 34.8810362),
+                createBoundary("1", "2024b.yarden.cherry", "Babysitter", "Aa,12345", new Location(32.1785837, 34.8810362),
                         true, createCreatedBy("2024b.yarden.cherry", "adi@gmail.com"), createBabysitterDetails(
                         "מוטה גור 2, רעננה, ישראל", "adi@gmail.com", 32.1785837, true, "4", "1993-07-01", 7, "1", "Aa,12345", "0526553008", 25, "adi", "r", 34.8810362)),
-                createBoundary("2", "2024b.yarden.cherry", "com.example.babysitter.models.Babysitter", "Aa!14567", new Location(37.4220936, -122.083922),
+                createBoundary("2", "2024b.yarden.cherry", "Babysitter", "Aa!14567", new Location(37.4220936, -122.083922),
                         true, createCreatedBy("2024b.yarden.cherry", "rotem@gmai.com"), createBabysitterDetails(
                         "Unnamed Road, Mountain View, CA 94043, USA", "rotem@gmai.com", 37.4220936, false, "t", "1986-07-01", 4, "2", "Aa!14567", "0526553002", 60, "rotem", "t", -122.083922)),
-                createBoundary("3", "2024b.yarden.cherry", "com.example.babysitter.models.Parent", "Aa,12345", new Location(32.1785796, 34.881024),
+                createBoundary("3", "2024b.yarden.cherry", "Parent", "Aa,12345", new Location(32.1785796, 34.881024),
                         true, createCreatedBy("2024b.yarden.cherry", "noa@gmail.com"), createParentDetails(
                         "3", "Aa,12345", 2, "מוטה גור 2, רעננה, ישראל", "noa@gmail.com", "0526553001", 32.1785796, "noa", 34.881024))
         };
@@ -151,7 +151,7 @@ public class Init implements CommandLineRunner {
     		
         for (UserBoundary user : usersToStore) {
         	for(ObjectBoundary object : objectsToStore) {
-        		if(user.getUsername().equals(object.getObjectId().getId())) {
+        		if(user.getUserId().getEmail().equals(object.getCreatedBy().getUserId().getEmail())) {
 	            	object.getObjectDetails().put("uid", object.getObjectId().getId());
 	            	this.objects.updateById(
 	            			object.getObjectId().getId(),

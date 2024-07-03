@@ -63,9 +63,9 @@ public class ObjectCrudImplementation implements EnhancedObjectLogic {
 		UserEntity user = userCrud
 				.findById(objectBoundary.getCreatedBy().getUserId().getSuperapp() + "_"
 						+ objectBoundary.getCreatedBy().getUserId().getEmail())
-				.orElseThrow(() -> new MyForbiddenException("User not authorized"));
+				.orElseThrow(() -> new MyForbiddenException("User not authorized1"));
 		if (!user.getRole().equals(Role.SUPERAPP_USER)) {
-			throw new MyForbiddenException("User not authorized");
+			throw new MyForbiddenException("User not authorized2");
 		}
 
 		validateObjectBoundary(objectBoundary);

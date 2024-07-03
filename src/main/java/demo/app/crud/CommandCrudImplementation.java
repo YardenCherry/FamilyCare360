@@ -108,11 +108,15 @@ public class CommandCrudImplementation implements CommandLogic {
 			case "GetAllObjectsByTypeAndAliasAndActive":
                 type = commandEntity.getCommandAttributes().get("type").toString();
                 String alias = commandEntity.getCommandAttributes().get("alias").toString();
-
-				entities=objectCrud.findAllByTypeAndAliasAndActiveTrue(type,alias, 
-						PageRequest.of(0, 5, Direction.ASC, "objectID"));	
-				for (ObjectEntity entity : entities) 
+                System.out.println("type: "+type+", alias: "+alias);
+//				entities=objectCrud.findAllByTypeAndAliasAndActiveTrue(type,alias, 
+//						PageRequest.of(0, 5, Direction.ASC, "objectID"));	
+				entities=objectCrud.findAllByType(type, 
+				PageRequest.of(0, 5, Direction.ASC, "objectID"));	
+				for (ObjectEntity entity : entities) {
 					rv.add(this.objectConverter.toBoundary(entity));
+					System.out.println("*** entity: " + entity);
+				}
 				return rv;
 				
 			case "GetAllObjectsByTypeAndLocationAndActive":

@@ -122,4 +122,5 @@ public class ObjectEntity {
 		setLatitude(latitude);
 		setLongitude(longitude);
 	}
+	
 }
