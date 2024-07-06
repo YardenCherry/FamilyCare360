@@ -1,6 +1,7 @@
 package demo.app.crud;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,8 +9,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import demo.app.entities.ObjectEntity;
+import demo.app.entities.UserEntity;
 
 public interface ObjectCrud extends JpaRepository<ObjectEntity, String> {
+
+	public Optional<ObjectEntity> findByObjectIdAndActiveTrue(@Param("objectId") String objectId);
 
 	public List<ObjectEntity> findAllByActive(@Param("active") boolean active, Pageable pageable);
 
@@ -63,5 +67,7 @@ public interface ObjectCrud extends JpaRepository<ObjectEntity, String> {
 
 	public List<ObjectEntity> findAllByTypeAndAliasAndActiveTrue(@Param("type") String type,
 			@Param("alias") String alias, Pageable pageable);
+
+	public Optional<ObjectEntity> findByObjectId(@Param("objectId") String objectId);
 
 }

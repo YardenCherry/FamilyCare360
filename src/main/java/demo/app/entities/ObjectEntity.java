@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 public class ObjectEntity {
 
 	@Id
-	private String objectID;
+	private String objectId;
 	private String type;
 	private String alias;
 	private Boolean active;
@@ -48,12 +48,12 @@ public class ObjectEntity {
 		this.longitude = longitude;
 	}
 
-	public String getObjectID() {
-		return objectID;
+	public String getObjectId() {
+		return objectId;
 	}
 
-	public void setObjectID(String objectID) {
-		this.objectID = objectID;
+	public void setObjectId(String objectId) {
+		this.objectId = objectId;
 	}
 
 	public String getType() {
@@ -106,7 +106,7 @@ public class ObjectEntity {
 
 	@Override
 	public String toString() {
-		return "ObjectEntity{" + "objectID='" + objectID + '\'' + ", type='" + type + '\'' + ", alias='" + alias + '\''
+		return "ObjectEntity{" + "objectId='" + objectId + '\'' + ", type='" + type + '\'' + ", alias='" + alias + '\''
 				+ ", latitude='" + latitude + ", longitude='" + longitude + '\'' + ", active=" + active
 				+ ", creationTimestamp=" + creationTimestamp + ", createdBy=" + createdBy + ", objectDetails="
 				+ objectDetails + '}';

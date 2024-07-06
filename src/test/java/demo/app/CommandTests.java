@@ -1,5 +1,7 @@
 package demo.app;
 
+import demo.app.Utils;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -12,15 +14,15 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClient;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import demo.app.boundaries.MiniAppCommandBoundary;
 import demo.app.boundaries.NewUserBoundary;
 import demo.app.boundaries.ObjectBoundary;
 import demo.app.boundaries.UserBoundary;
+import demo.app.entities.MiniAppCommandEntity;
 import demo.app.enums.Role;
 import demo.app.objects.CommandId;
 import jakarta.annotation.PostConstruct;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 public class CommandTests {
@@ -188,6 +190,19 @@ public class CommandTests {
 		return object1;
 	}
 
+	public ObjectBoundary addObjectNotActiveBySuperapp() {
+		NewUserBoundary newSuperappUser = Utils.createNewUserSuperapp();
+		UserBoundary superappUser = this.restClient.post().uri("/users").body(newSuperappUser).retrieve()
+				.body(UserBoundary.class);
+
+		ObjectBoundary newObject1 = Utils.createNewObjectBySuperapp();
+		newObject1.setActive(false);
+		ObjectBoundary object1 = this.restClient.post().uri("/objects").body(newObject1).retrieve()
+				.body(ObjectBoundary.class);
+
+		return object1;
+	}
+
 	public void deleteAllAndAddAdmin() {
 		NewUserBoundary newAdmin = Utils.createNewUserBoundary("admin_avatar", "adminEmail@demo.or", Role.ADMIN,
 				"admin_username");
@@ -202,6 +217,47 @@ public class CommandTests {
 
 		this.restClient.delete().uri("/admin/users?userSuperapp={superapp}&userEmail={adminEmail}",
 				newUserAdmin.getUserId().getSuperapp(), newUserAdmin.getUserId().getEmail()).retrieve();
+	}
+
+	@Test
+	public void testCreateCommandBySuperappUserResponseWith403() throws Exception {
+		NewUserBoundary superappUser = Utils.createNewUserSuperapp();
+		ObjectBoundary targetObject = addObjectBySuperapp();
+		MiniAppCommandBoundary superapp = Utils.createNewCommandBySuperapp(targetObject.getObjectId().getId());
+		System.err.println(superapp);
+
+		assertThatThrownBy(
+				() -> this.restClient.post().uri("/miniapp/{miniAppName}", superapp.getCommandId().getMiniapp())
+						.body(superapp).retrieve().body(Object[].class))
+				.isInstanceOf(HttpStatusCodeException.class).extracting("statusCode").extracting("value")
+				.isEqualTo(403);
+	}
+
+	@Test
+	public void testCreateCommandByAdminUserResponseWith403() throws Exception {
+		NewUserBoundary adminUser = Utils.createNewUserAdmin();
+		ObjectBoundary targetObject = addObjectBySuperapp();
+		MiniAppCommandBoundary admin = Utils.createNewCommandByAdmin(targetObject.getObjectId().getId());
+		System.err.println(admin);
+
+		assertThatThrownBy(() -> this.restClient.post().uri("/miniapp/{miniAppName}", admin.getCommandId().getMiniapp())
+				.body(admin).retrieve().body(Object[].class)).isInstanceOf(HttpStatusCodeException.class)
+				.extracting("statusCode").extracting("value").isEqualTo(403);
+	}
+
+	@Test
+	public void testCreateCommandByMiniappWithNonActiveTargetObject() throws Exception {
+		UserBoundary miniappUser = addMiniAppUser();
+		ObjectBoundary targetObject = addObjectNotActiveBySuperapp();
+		MiniAppCommandBoundary miniapp = Utils.createNewCommandByMiniapp(targetObject.getObjectId().getId(),
+				miniappUser);
+		System.err.println(miniapp);
+
+		assertThatThrownBy(
+				() -> this.restClient.post().uri("/miniapp/{miniAppName}", miniapp.getCommandId().getMiniapp())
+						.body(miniapp).retrieve().body(Object[].class))
+				.isInstanceOf(HttpStatusCodeException.class).extracting("statusCode").extracting("value")
+				.isEqualTo(400);
 	}
 
 }

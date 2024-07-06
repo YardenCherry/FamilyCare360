@@ -91,7 +91,11 @@ public class ObjectLogicImpl implements EnhancedObjectLogic {
 		}
 
 		String objectId = id + "_" + superapp;
-		ObjectEntity entity = this.objectCrud.findById(objectId).orElse(null);
+		ObjectEntity entity;
+		if (user.getRole().equals(Role.SUPERAPP_USER))
+			entity = this.objectCrud.findByObjectId(objectId).orElse(null);
+		else
+			entity = this.objectCrud.findByObjectIdAndActiveTrue(objectId).orElse(null);
 
 		if (entity == null) {
 			return Optional.empty();
@@ -127,10 +131,10 @@ public class ObjectLogicImpl implements EnhancedObjectLogic {
 
 		List<ObjectEntity> entities;
 		if (user.getRole().equals(Role.MINIAPP_USER)) {
-			entities = this.objectCrud.findAllByActive(true, PageRequest.of(page, size, Direction.ASC, "objectID"))
+			entities = this.objectCrud.findAllByActive(true, PageRequest.of(page, size, Direction.ASC, "objectId"))
 					.stream().toList();
 		} else {
-			entities = this.objectCrud.findAll(PageRequest.of(page, size, Direction.ASC, "objectID")).toList();
+			entities = this.objectCrud.findAll(PageRequest.of(page, size, Direction.ASC, "objectId")).toList();
 		}
 		List<ObjectBoundary> rv = new ArrayList<>();
 
@@ -206,10 +210,10 @@ public class ObjectLogicImpl implements EnhancedObjectLogic {
 		List<ObjectEntity> entities;
 		if (user.getRole().equals(Role.MINIAPP_USER)) {
 			entities = this.objectCrud.findAllByAliasAndActive(alias, true,
-					PageRequest.of(page, size, Direction.ASC, "alias", "objectID")).stream().toList();
+					PageRequest.of(page, size, Direction.ASC, "alias", "objectId")).stream().toList();
 		} else {
 			entities = this.objectCrud
-					.findAllByAlias(alias, PageRequest.of(page, size, Direction.ASC, "alias", "objectID")).stream()
+					.findAllByAlias(alias, PageRequest.of(page, size, Direction.ASC, "alias", "objectId")).stream()
 					.toList();
 		}
 
@@ -235,10 +239,10 @@ public class ObjectLogicImpl implements EnhancedObjectLogic {
 		List<ObjectEntity> entities;
 		if (user.getRole().equals(Role.MINIAPP_USER)) {
 			entities = this.objectCrud
-					.findAllByTypeAndActive(type, true, PageRequest.of(page, size, Direction.ASC, "objectID")).stream()
+					.findAllByTypeAndActive(type, true, PageRequest.of(page, size, Direction.ASC, "objectId")).stream()
 					.toList();
 		} else {
-			entities = this.objectCrud.findAllByType(type, PageRequest.of(page, size, Direction.ASC, "objectID"))
+			entities = this.objectCrud.findAllByType(type, PageRequest.of(page, size, Direction.ASC, "objectId"))
 					.stream().toList();
 		}
 
@@ -266,12 +270,12 @@ public class ObjectLogicImpl implements EnhancedObjectLogic {
 		if (user.getRole().equals(Role.MINIAPP_USER)) {
 			entities = this.objectCrud
 					.findAllByAliasLikeIgnoreCaseAndActive(pattern, true,
-							PageRequest.of(page, size, Direction.ASC, "creationTimestamp", "objectID"))
+							PageRequest.of(page, size, Direction.ASC, "creationTimestamp", "objectId"))
 					.stream().toList();
 		} else {
 			entities = this.objectCrud
 					.findAllByAliasLikeIgnoreCase(pattern,
-							PageRequest.of(page, size, Direction.ASC, "creationTimestamp", "objectID"))
+							PageRequest.of(page, size, Direction.ASC, "creationTimestamp", "objectId"))
 					.stream().toList();
 		}
 
@@ -307,10 +311,10 @@ public class ObjectLogicImpl implements EnhancedObjectLogic {
 		if (user.getRole().equals(Role.MINIAPP_USER)) {
 
 			entities = this.objectCrud.findAllByLocationWithinAndActive(lat, lng, distance, units, true,
-					PageRequest.of(page, size, Direction.ASC, "objectID")).stream().toList();
+					PageRequest.of(page, size, Direction.ASC, "objectId")).stream().toList();
 		} else {
 			entities = this.objectCrud.findAllByLocationWithin(lat, lng, distance, units,
-					PageRequest.of(page, size, Direction.ASC, "objectID")).stream().toList();
+					PageRequest.of(page, size, Direction.ASC, "objectId")).stream().toList();
 		}
 
 		List<ObjectBoundary> rv = new ArrayList<>();
@@ -344,7 +348,7 @@ public class ObjectLogicImpl implements EnhancedObjectLogic {
 //		if (user.getRole().equals(Role.MINIAPP_USER)) {
 //			entities = this.objectCrud
 //					.findAllByLocationWithinAndActive(
-//							lat, lng, radius, true, PageRequest.of(page, size, Direction.ASC, "location", "objectID"))
+//							lat, lng, radius, true, PageRequest.of(page, size, Direction.ASC, "location", "objectId"))
 //					.stream()
 //					.filter(entity -> calculateDistance(lat, lng,
 //							Double.parseDouble(entity.getLocation().split("_")[0]),
@@ -353,7 +357,7 @@ public class ObjectLogicImpl implements EnhancedObjectLogic {
 //		} else {
 //			entities = this.objectCrud
 //					.findAllByLocationWithin(
-//							lat, lng, radius, PageRequest.of(page, size, Direction.ASC, "location", "objectID"))
+//							lat, lng, radius, PageRequest.of(page, size, Direction.ASC, "location", "objectId"))
 //					.stream()
 //					.filter(entity -> calculateDistance(lat, lng,
 //							Double.parseDouble(entity.getLocation().split("_")[0]),

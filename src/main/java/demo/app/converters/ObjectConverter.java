@@ -18,7 +18,7 @@ public class ObjectConverter {
 
 	public ObjectBoundary toBoundary(ObjectEntity entity) {
 		ObjectBoundary boundary = new ObjectBoundary();
-		String[] objectIdParts = entity.getObjectID().split("_");
+		String[] objectIdParts = entity.getObjectId().split("_");
 		if (objectIdParts.length != 2) {
 			throw new IllegalArgumentException("Invalid object ID format");
 		}
@@ -60,7 +60,7 @@ public class ObjectConverter {
 
 	public ObjectEntity toEntity(ObjectBoundary boundary) {
 		ObjectEntity entity = new ObjectEntity();
-		entity.setObjectID(boundary.getObjectId().getId() + "_" + boundary.getObjectId().getSuperapp());
+		entity.setObjectId(boundary.getObjectId().getId() + "_" + boundary.getObjectId().getSuperapp());
 		entity.setType(boundary.getType());
 		entity.setAlias(boundary.getAlias());
 		entity.setCreationTimestamp(boundary.getCreationTimestamp());
