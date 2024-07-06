@@ -24,16 +24,17 @@ public class ApplicationMapToStringConverter implements AttributeConverter<Map<S
 		try {
 			return this.jackson.writeValueAsString(attribute);
 		} catch (Exception e) {
-            throw new RuntimeException("Error converting map to JSON string.", e);
+			throw new RuntimeException("Error converting map to JSON string.", e);
 		}
 	}
 
 	@Override
 	public Map<String, Object> convertToEntityAttribute(String dbData) {
 		try {
-			return this.jackson.readValue(dbData, new TypeReference<Map<String, Object>>() {});
+			return this.jackson.readValue(dbData, new TypeReference<Map<String, Object>>() {
+			});
 		} catch (Exception e) {
-            throw new RuntimeException("Error converting JSON string to map.", e);
+			throw new RuntimeException("Error converting JSON string to map.", e);
 		}
 	}
 }

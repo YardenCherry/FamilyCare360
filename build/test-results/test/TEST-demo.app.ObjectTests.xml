@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="demo.app.ObjectTests" tests="11" skipped="0" failures="0" errors="0" timestamp="2024-07-04T16:52:03" hostname="DESKTOP-G227G8D" time="3.159">
+  <properties/>
+  <testcase name="testSuperAppCreateObjectWithNullAlias()" classname="demo.app.ObjectTests" time="0.193"/>
+  <testcase name="testUpdateObjectLocationToDatabase()" classname="demo.app.ObjectTests" time="0.407"/>
+  <testcase name="testSuperGetObjectById()" classname="demo.app.ObjectTests" time="0.496"/>
+  <testcase name="testUpdateObjectTypeToDatabase()" classname="demo.app.ObjectTests" time="0.281"/>
+  <testcase name="testSuperAppCreateObjectWithEmptyType()" classname="demo.app.ObjectTests" time="0.195"/>
+  <testcase name="testSuperAppCreateObjectWithEmptyAlias()" classname="demo.app.ObjectTests" time="0.197"/>
+  <testcase name="testSuperAppCreateObject()" classname="demo.app.ObjectTests" time="0.206"/>
+  <testcase name="testSuperAppCreateObjectWithEmptyCreatedByDetails()" classname="demo.app.ObjectTests" time="0.194"/>
+  <testcase name="testUpdateObjectAliasToDatabase()" classname="demo.app.ObjectTests" time="0.351"/>
+  <testcase name="testSuperAppCreateObjectWithNullType()" classname="demo.app.ObjectTests" time="0.169"/>
+  <testcase name="testSuperAppGetAllObjects()" classname="demo.app.ObjectTests" time="0.411"/>
+  <system-out><![CDATA[2024-07-04T19:52:03.180+03:00  INFO 31728 --- [2024b.yarden.cherry] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [demo.app.ObjectTests]: ObjectTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-07-04T19:52:03.183+03:00  INFO 31728 --- [2024b.yarden.cherry] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration demo.app.Application for test class demo.app.ObjectTests
+]]></system-out>
+  <system-err><![CDATA[beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+]]></system-err>
+</testsuite>

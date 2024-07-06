@@ -3,6 +3,7 @@ package demo.app.entities;
 import java.util.Date;
 import java.util.Map;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -25,8 +26,8 @@ public class MiniAppCommandEntity {
 
 	private String invokedBy;
 
-	@Lob
 	@Convert(converter = ApplicationMapToStringConverter.class)
+	@Column(name = "commandAttributes", columnDefinition = "TEXT")
 	private Map<String, Object> commandAttributes;
 
 	public MiniAppCommandEntity() {

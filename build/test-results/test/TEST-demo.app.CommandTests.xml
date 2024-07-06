@@ -1,0 +1,989 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="demo.app.CommandTests" tests="6" skipped="0" failures="0" errors="0" timestamp="2024-07-04T16:51:59" hostname="DESKTOP-G227G8D" time="3.447">
+  <properties/>
+  <testcase name="testCreateCommandByMiniappWithNullTargetObject()" classname="demo.app.CommandTests" time="1.84"/>
+  <testcase name="testCreateCommandByMiniappWithNullObjectID()" classname="demo.app.CommandTests" time="0.202"/>
+  <testcase name="testCreateCommandByMiniappWithNullMiniappNameAndObjectExiting()" classname="demo.app.CommandTests" time="0.281"/>
+  <testcase name="testCreateCommandByMiniappWithNullInvokedBy()" classname="demo.app.CommandTests" time="0.257"/>
+  <testcase name="testCreateCommandByMiniappWithNullCommandID()" classname="demo.app.CommandTests" time="0.466"/>
+  <testcase name="testCreateCommandByMiniappAndObjectExiting()" classname="demo.app.CommandTests" time="0.377"/>
+  <system-out><![CDATA[19:51:54.757 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [demo.app.CommandTests]: CommandTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+19:51:54.878 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration demo.app.Application for test class demo.app.CommandTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.1)
+
+2024-07-04T19:51:55.457+03:00  WARN 31728 --- [2024b.yarden.cherry] [    Test worker] ory$DuplicateJsonObjectContextCustomizer : 
+
+Found multiple occurrences of org.json.JSONObject on the class path:
+
+	jar:file:/C:/Users/NoaG/.gradle/caches/modules-2/files-2.1/org.json/json/20210307/528c8df3757e8bcf151817b1d7b9b434f6aa08d5/json-20210307.jar!/org/json/JSONObject.class
+	jar:file:/C:/Users/NoaG/.gradle/caches/modules-2/files-2.1/com.vaadin.external.google/android-json/0.0.20131108.vaadin1/fa26d351fe62a6a17f5cda1287c1c6110dec413f/android-json-0.0.20131108.vaadin1.jar!/org/json/JSONObject.class
+
+You may wish to exclude one of them to ensure predictable runtime behavior
+
+2024-07-04T19:51:55.469+03:00  INFO 31728 --- [2024b.yarden.cherry] [    Test worker] demo.app.CommandTests                    : Starting CommandTests using Java 21.0.3 with PID 31728 (started by NoaG in C:\javaenv2024b\.config\git\2024b.yarden.cherry)
+2024-07-04T19:51:55.473+03:00  INFO 31728 --- [2024b.yarden.cherry] [    Test worker] demo.app.CommandTests                    : The following 2 profiles are active: "default", "manualTests"
+2024-07-04T19:51:56.008+03:00  INFO 31728 --- [2024b.yarden.cherry] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-04T19:51:56.067+03:00  INFO 31728 --- [2024b.yarden.cherry] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 51 ms. Found 3 JPA repository interfaces.
+2024-07-04T19:51:56.482+03:00  INFO 31728 --- [2024b.yarden.cherry] [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-04T19:51:56.539+03:00  INFO 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-07-04T19:51:56.577+03:00  INFO 31728 --- [2024b.yarden.cherry] [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-07-04T19:51:56.892+03:00  INFO 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-07-04T19:51:56.919+03:00  INFO 31728 --- [2024b.yarden.cherry] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-07-04T19:51:57.110+03:00  INFO 31728 --- [2024b.yarden.cherry] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:e4033c94-3f8b-44ac-99c1-8170bccb2dbb user=SA
+2024-07-04T19:51:57.112+03:00  INFO 31728 --- [2024b.yarden.cherry] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-07-04T19:51:58.039+03:00  INFO 31728 --- [2024b.yarden.cherry] [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: 
+    drop table if exists command_table cascade 
+Hibernate: 
+    drop table if exists objects cascade 
+Hibernate: 
+    drop table if exists users cascade 
+Hibernate: 
+    create table command_table (
+        invocation_time_stamp timestamp(6),
+        command varchar(255),
+        command_id varchar(255) not null,
+        invoked_by varchar(255),
+        mini_app_name varchar(255),
+        target_object varchar(255),
+        command_attributes clob,
+        primary key (command_id)
+    )
+Hibernate: 
+    create table objects (
+        active boolean,
+        latitude float(53) not null,
+        longitude float(53) not null,
+        creation_timestamp timestamp(6),
+        alias varchar(255),
+        created_by varchar(255),
+        objectid varchar(255) not null,
+        type varchar(255),
+        object_details TEXT,
+        primary key (objectid)
+    )
+Hibernate: 
+    create table users (
+        role tinyint check (role between 0 and 2),
+        avatar varchar(255),
+        id varchar(255) not null,
+        user_name varchar(255),
+        primary key (id)
+    )
+2024-07-04T19:51:58.078+03:00  INFO 31728 --- [2024b.yarden.cherry] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-04T19:51:58.467+03:00  INFO 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-07-04T19:51:58.574+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] t.a.AnnotationTransactionAttributeSource : Adding transactional method 'demo.app.crud.AdminCrudImplementation.getAllCommandsByMiniAppName' with attribute: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2024-07-04T19:51:58.587+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] t.a.AnnotationTransactionAttributeSource : Adding transactional method 'demo.app.crud.AdminCrudImplementation.deleteAllUsers' with attribute: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2024-07-04T19:51:58.588+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] t.a.AnnotationTransactionAttributeSource : Adding transactional method 'demo.app.crud.AdminCrudImplementation.deleteAllObjects' with attribute: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2024-07-04T19:51:58.588+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] t.a.AnnotationTransactionAttributeSource : Adding transactional method 'demo.app.crud.AdminCrudImplementation.deleteAllCommandsHistory' with attribute: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2024-07-04T19:51:58.588+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] t.a.AnnotationTransactionAttributeSource : Adding transactional method 'demo.app.crud.AdminCrudImplementation.getAllCommands' with attribute: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2024-07-04T19:51:58.588+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] t.a.AnnotationTransactionAttributeSource : Adding transactional method 'demo.app.crud.AdminCrudImplementation.getAllUsers' with attribute: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2024-07-04T19:51:58.619+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] t.a.AnnotationTransactionAttributeSource : Adding transactional method 'demo.app.crud.CommandCrudImplementation.storeInDatabase' with attribute: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2024-07-04T19:51:58.636+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] t.a.AnnotationTransactionAttributeSource : Adding transactional method 'demo.app.crud.ObjectCrudImplementation.getAll' with attribute: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2024-07-04T19:51:58.637+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] t.a.AnnotationTransactionAttributeSource : Adding transactional method 'demo.app.crud.ObjectCrudImplementation.getAllByAliasPattern' with attribute: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2024-07-04T19:51:58.638+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] t.a.AnnotationTransactionAttributeSource : Adding transactional method 'demo.app.crud.ObjectCrudImplementation.getAllByAlias' with attribute: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2024-07-04T19:51:58.638+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] t.a.AnnotationTransactionAttributeSource : Adding transactional method 'demo.app.crud.ObjectCrudImplementation.storeInDatabase' with attribute: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2024-07-04T19:51:58.638+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] t.a.AnnotationTransactionAttributeSource : Adding transactional method 'demo.app.crud.ObjectCrudImplementation.getSpecificObject' with attribute: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2024-07-04T19:51:58.638+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] t.a.AnnotationTransactionAttributeSource : Adding transactional method 'demo.app.crud.ObjectCrudImplementation.getAllByType' with attribute: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2024-07-04T19:51:58.638+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] t.a.AnnotationTransactionAttributeSource : Adding transactional method 'demo.app.crud.ObjectCrudImplementation.getAllByLocation' with attribute: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2024-07-04T19:51:58.651+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] t.a.AnnotationTransactionAttributeSource : Adding transactional method 'demo.app.crud.UserCrudImplementation.createNewUser' with attribute: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2024-07-04T19:51:58.653+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] t.a.AnnotationTransactionAttributeSource : Adding transactional method 'demo.app.crud.UserCrudImplementation.getSpecificUser' with attribute: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly
+2024-07-04T19:51:58.653+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] t.a.AnnotationTransactionAttributeSource : Adding transactional method 'demo.app.crud.UserCrudImplementation.updateById' with attribute: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2024-07-04T19:51:58.864+03:00  INFO 31728 --- [2024b.yarden.cherry] [    Test worker] demo.app.CommandTests                    : Started CommandTests in 3.693 seconds (process running for 5.083)
+2024-07-04T19:51:58.876+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [demo.app.crud.UserCrudImplementation.createNewUser]
+2024-07-04T19:51:58.881+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.existsById]
+Hibernate: 
+    select
+        count(*) 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.210+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_adi@gmail.com]
+2024-07-04T19:51:59.226+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.existsById]
+2024-07-04T19:51:59.226+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+Hibernate: 
+    select
+        ue1_0.id,
+        ue1_0.avatar,
+        ue1_0.role,
+        ue1_0.user_name 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.241+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_adi@gmail.com]
+2024-07-04T19:51:59.254+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+2024-07-04T19:51:59.254+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [demo.app.crud.UserCrudImplementation.createNewUser]
+Hibernate: 
+    insert 
+    into
+        users
+        (avatar, role, user_name, id) 
+    values
+        (?, ?, ?, ?)
+2024-07-04T19:51:59.268+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [Aa,12345]
+2024-07-04T19:51:59.268+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (2:TINYINT) <- [SUPERAPP_USER]
+2024-07-04T19:51:59.268+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [adi@gmail.com]
+2024-07-04T19:51:59.268+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (4:VARCHAR) <- [2024b.yarden.cherry_adi@gmail.com]
+2024-07-04T19:51:59.273+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [demo.app.crud.UserCrudImplementation.createNewUser]
+2024-07-04T19:51:59.273+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.existsById]
+Hibernate: 
+    select
+        count(*) 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.276+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_noa@gmail.com]
+2024-07-04T19:51:59.277+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.existsById]
+2024-07-04T19:51:59.277+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+Hibernate: 
+    select
+        ue1_0.id,
+        ue1_0.avatar,
+        ue1_0.role,
+        ue1_0.user_name 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.278+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_noa@gmail.com]
+2024-07-04T19:51:59.278+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+2024-07-04T19:51:59.279+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [demo.app.crud.UserCrudImplementation.createNewUser]
+Hibernate: 
+    insert 
+    into
+        users
+        (avatar, role, user_name, id) 
+    values
+        (?, ?, ?, ?)
+2024-07-04T19:51:59.279+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [Aa,12345]
+2024-07-04T19:51:59.279+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (2:TINYINT) <- [SUPERAPP_USER]
+2024-07-04T19:51:59.279+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [noa@gmail.com]
+2024-07-04T19:51:59.280+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (4:VARCHAR) <- [2024b.yarden.cherry_noa@gmail.com]
+2024-07-04T19:51:59.280+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [demo.app.crud.UserCrudImplementation.createNewUser]
+2024-07-04T19:51:59.281+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.existsById]
+Hibernate: 
+    select
+        count(*) 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.281+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_rotem@gmai.com]
+2024-07-04T19:51:59.282+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.existsById]
+2024-07-04T19:51:59.282+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+Hibernate: 
+    select
+        ue1_0.id,
+        ue1_0.avatar,
+        ue1_0.role,
+        ue1_0.user_name 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.283+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_rotem@gmai.com]
+2024-07-04T19:51:59.283+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+2024-07-04T19:51:59.283+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [demo.app.crud.UserCrudImplementation.createNewUser]
+Hibernate: 
+    insert 
+    into
+        users
+        (avatar, role, user_name, id) 
+    values
+        (?, ?, ?, ?)
+2024-07-04T19:51:59.284+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [Aa!14567]
+2024-07-04T19:51:59.284+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (2:TINYINT) <- [SUPERAPP_USER]
+2024-07-04T19:51:59.284+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [rotem@gmai.com]
+2024-07-04T19:51:59.284+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (4:VARCHAR) <- [2024b.yarden.cherry_rotem@gmai.com]
+2024-07-04T19:51:59.285+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [demo.app.crud.UserCrudImplementation.createNewUser]
+2024-07-04T19:51:59.285+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.existsById]
+Hibernate: 
+    select
+        count(*) 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.286+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_admin@gmail.com]
+2024-07-04T19:51:59.286+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.existsById]
+2024-07-04T19:51:59.286+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+Hibernate: 
+    select
+        ue1_0.id,
+        ue1_0.avatar,
+        ue1_0.role,
+        ue1_0.user_name 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.287+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_admin@gmail.com]
+2024-07-04T19:51:59.287+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+2024-07-04T19:51:59.287+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [demo.app.crud.UserCrudImplementation.createNewUser]
+Hibernate: 
+    insert 
+    into
+        users
+        (avatar, role, user_name, id) 
+    values
+        (?, ?, ?, ?)
+2024-07-04T19:51:59.288+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [string]
+2024-07-04T19:51:59.288+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (2:TINYINT) <- [ADMIN]
+2024-07-04T19:51:59.288+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [admin@gmail.com]
+2024-07-04T19:51:59.288+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (4:VARCHAR) <- [2024b.yarden.cherry_admin@gmail.com]
+2024-07-04T19:51:59.290+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [demo.app.crud.AdminCrudImplementation.deleteAllObjects]
+2024-07-04T19:51:59.290+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+Hibernate: 
+    select
+        ue1_0.id,
+        ue1_0.avatar,
+        ue1_0.role,
+        ue1_0.user_name 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.293+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_admin@gmail.com]
+2024-07-04T19:51:59.296+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+2024-07-04T19:51:59.296+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.deleteAll]
+Hibernate: 
+    select
+        oe1_0.objectid,
+        oe1_0.active,
+        oe1_0.alias,
+        oe1_0.created_by,
+        oe1_0.creation_timestamp,
+        oe1_0.latitude,
+        oe1_0.longitude,
+        oe1_0.object_details,
+        oe1_0.type 
+    from
+        objects oe1_0
+2024-07-04T19:51:59.309+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.deleteAll]
+2024-07-04T19:51:59.310+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [demo.app.crud.AdminCrudImplementation.deleteAllObjects]
+2024-07-04T19:51:59.310+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [demo.app.crud.AdminCrudImplementation.deleteAllUsers]
+2024-07-04T19:51:59.310+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+Hibernate: 
+    select
+        ue1_0.id,
+        ue1_0.avatar,
+        ue1_0.role,
+        ue1_0.user_name 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.311+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_admin@gmail.com]
+2024-07-04T19:51:59.312+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+2024-07-04T19:51:59.312+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.deleteAll]
+Hibernate: 
+    select
+        ue1_0.id,
+        ue1_0.avatar,
+        ue1_0.role,
+        ue1_0.user_name 
+    from
+        users ue1_0
+2024-07-04T19:51:59.318+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.deleteAll]
+2024-07-04T19:51:59.318+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [demo.app.crud.AdminCrudImplementation.deleteAllUsers]
+Hibernate: 
+    delete 
+    from
+        users 
+    where
+        id=?
+2024-07-04T19:51:59.319+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_adi@gmail.com]
+Hibernate: 
+    delete 
+    from
+        users 
+    where
+        id=?
+2024-07-04T19:51:59.321+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_noa@gmail.com]
+Hibernate: 
+    delete 
+    from
+        users 
+    where
+        id=?
+2024-07-04T19:51:59.322+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_rotem@gmai.com]
+Hibernate: 
+    delete 
+    from
+        users 
+    where
+        id=?
+2024-07-04T19:51:59.323+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_admin@gmail.com]
+2024-07-04T19:51:59.324+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [demo.app.crud.UserCrudImplementation.createNewUser]
+2024-07-04T19:51:59.324+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.existsById]
+Hibernate: 
+    select
+        count(*) 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.325+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_adi@gmail.com]
+2024-07-04T19:51:59.326+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.existsById]
+2024-07-04T19:51:59.326+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+Hibernate: 
+    select
+        ue1_0.id,
+        ue1_0.avatar,
+        ue1_0.role,
+        ue1_0.user_name 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.326+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_adi@gmail.com]
+2024-07-04T19:51:59.327+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+2024-07-04T19:51:59.327+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [demo.app.crud.UserCrudImplementation.createNewUser]
+Hibernate: 
+    insert 
+    into
+        users
+        (avatar, role, user_name, id) 
+    values
+        (?, ?, ?, ?)
+2024-07-04T19:51:59.328+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [Aa,12345]
+2024-07-04T19:51:59.328+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (2:TINYINT) <- [SUPERAPP_USER]
+2024-07-04T19:51:59.328+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [adi@gmail.com]
+2024-07-04T19:51:59.328+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (4:VARCHAR) <- [2024b.yarden.cherry_adi@gmail.com]
+2024-07-04T19:51:59.329+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [demo.app.crud.UserCrudImplementation.createNewUser]
+2024-07-04T19:51:59.329+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.existsById]
+Hibernate: 
+    select
+        count(*) 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.330+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_noa@gmail.com]
+2024-07-04T19:51:59.330+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.existsById]
+2024-07-04T19:51:59.330+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+Hibernate: 
+    select
+        ue1_0.id,
+        ue1_0.avatar,
+        ue1_0.role,
+        ue1_0.user_name 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.331+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_noa@gmail.com]
+2024-07-04T19:51:59.332+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+2024-07-04T19:51:59.332+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [demo.app.crud.UserCrudImplementation.createNewUser]
+Hibernate: 
+    insert 
+    into
+        users
+        (avatar, role, user_name, id) 
+    values
+        (?, ?, ?, ?)
+2024-07-04T19:51:59.333+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [Aa,12345]
+2024-07-04T19:51:59.333+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (2:TINYINT) <- [SUPERAPP_USER]
+2024-07-04T19:51:59.333+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [noa@gmail.com]
+2024-07-04T19:51:59.333+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (4:VARCHAR) <- [2024b.yarden.cherry_noa@gmail.com]
+2024-07-04T19:51:59.334+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [demo.app.crud.UserCrudImplementation.createNewUser]
+2024-07-04T19:51:59.334+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.existsById]
+Hibernate: 
+    select
+        count(*) 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.335+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_rotem@gmai.com]
+2024-07-04T19:51:59.335+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.existsById]
+2024-07-04T19:51:59.335+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+Hibernate: 
+    select
+        ue1_0.id,
+        ue1_0.avatar,
+        ue1_0.role,
+        ue1_0.user_name 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.337+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_rotem@gmai.com]
+2024-07-04T19:51:59.337+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+2024-07-04T19:51:59.337+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [demo.app.crud.UserCrudImplementation.createNewUser]
+Hibernate: 
+    insert 
+    into
+        users
+        (avatar, role, user_name, id) 
+    values
+        (?, ?, ?, ?)
+2024-07-04T19:51:59.338+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [Aa!14567]
+2024-07-04T19:51:59.338+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (2:TINYINT) <- [SUPERAPP_USER]
+2024-07-04T19:51:59.338+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [rotem@gmai.com]
+2024-07-04T19:51:59.338+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (4:VARCHAR) <- [2024b.yarden.cherry_rotem@gmai.com]
+2024-07-04T19:51:59.339+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [demo.app.crud.UserCrudImplementation.createNewUser]
+2024-07-04T19:51:59.340+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.existsById]
+Hibernate: 
+    select
+        count(*) 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.341+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_admin@gmail.com]
+2024-07-04T19:51:59.341+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.existsById]
+2024-07-04T19:51:59.341+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+Hibernate: 
+    select
+        ue1_0.id,
+        ue1_0.avatar,
+        ue1_0.role,
+        ue1_0.user_name 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.342+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_admin@gmail.com]
+2024-07-04T19:51:59.343+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+2024-07-04T19:51:59.343+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [demo.app.crud.UserCrudImplementation.createNewUser]
+Hibernate: 
+    insert 
+    into
+        users
+        (avatar, role, user_name, id) 
+    values
+        (?, ?, ?, ?)
+2024-07-04T19:51:59.344+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [string]
+2024-07-04T19:51:59.344+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (2:TINYINT) <- [ADMIN]
+2024-07-04T19:51:59.344+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [admin@gmail.com]
+2024-07-04T19:51:59.344+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (4:VARCHAR) <- [2024b.yarden.cherry_admin@gmail.com]
+2024-07-04T19:51:59.345+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [demo.app.crud.ObjectCrudImplementation.storeInDatabase]
+2024-07-04T19:51:59.345+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+Hibernate: 
+    select
+        ue1_0.id,
+        ue1_0.avatar,
+        ue1_0.role,
+        ue1_0.user_name 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.346+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_adi@gmail.com]
+2024-07-04T19:51:59.346+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+2024-07-04T19:51:59.347+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+Hibernate: 
+    select
+        oe1_0.objectid,
+        oe1_0.active,
+        oe1_0.alias,
+        oe1_0.created_by,
+        oe1_0.creation_timestamp,
+        oe1_0.latitude,
+        oe1_0.longitude,
+        oe1_0.object_details,
+        oe1_0.type 
+    from
+        objects oe1_0 
+    where
+        oe1_0.objectid=?
+2024-07-04T19:51:59.349+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [1964b122-2bd3-4cce-b278-44073faa1e1e_2024b.yarden.cherry]
+2024-07-04T19:51:59.396+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+2024-07-04T19:51:59.402+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [demo.app.crud.ObjectCrudImplementation.storeInDatabase]
+Hibernate: 
+    insert 
+    into
+        objects
+        (active, alias, created_by, creation_timestamp, latitude, longitude, object_details, type, objectid) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-07-04T19:51:59.405+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:BOOLEAN) <- [true]
+2024-07-04T19:51:59.405+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [Aa,12345]
+2024-07-04T19:51:59.405+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [2024b.yarden.cherry_adi@gmail.com]
+2024-07-04T19:51:59.405+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (4:TIMESTAMP) <- [2024-07-04 19:51:59.345]
+2024-07-04T19:51:59.406+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (5:DOUBLE) <- [32.1785837]
+2024-07-04T19:51:59.406+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (6:DOUBLE) <- [34.8810362]
+2024-07-04T19:51:59.406+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (7:CLOB) <- [{"address":"מוטה גור 2, רעננה, ישראל","mail":"adi@gmail.com","latitude":32.1785837,"smoke":true,"description":"4","dateOfBirth":"1993-07-01","experience":7,"uid":"1","password":"Aa,12345","phone":"0526553008","hourlyWage":25,"name":"adi","maritalStatus":"r","longitude":34.8810362}]
+2024-07-04T19:51:59.408+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (8:VARCHAR) <- [Babysitter]
+2024-07-04T19:51:59.408+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (9:VARCHAR) <- [1964b122-2bd3-4cce-b278-44073faa1e1e_2024b.yarden.cherry]
+2024-07-04T19:51:59.414+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [demo.app.crud.ObjectCrudImplementation.storeInDatabase]
+2024-07-04T19:51:59.414+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+Hibernate: 
+    select
+        ue1_0.id,
+        ue1_0.avatar,
+        ue1_0.role,
+        ue1_0.user_name 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.415+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_rotem@gmai.com]
+2024-07-04T19:51:59.415+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+2024-07-04T19:51:59.416+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+Hibernate: 
+    select
+        oe1_0.objectid,
+        oe1_0.active,
+        oe1_0.alias,
+        oe1_0.created_by,
+        oe1_0.creation_timestamp,
+        oe1_0.latitude,
+        oe1_0.longitude,
+        oe1_0.object_details,
+        oe1_0.type 
+    from
+        objects oe1_0 
+    where
+        oe1_0.objectid=?
+2024-07-04T19:51:59.417+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [87188544-f528-4be0-b98d-caaeb54658ab_2024b.yarden.cherry]
+2024-07-04T19:51:59.418+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+2024-07-04T19:51:59.418+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [demo.app.crud.ObjectCrudImplementation.storeInDatabase]
+Hibernate: 
+    insert 
+    into
+        objects
+        (active, alias, created_by, creation_timestamp, latitude, longitude, object_details, type, objectid) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-07-04T19:51:59.419+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:BOOLEAN) <- [true]
+2024-07-04T19:51:59.419+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [Aa!14567]
+2024-07-04T19:51:59.420+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [2024b.yarden.cherry_rotem@gmai.com]
+2024-07-04T19:51:59.420+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (4:TIMESTAMP) <- [2024-07-04 19:51:59.414]
+2024-07-04T19:51:59.420+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (5:DOUBLE) <- [37.4220936]
+2024-07-04T19:51:59.420+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (6:DOUBLE) <- [-122.083922]
+2024-07-04T19:51:59.420+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (7:CLOB) <- [{"address":"Unnamed Road, Mountain View, CA 94043, USA","mail":"rotem@gmai.com","latitude":37.4220936,"smoke":false,"description":"t","dateOfBirth":"1986-07-01","experience":4,"uid":"2","password":"Aa!14567","phone":"0526553002","hourlyWage":60,"name":"rotem","maritalStatus":"t","longitude":-122.083922}]
+2024-07-04T19:51:59.420+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (8:VARCHAR) <- [Babysitter]
+2024-07-04T19:51:59.420+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (9:VARCHAR) <- [87188544-f528-4be0-b98d-caaeb54658ab_2024b.yarden.cherry]
+2024-07-04T19:51:59.422+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [demo.app.crud.ObjectCrudImplementation.storeInDatabase]
+2024-07-04T19:51:59.422+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+Hibernate: 
+    select
+        ue1_0.id,
+        ue1_0.avatar,
+        ue1_0.role,
+        ue1_0.user_name 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.423+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_noa@gmail.com]
+2024-07-04T19:51:59.424+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+2024-07-04T19:51:59.424+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+Hibernate: 
+    select
+        oe1_0.objectid,
+        oe1_0.active,
+        oe1_0.alias,
+        oe1_0.created_by,
+        oe1_0.creation_timestamp,
+        oe1_0.latitude,
+        oe1_0.longitude,
+        oe1_0.object_details,
+        oe1_0.type 
+    from
+        objects oe1_0 
+    where
+        oe1_0.objectid=?
+2024-07-04T19:51:59.425+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [0f0c5ef0-7379-4873-b1a9-7f5306e9ce04_2024b.yarden.cherry]
+2024-07-04T19:51:59.427+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+2024-07-04T19:51:59.428+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [demo.app.crud.ObjectCrudImplementation.storeInDatabase]
+Hibernate: 
+    insert 
+    into
+        objects
+        (active, alias, created_by, creation_timestamp, latitude, longitude, object_details, type, objectid) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+2024-07-04T19:51:59.429+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:BOOLEAN) <- [true]
+2024-07-04T19:51:59.429+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [Aa,12345]
+2024-07-04T19:51:59.429+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [2024b.yarden.cherry_noa@gmail.com]
+2024-07-04T19:51:59.429+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (4:TIMESTAMP) <- [2024-07-04 19:51:59.422]
+2024-07-04T19:51:59.429+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (5:DOUBLE) <- [32.1785796]
+2024-07-04T19:51:59.431+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (6:DOUBLE) <- [34.881024]
+2024-07-04T19:51:59.431+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (7:CLOB) <- [{"uid":"3","password":"Aa,12345","numberOfChildren":2,"address":"מוטה גור 2, רעננה, ישראל","mail":"noa@gmail.com","phone":"0526553001","latitude":32.1785796,"name":"noa","longitude":34.881024}]
+2024-07-04T19:51:59.431+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (8:VARCHAR) <- [Parent]
+2024-07-04T19:51:59.431+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (9:VARCHAR) <- [0f0c5ef0-7379-4873-b1a9-7f5306e9ce04_2024b.yarden.cherry]
+2024-07-04T19:51:59.434+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+Hibernate: 
+    select
+        ue1_0.id,
+        ue1_0.avatar,
+        ue1_0.role,
+        ue1_0.user_name 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.435+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_adi@gmail.com]
+2024-07-04T19:51:59.436+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+2024-07-04T19:51:59.437+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+Hibernate: 
+    select
+        oe1_0.objectid,
+        oe1_0.active,
+        oe1_0.alias,
+        oe1_0.created_by,
+        oe1_0.creation_timestamp,
+        oe1_0.latitude,
+        oe1_0.longitude,
+        oe1_0.object_details,
+        oe1_0.type 
+    from
+        objects oe1_0 
+    where
+        oe1_0.objectid=?
+2024-07-04T19:51:59.438+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [1964b122-2bd3-4cce-b278-44073faa1e1e_2024b.yarden.cherry]
+2024-07-04T19:51:59.441+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+2024-07-04T19:51:59.442+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+Hibernate: 
+    select
+        oe1_0.objectid,
+        oe1_0.active,
+        oe1_0.alias,
+        oe1_0.created_by,
+        oe1_0.creation_timestamp,
+        oe1_0.latitude,
+        oe1_0.longitude,
+        oe1_0.object_details,
+        oe1_0.type 
+    from
+        objects oe1_0 
+    where
+        oe1_0.objectid=?
+2024-07-04T19:51:59.443+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [1964b122-2bd3-4cce-b278-44073faa1e1e_2024b.yarden.cherry]
+2024-07-04T19:51:59.445+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+Hibernate: 
+    update
+        objects 
+    set
+        active=?,
+        alias=?,
+        created_by=?,
+        creation_timestamp=?,
+        latitude=?,
+        longitude=?,
+        object_details=?,
+        type=? 
+    where
+        objectid=?
+2024-07-04T19:51:59.453+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:BOOLEAN) <- [true]
+2024-07-04T19:51:59.454+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [Aa,12345]
+2024-07-04T19:51:59.454+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [2024b.yarden.cherry_adi@gmail.com]
+2024-07-04T19:51:59.454+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (4:TIMESTAMP) <- [2024-07-04 19:51:59.345]
+2024-07-04T19:51:59.454+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (5:DOUBLE) <- [32.1785837]
+2024-07-04T19:51:59.454+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (6:DOUBLE) <- [34.8810362]
+2024-07-04T19:51:59.454+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (7:CLOB) <- [{"address":"מוטה גור 2, רעננה, ישראל","mail":"adi@gmail.com","latitude":32.1785837,"smoke":true,"description":"4","dateOfBirth":"1993-07-01","experience":7,"uid":"1964b122-2bd3-4cce-b278-44073faa1e1e","password":"Aa,12345","phone":"0526553008","hourlyWage":25,"name":"adi","maritalStatus":"r","longitude":34.8810362}]
+2024-07-04T19:51:59.454+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (8:VARCHAR) <- [Babysitter]
+2024-07-04T19:51:59.454+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (9:VARCHAR) <- [1964b122-2bd3-4cce-b278-44073faa1e1e_2024b.yarden.cherry]
+2024-07-04T19:51:59.460+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [demo.app.crud.UserCrudImplementation.updateById]
+2024-07-04T19:51:59.463+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+Hibernate: 
+    select
+        ue1_0.id,
+        ue1_0.avatar,
+        ue1_0.role,
+        ue1_0.user_name 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.464+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_adi@gmail.com]
+2024-07-04T19:51:59.464+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+2024-07-04T19:51:59.465+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+2024-07-04T19:51:59.465+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+2024-07-04T19:51:59.466+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [demo.app.crud.UserCrudImplementation.updateById]
+Hibernate: 
+    update
+        users 
+    set
+        avatar=?,
+        role=?,
+        user_name=? 
+    where
+        id=?
+2024-07-04T19:51:59.466+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [Aa,12345]
+2024-07-04T19:51:59.466+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (2:TINYINT) <- [MINIAPP_USER]
+2024-07-04T19:51:59.467+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [1964b122-2bd3-4cce-b278-44073faa1e1e]
+2024-07-04T19:51:59.467+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (4:VARCHAR) <- [2024b.yarden.cherry_adi@gmail.com]
+2024-07-04T19:51:59.467+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+Hibernate: 
+    select
+        ue1_0.id,
+        ue1_0.avatar,
+        ue1_0.role,
+        ue1_0.user_name 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.468+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_noa@gmail.com]
+2024-07-04T19:51:59.468+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+2024-07-04T19:51:59.469+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+Hibernate: 
+    select
+        oe1_0.objectid,
+        oe1_0.active,
+        oe1_0.alias,
+        oe1_0.created_by,
+        oe1_0.creation_timestamp,
+        oe1_0.latitude,
+        oe1_0.longitude,
+        oe1_0.object_details,
+        oe1_0.type 
+    from
+        objects oe1_0 
+    where
+        oe1_0.objectid=?
+2024-07-04T19:51:59.470+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [0f0c5ef0-7379-4873-b1a9-7f5306e9ce04_2024b.yarden.cherry]
+2024-07-04T19:51:59.470+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+2024-07-04T19:51:59.471+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+Hibernate: 
+    select
+        oe1_0.objectid,
+        oe1_0.active,
+        oe1_0.alias,
+        oe1_0.created_by,
+        oe1_0.creation_timestamp,
+        oe1_0.latitude,
+        oe1_0.longitude,
+        oe1_0.object_details,
+        oe1_0.type 
+    from
+        objects oe1_0 
+    where
+        oe1_0.objectid=?
+2024-07-04T19:51:59.471+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [0f0c5ef0-7379-4873-b1a9-7f5306e9ce04_2024b.yarden.cherry]
+2024-07-04T19:51:59.472+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+Hibernate: 
+    update
+        objects 
+    set
+        active=?,
+        alias=?,
+        created_by=?,
+        creation_timestamp=?,
+        latitude=?,
+        longitude=?,
+        object_details=?,
+        type=? 
+    where
+        objectid=?
+2024-07-04T19:51:59.473+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:BOOLEAN) <- [true]
+2024-07-04T19:51:59.473+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [Aa,12345]
+2024-07-04T19:51:59.473+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [2024b.yarden.cherry_noa@gmail.com]
+2024-07-04T19:51:59.473+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (4:TIMESTAMP) <- [2024-07-04 19:51:59.422]
+2024-07-04T19:51:59.473+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (5:DOUBLE) <- [32.1785796]
+2024-07-04T19:51:59.473+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (6:DOUBLE) <- [34.881024]
+2024-07-04T19:51:59.473+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (7:CLOB) <- [{"uid":"0f0c5ef0-7379-4873-b1a9-7f5306e9ce04","password":"Aa,12345","numberOfChildren":2,"address":"מוטה גור 2, רעננה, ישראל","mail":"noa@gmail.com","phone":"0526553001","latitude":32.1785796,"name":"noa","longitude":34.881024}]
+2024-07-04T19:51:59.473+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (8:VARCHAR) <- [Parent]
+2024-07-04T19:51:59.473+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (9:VARCHAR) <- [0f0c5ef0-7379-4873-b1a9-7f5306e9ce04_2024b.yarden.cherry]
+2024-07-04T19:51:59.476+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [demo.app.crud.UserCrudImplementation.updateById]
+2024-07-04T19:51:59.477+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+Hibernate: 
+    select
+        ue1_0.id,
+        ue1_0.avatar,
+        ue1_0.role,
+        ue1_0.user_name 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.478+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_noa@gmail.com]
+2024-07-04T19:51:59.479+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+2024-07-04T19:51:59.480+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+2024-07-04T19:51:59.480+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+2024-07-04T19:51:59.480+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [demo.app.crud.UserCrudImplementation.updateById]
+Hibernate: 
+    update
+        users 
+    set
+        avatar=?,
+        role=?,
+        user_name=? 
+    where
+        id=?
+2024-07-04T19:51:59.481+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [Aa,12345]
+2024-07-04T19:51:59.481+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (2:TINYINT) <- [MINIAPP_USER]
+2024-07-04T19:51:59.482+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [0f0c5ef0-7379-4873-b1a9-7f5306e9ce04]
+2024-07-04T19:51:59.482+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (4:VARCHAR) <- [2024b.yarden.cherry_noa@gmail.com]
+2024-07-04T19:51:59.483+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+Hibernate: 
+    select
+        ue1_0.id,
+        ue1_0.avatar,
+        ue1_0.role,
+        ue1_0.user_name 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.484+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_rotem@gmai.com]
+2024-07-04T19:51:59.484+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+2024-07-04T19:51:59.485+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+Hibernate: 
+    select
+        oe1_0.objectid,
+        oe1_0.active,
+        oe1_0.alias,
+        oe1_0.created_by,
+        oe1_0.creation_timestamp,
+        oe1_0.latitude,
+        oe1_0.longitude,
+        oe1_0.object_details,
+        oe1_0.type 
+    from
+        objects oe1_0 
+    where
+        oe1_0.objectid=?
+2024-07-04T19:51:59.485+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [87188544-f528-4be0-b98d-caaeb54658ab_2024b.yarden.cherry]
+2024-07-04T19:51:59.486+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+2024-07-04T19:51:59.486+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+Hibernate: 
+    select
+        oe1_0.objectid,
+        oe1_0.active,
+        oe1_0.alias,
+        oe1_0.created_by,
+        oe1_0.creation_timestamp,
+        oe1_0.latitude,
+        oe1_0.longitude,
+        oe1_0.object_details,
+        oe1_0.type 
+    from
+        objects oe1_0 
+    where
+        oe1_0.objectid=?
+2024-07-04T19:51:59.487+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [87188544-f528-4be0-b98d-caaeb54658ab_2024b.yarden.cherry]
+2024-07-04T19:51:59.488+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+Hibernate: 
+    update
+        objects 
+    set
+        active=?,
+        alias=?,
+        created_by=?,
+        creation_timestamp=?,
+        latitude=?,
+        longitude=?,
+        object_details=?,
+        type=? 
+    where
+        objectid=?
+2024-07-04T19:51:59.489+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:BOOLEAN) <- [true]
+2024-07-04T19:51:59.489+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [Aa!14567]
+2024-07-04T19:51:59.489+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [2024b.yarden.cherry_rotem@gmai.com]
+2024-07-04T19:51:59.489+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (4:TIMESTAMP) <- [2024-07-04 19:51:59.414]
+2024-07-04T19:51:59.489+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (5:DOUBLE) <- [37.4220936]
+2024-07-04T19:51:59.489+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (6:DOUBLE) <- [-122.083922]
+2024-07-04T19:51:59.489+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (7:CLOB) <- [{"address":"Unnamed Road, Mountain View, CA 94043, USA","mail":"rotem@gmai.com","latitude":37.4220936,"smoke":false,"description":"t","dateOfBirth":"1986-07-01","experience":4,"uid":"87188544-f528-4be0-b98d-caaeb54658ab","password":"Aa!14567","phone":"0526553002","hourlyWage":60,"name":"rotem","maritalStatus":"t","longitude":-122.083922}]
+2024-07-04T19:51:59.490+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (8:VARCHAR) <- [Babysitter]
+2024-07-04T19:51:59.490+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (9:VARCHAR) <- [87188544-f528-4be0-b98d-caaeb54658ab_2024b.yarden.cherry]
+2024-07-04T19:51:59.492+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [demo.app.crud.UserCrudImplementation.updateById]
+2024-07-04T19:51:59.493+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+Hibernate: 
+    select
+        ue1_0.id,
+        ue1_0.avatar,
+        ue1_0.role,
+        ue1_0.user_name 
+    from
+        users ue1_0 
+    where
+        ue1_0.id=?
+2024-07-04T19:51:59.495+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [2024b.yarden.cherry_rotem@gmai.com]
+2024-07-04T19:51:59.496+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.findById]
+2024-07-04T19:51:59.496+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Getting transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+2024-07-04T19:51:59.497+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]
+2024-07-04T19:51:59.497+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] o.s.t.i.TransactionInterceptor           : Completing transaction for [demo.app.crud.UserCrudImplementation.updateById]
+Hibernate: 
+    update
+        users 
+    set
+        avatar=?,
+        role=?,
+        user_name=? 
+    where
+        id=?
+2024-07-04T19:51:59.498+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [Aa!14567]
+2024-07-04T19:51:59.498+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (2:TINYINT) <- [MINIAPP_USER]
+2024-07-04T19:51:59.498+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [87188544-f528-4be0-b98d-caaeb54658ab]
+2024-07-04T19:51:59.498+03:00 TRACE 31728 --- [2024b.yarden.cherry] [    Test worker] org.hibernate.orm.jdbc.bind              : binding parameter (4:VARCHAR) <- [2024b.yarden.cherry_rotem@gmai.com]
+]]></system-out>
+  <system-err><![CDATA[The Spring Application name is: null
+The Spring Application name is: 2024b.yarden.cherry
+Command logic implementation is ready
+The Spring Application name is: 2024b.yarden.cherry
+Object logic implementation is ready
+The Spring Application name is: 2024b.yarden.cherry
+Created: UserBoundary{userId=UserId {superapp=2024b.yarden.cherry,/n email=adi@gmail.com}, role=SUPERAPP_USER, username='adi@gmail.com', avatar='Aa,12345'}
+Created: UserBoundary{userId=UserId {superapp=2024b.yarden.cherry,/n email=noa@gmail.com}, role=SUPERAPP_USER, username='noa@gmail.com', avatar='Aa,12345'}
+Created: UserBoundary{userId=UserId {superapp=2024b.yarden.cherry,/n email=rotem@gmai.com}, role=SUPERAPP_USER, username='rotem@gmai.com', avatar='Aa!14567'}
+Created: UserBoundary{userId=UserId {superapp=2024b.yarden.cherry,/n email=admin@gmail.com}, role=ADMIN, username='admin@gmail.com', avatar='string'}
+All object entries Deleted
+All user entries Deleted
+Created: UserBoundary{userId=UserId {superapp=2024b.yarden.cherry,/n email=adi@gmail.com}, role=SUPERAPP_USER, username='adi@gmail.com', avatar='Aa,12345'}
+Created: UserBoundary{userId=UserId {superapp=2024b.yarden.cherry,/n email=noa@gmail.com}, role=SUPERAPP_USER, username='noa@gmail.com', avatar='Aa,12345'}
+Created: UserBoundary{userId=UserId {superapp=2024b.yarden.cherry,/n email=rotem@gmai.com}, role=SUPERAPP_USER, username='rotem@gmai.com', avatar='Aa!14567'}
+Created: UserBoundary{userId=UserId {superapp=2024b.yarden.cherry,/n email=admin@gmail.com}, role=ADMIN, username='admin@gmail.com', avatar='string'}
+Saved in DB the object: ObjectEntity{objectID='1964b122-2bd3-4cce-b278-44073faa1e1e_2024b.yarden.cherry', type='Babysitter', alias='Aa,12345', latitude='32.1785837, longitude='34.8810362', active=true, creationTimestamp=2024-07-04 19:51:59.345, createdBy=2024b.yarden.cherry_adi@gmail.com, objectDetails={address=מוטה גור 2, רעננה, ישראל, mail=adi@gmail.com, latitude=32.1785837, smoke=true, description=4, dateOfBirth=1993-07-01, experience=7, uid=1, password=Aa,12345, phone=0526553008, hourlyWage=25, name=adi, maritalStatus=r, longitude=34.8810362}}
+Created: ObjectBoundary {objectId=ObjectId{id='1964b122-2bd3-4cce-b278-44073faa1e1e/n, superapp='2024b.yarden.cherry/n}, type=Babysitter, alias=Aa,12345, active=true, location= Location{lat=32.1785837, lng=34.8810362}, creationTimestamp=2024-07-04 19:51:59.345, createdBy=CreatedBy{userId=UserId {superapp=2024b.yarden.cherry,/n email=adi@gmail.com}}, objectDetails={address=מוטה גור 2, רעננה, ישראל, mail=adi@gmail.com, latitude=32.1785837, smoke=true, description=4, dateOfBirth=1993-07-01, experience=7, uid=1, password=Aa,12345, phone=0526553008, hourlyWage=25, name=adi, maritalStatus=r, longitude=34.8810362}}
+Saved in DB the object: ObjectEntity{objectID='87188544-f528-4be0-b98d-caaeb54658ab_2024b.yarden.cherry', type='Babysitter', alias='Aa!14567', latitude='37.4220936, longitude='-122.083922', active=true, creationTimestamp=2024-07-04 19:51:59.414, createdBy=2024b.yarden.cherry_rotem@gmai.com, objectDetails={address=Unnamed Road, Mountain View, CA 94043, USA, mail=rotem@gmai.com, latitude=37.4220936, smoke=false, description=t, dateOfBirth=1986-07-01, experience=4, uid=2, password=Aa!14567, phone=0526553002, hourlyWage=60, name=rotem, maritalStatus=t, longitude=-122.083922}}
+Created: ObjectBoundary {objectId=ObjectId{id='87188544-f528-4be0-b98d-caaeb54658ab/n, superapp='2024b.yarden.cherry/n}, type=Babysitter, alias=Aa!14567, active=true, location= Location{lat=37.4220936, lng=-122.083922}, creationTimestamp=2024-07-04 19:51:59.414, createdBy=CreatedBy{userId=UserId {superapp=2024b.yarden.cherry,/n email=rotem@gmai.com}}, objectDetails={address=Unnamed Road, Mountain View, CA 94043, USA, mail=rotem@gmai.com, latitude=37.4220936, smoke=false, description=t, dateOfBirth=1986-07-01, experience=4, uid=2, password=Aa!14567, phone=0526553002, hourlyWage=60, name=rotem, maritalStatus=t, longitude=-122.083922}}
+Saved in DB the object: ObjectEntity{objectID='0f0c5ef0-7379-4873-b1a9-7f5306e9ce04_2024b.yarden.cherry', type='Parent', alias='Aa,12345', latitude='32.1785796, longitude='34.881024', active=true, creationTimestamp=2024-07-04 19:51:59.422, createdBy=2024b.yarden.cherry_noa@gmail.com, objectDetails={uid=3, password=Aa,12345, numberOfChildren=2, address=מוטה גור 2, רעננה, ישראל, mail=noa@gmail.com, phone=0526553001, latitude=32.1785796, name=noa, longitude=34.881024}}
+Created: ObjectBoundary {objectId=ObjectId{id='0f0c5ef0-7379-4873-b1a9-7f5306e9ce04/n, superapp='2024b.yarden.cherry/n}, type=Parent, alias=Aa,12345, active=true, location= Location{lat=32.1785796, lng=34.881024}, creationTimestamp=2024-07-04 19:51:59.422, createdBy=CreatedBy{userId=UserId {superapp=2024b.yarden.cherry,/n email=noa@gmail.com}}, objectDetails={uid=3, password=Aa,12345, numberOfChildren=2, address=מוטה גור 2, רעננה, ישראל, mail=noa@gmail.com, phone=0526553001, latitude=32.1785796, name=noa, longitude=34.881024}}
+Updated in database: ObjectEntity{objectID='1964b122-2bd3-4cce-b278-44073faa1e1e_2024b.yarden.cherry', type='Babysitter', alias='Aa,12345', latitude='32.1785837, longitude='34.8810362', active=true, creationTimestamp=2024-07-04 19:51:59.345, createdBy=2024b.yarden.cherry_adi@gmail.com, objectDetails={address=מוטה גור 2, רעננה, ישראל, mail=adi@gmail.com, latitude=32.1785837, smoke=true, description=4, dateOfBirth=1993-07-01, experience=7, uid=1964b122-2bd3-4cce-b278-44073faa1e1e, password=Aa,12345, phone=0526553008, hourlyWage=25, name=adi, maritalStatus=r, longitude=34.8810362}}
+Updated: ObjectBoundary {objectId=ObjectId{id='1964b122-2bd3-4cce-b278-44073faa1e1e/n, superapp='2024b.yarden.cherry/n}, type=Babysitter, alias=Aa,12345, active=true, location= Location{lat=32.1785837, lng=34.8810362}, creationTimestamp=Thu Jul 04 19:51:59 IDT 2024, createdBy=CreatedBy{userId=UserId {superapp=2024b.yarden.cherry,/n email=adi@gmail.com}}, objectDetails={address=מוטה גור 2, רעננה, ישראל, mail=adi@gmail.com, latitude=32.1785837, smoke=true, description=4, dateOfBirth=1993-07-01, experience=7, uid=1964b122-2bd3-4cce-b278-44073faa1e1e, password=Aa,12345, phone=0526553008, hourlyWage=25, name=adi, maritalStatus=r, longitude=34.8810362}}
+Updated in database: UserEntity{id='2024b.yarden.cherry_adi@gmail.com', userName='1964b122-2bd3-4cce-b278-44073faa1e1e', role=MINIAPP_USER, avatar='Aa,12345'}
+Updated: UserBoundary{userId=UserId {superapp=2024b.yarden.cherry,/n email=adi@gmail.com}, role=MINIAPP_USER, username='1964b122-2bd3-4cce-b278-44073faa1e1e', avatar='Aa,12345'}
+Updated in database: ObjectEntity{objectID='0f0c5ef0-7379-4873-b1a9-7f5306e9ce04_2024b.yarden.cherry', type='Parent', alias='Aa,12345', latitude='32.1785796, longitude='34.881024', active=true, creationTimestamp=2024-07-04 19:51:59.422, createdBy=2024b.yarden.cherry_noa@gmail.com, objectDetails={uid=0f0c5ef0-7379-4873-b1a9-7f5306e9ce04, password=Aa,12345, numberOfChildren=2, address=מוטה גור 2, רעננה, ישראל, mail=noa@gmail.com, phone=0526553001, latitude=32.1785796, name=noa, longitude=34.881024}}
+Updated: ObjectBoundary {objectId=ObjectId{id='0f0c5ef0-7379-4873-b1a9-7f5306e9ce04/n, superapp='2024b.yarden.cherry/n}, type=Parent, alias=Aa,12345, active=true, location= Location{lat=32.1785796, lng=34.881024}, creationTimestamp=Thu Jul 04 19:51:59 IDT 2024, createdBy=CreatedBy{userId=UserId {superapp=2024b.yarden.cherry,/n email=noa@gmail.com}}, objectDetails={uid=0f0c5ef0-7379-4873-b1a9-7f5306e9ce04, password=Aa,12345, numberOfChildren=2, address=מוטה גור 2, רעננה, ישראל, mail=noa@gmail.com, phone=0526553001, latitude=32.1785796, name=noa, longitude=34.881024}}
+Updated in database: UserEntity{id='2024b.yarden.cherry_noa@gmail.com', userName='0f0c5ef0-7379-4873-b1a9-7f5306e9ce04', role=MINIAPP_USER, avatar='Aa,12345'}
+Updated: UserBoundary{userId=UserId {superapp=2024b.yarden.cherry,/n email=noa@gmail.com}, role=MINIAPP_USER, username='0f0c5ef0-7379-4873-b1a9-7f5306e9ce04', avatar='Aa,12345'}
+Updated in database: ObjectEntity{objectID='87188544-f528-4be0-b98d-caaeb54658ab_2024b.yarden.cherry', type='Babysitter', alias='Aa!14567', latitude='37.4220936, longitude='-122.083922', active=true, creationTimestamp=2024-07-04 19:51:59.414, createdBy=2024b.yarden.cherry_rotem@gmai.com, objectDetails={address=Unnamed Road, Mountain View, CA 94043, USA, mail=rotem@gmai.com, latitude=37.4220936, smoke=false, description=t, dateOfBirth=1986-07-01, experience=4, uid=87188544-f528-4be0-b98d-caaeb54658ab, password=Aa!14567, phone=0526553002, hourlyWage=60, name=rotem, maritalStatus=t, longitude=-122.083922}}
+Updated: ObjectBoundary {objectId=ObjectId{id='87188544-f528-4be0-b98d-caaeb54658ab/n, superapp='2024b.yarden.cherry/n}, type=Babysitter, alias=Aa!14567, active=true, location= Location{lat=37.4220936, lng=-122.083922}, creationTimestamp=Thu Jul 04 19:51:59 IDT 2024, createdBy=CreatedBy{userId=UserId {superapp=2024b.yarden.cherry,/n email=rotem@gmai.com}}, objectDetails={address=Unnamed Road, Mountain View, CA 94043, USA, mail=rotem@gmai.com, latitude=37.4220936, smoke=false, description=t, dateOfBirth=1986-07-01, experience=4, uid=87188544-f528-4be0-b98d-caaeb54658ab, password=Aa!14567, phone=0526553002, hourlyWage=60, name=rotem, maritalStatus=t, longitude=-122.083922}}
+Updated in database: UserEntity{id='2024b.yarden.cherry_rotem@gmai.com', userName='87188544-f528-4be0-b98d-caaeb54658ab', role=MINIAPP_USER, avatar='Aa!14567'}
+Updated: UserBoundary{userId=UserId {superapp=2024b.yarden.cherry,/n email=rotem@gmai.com}, role=MINIAPP_USER, username='87188544-f528-4be0-b98d-caaeb54658ab', avatar='Aa!14567'}
+beginning test
+WARNING: A Java agent has been loaded dynamically (C:\Users\NoaG\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.14.17\e3c251a39dc90badaf71c83427ba46840f219d8d\byte-buddy-agent-1.14.17.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+set up
+MiniAppCommandBoundary{commandId=CommandId:/n {superapp=2024b.yarden.cherry/n, miniapp=miniapp/n, id=1}, command='command', targetObject=TargetObject{ObjectId{id='null/n, superapp='2024b.yarden.cherry/n}}, invocationTimeStamp=Thu Jul 04 19:52:01 IDT 2024, invokedBy=CreatedBy{userId=UserId {superapp=2024b.yarden.cherry,/n email=mini@gmail.com}}, commandAttributes={key1=can be set to any value you wish, key2=you can also name the attributes any name you like, key5=[Array, of, 1, 2.0, false, {type=user defined}, values], key3=42.0, key4=true}}
+tear down
+beginning test
+set up
+MiniAppCommandBoundary{commandId=CommandId:/n {superapp=2024b.yarden.cherry/n, miniapp=miniapp/n, id=1}, command='command', targetObject=TargetObject{ObjectId{id='null/n, superapp='2024b.yarden.cherry/n}}, invocationTimeStamp=Thu Jul 04 19:52:01 IDT 2024, invokedBy=CreatedBy{userId=UserId {superapp=2024b.yarden.cherry,/n email=mini@gmail.com}}, commandAttributes={key1=can be set to any value you wish, key2=you can also name the attributes any name you like, key5=[Array, of, 1, 2.0, false, {type=user defined}, values], key3=42.0, key4=true}}
+tear down
+beginning test
+set up
+MiniAppCommandBoundary{commandId=CommandId:/n {superapp=null/n, miniapp=miniapp/n, id=1}, command='command', targetObject=TargetObject{ObjectId{id='c54eaf4c-145a-475d-ace3-0ea06cf15509/n, superapp='null/n}}, invocationTimeStamp=Thu Jul 04 19:52:01 IDT 2024, invokedBy=CreatedBy{userId=UserId {superapp=null,/n email=mini@gmail.com}}, commandAttributes={key1=can be set to any value you wish, key2=you can also name the attributes any name you like, key5=[Array, of, 1, 2.0, false, {type=user defined}, values], key3=42.0, key4=true}}
+tear down
+beginning test
+set up
+MiniAppCommandBoundary{commandId=CommandId:/n {superapp=2024b.yarden.cherry/n, miniapp=miniapp/n, id=1}, command='command', targetObject=TargetObject{ObjectId{id='bf8986fc-7fcd-4e07-b759-6f54434516a0/n, superapp='2024b.yarden.cherry/n}}, invocationTimeStamp=Thu Jul 04 19:52:02 IDT 2024, invokedBy=CreatedBy{userId=UserId {superapp=2024b.yarden.cherry,/n email=mini@gmail.com}}, commandAttributes={key1=can be set to any value you wish, key2=you can also name the attributes any name you like, key5=[Array, of, 1, 2.0, false, {type=user defined}, values], key3=42.0, key4=true}}
+tear down
+beginning test
+set up
+MiniAppCommandBoundary{commandId=CommandId:/n {superapp=2024b.yarden.cherry/n, miniapp=miniapp/n, id=1}, command='command', targetObject=TargetObject{ObjectId{id='0d36307c-d85a-427e-b8c8-5bb85bffcf2e/n, superapp='2024b.yarden.cherry/n}}, invocationTimeStamp=Thu Jul 04 19:52:02 IDT 2024, invokedBy=CreatedBy{userId=UserId {superapp=2024b.yarden.cherry,/n email=mini@gmail.com}}, commandAttributes={key1=can be set to any value you wish, key2=you can also name the attributes any name you like, key5=[Array, of, 1, 2.0, false, {type=user defined}, values], key3=42.0, key4=true}}
+tear down
+beginning test
+set up
+MiniAppCommandBoundary{commandId=CommandId:/n {superapp=2024b.yarden.cherry/n, miniapp=miniapp/n, id=1}, command='command', targetObject=TargetObject{ObjectId{id='8ec29875-889b-4dee-868b-a1bbc8f63565/n, superapp='2024b.yarden.cherry/n}}, invocationTimeStamp=Thu Jul 04 19:52:02 IDT 2024, invokedBy=CreatedBy{userId=UserId {superapp=2024b.yarden.cherry,/n email=mini@gmail.com}}, commandAttributes={key1=can be set to any value you wish, key2=you can also name the attributes any name you like, key5=[Array, of, 1, 2.0, false, {type=user defined}, values], key3=42.0, key4=true}}
+tear down
+]]></system-err>
+</testsuite>

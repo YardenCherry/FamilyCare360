@@ -27,9 +27,9 @@ public class PermissionTests {
 	private int port;
 	private RestClient restClient;
 
-	private UserBoundary[] users=null;
-	private ObjectBoundary[] objects=null;
-	private MiniAppCommandBoundary[] commands=null;
+	private UserBoundary[] users = null;
+	private ObjectBoundary[] objects = null;
+	private MiniAppCommandBoundary[] commands = null;
 
 	@Value("${spring.application.name}")
 	private String superapp;
@@ -59,166 +59,111 @@ public class PermissionTests {
 
 	@Test
 	public void testAdminGetAllUsers() throws Exception {
-		UserBoundary[] response = this.restClient
-				.get()
-				.uri("/admin/users?userSuperapp={superapp}&userEmail={adminEmail}&size=5&page=0", superapp, Utils.getAdminEmail())
-				.retrieve()
-				.body(UserBoundary[].class);
+		UserBoundary[] response = this.restClient.get()
+				.uri("/admin/users?userSuperapp={superapp}&userEmail={adminEmail}&size=5&page=0", superapp,
+						Utils.getAdminEmail())
+				.retrieve().body(UserBoundary[].class);
 
-		assertThat(response)
-		.hasSize(users.length)
-		.usingRecursiveFieldByFieldElementComparator()
-        .containsAnyElementsOf(Arrays.asList(users));
-			}
-	
+		assertThat(response).hasSize(users.length).usingRecursiveFieldByFieldElementComparator()
+				.containsAnyElementsOf(Arrays.asList(users));
+	}
+
 	@Test
 	public void testSuperappGetAllUsers() throws Exception {
 
-		assertThatThrownBy(() -> this.restClient
-				.get()
-				.uri("/admin/users?userSuperapp={superapp}&userEmail={adminEmail}&size=5&page=0", superapp, Utils.getSuperappUserEmail())
-				.retrieve()
-				.body(UserBoundary[].class))
-			.isInstanceOf(HttpStatusCodeException.class)
-			.extracting("statusCode")
-			.extracting("value")
-			.isEqualTo(403);
+		assertThatThrownBy(() -> this.restClient.get()
+				.uri("/admin/users?userSuperapp={superapp}&userEmail={adminEmail}&size=5&page=0", superapp,
+						Utils.getSuperappUserEmail())
+				.retrieve().body(UserBoundary[].class)).isInstanceOf(HttpStatusCodeException.class)
+				.extracting("statusCode").extracting("value").isEqualTo(403);
 	}
 
 	@Test
 	public void testMiniappGetAllUsers() throws Exception {
 
-		assertThatThrownBy(() -> this.restClient
-				.get()
-				.uri("/admin/users?userSuperapp={superapp}&userEmail={adminEmail}&size=5&page=0", superapp, Utils.getMiniappUserEmail())
-				.retrieve()
-				.body(UserBoundary[].class))
-			.isInstanceOf(HttpStatusCodeException.class)
-			.extracting("statusCode")
-			.extracting("value")
-			.isEqualTo(403);
+		assertThatThrownBy(() -> this.restClient.get()
+				.uri("/admin/users?userSuperapp={superapp}&userEmail={adminEmail}&size=5&page=0", superapp,
+						Utils.getMiniappUserEmail())
+				.retrieve().body(UserBoundary[].class)).isInstanceOf(HttpStatusCodeException.class)
+				.extracting("statusCode").extracting("value").isEqualTo(403);
 	}
-	
+
 	@Test
-	public void testAdminDeleteAllUsers() throws Exception {		
-		this.restClient
-				.delete()
+	public void testAdminDeleteAllUsers() throws Exception {
+		this.restClient.delete()
 				.uri("/admin/users?userSuperapp={superapp}&userEmail={adminEmail}", superapp, Utils.getAdminEmail())
 				.retrieve();
 	}
-	
+
 	@Test
 	public void testSuperappDeleteAllUsers() throws Exception {
-		assertThatThrownBy(() -> this.restClient
-				.delete()
-				.uri("/admin/users?userSuperapp={superapp}&userEmail={adminEmail}", superapp, Utils.getSuperappUserEmail())
-				.retrieve()
-				.body(UserBoundary[].class))
-			.isInstanceOf(HttpStatusCodeException.class)
-			.extracting("statusCode")
-			.extracting("value")
-			.isEqualTo(403);
+		assertThatThrownBy(() -> this.restClient.delete()
+				.uri("/admin/users?userSuperapp={superapp}&userEmail={adminEmail}", superapp,
+						Utils.getSuperappUserEmail())
+				.retrieve().body(UserBoundary[].class)).isInstanceOf(HttpStatusCodeException.class)
+				.extracting("statusCode").extracting("value").isEqualTo(403);
 	}
 
 	@Test
 	public void testMiniappDeleteAllUsers() throws Exception {
 
-		assertThatThrownBy(() -> this.restClient
-				.delete()
-				.uri("/admin/users?userSuperapp={superapp}&userEmail={adminEmail}", superapp, Utils.getMiniappUserEmail())
-				.retrieve()
-				.body(UserBoundary[].class))
-			.isInstanceOf(HttpStatusCodeException.class)
-			.extracting("statusCode")
-			.extracting("value")
-			.isEqualTo(403);
+		assertThatThrownBy(() -> this.restClient.delete()
+				.uri("/admin/users?userSuperapp={superapp}&userEmail={adminEmail}", superapp,
+						Utils.getMiniappUserEmail())
+				.retrieve().body(UserBoundary[].class)).isInstanceOf(HttpStatusCodeException.class)
+				.extracting("statusCode").extracting("value").isEqualTo(403);
 	}
-	
+
 	public void addUsers() {
 		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
-		UserBoundary adminUser = this.restClient
-				.post().uri("/users")
-				.body(newAdmin)
-				.retrieve()
+		UserBoundary adminUser = this.restClient.post().uri("/users").body(newAdmin).retrieve()
 				.body(UserBoundary.class);
 
 		NewUserBoundary newSuperappUser = Utils.createNewUserSuperapp();
-		UserBoundary superappUser = this.restClient
-				.post().uri("/users")
-				.body(newSuperappUser)
-				.retrieve()
+		UserBoundary superappUser = this.restClient.post().uri("/users").body(newSuperappUser).retrieve()
 				.body(UserBoundary.class);
 
 		NewUserBoundary newMiniappUser = Utils.createNewUserMiniapp();
-		UserBoundary miniappUser = this.restClient
-				.post().uri("/users")
-				.body(newMiniappUser)
-				.retrieve()
+		UserBoundary miniappUser = this.restClient.post().uri("/users").body(newMiniappUser).retrieve()
 				.body(UserBoundary.class);
 
 		users = new UserBoundary[] { adminUser, superappUser, miniappUser };
 	}
-	
+
 	public void addObjects() {
 		NewUserBoundary newSuperappUser = Utils.createNewUserSuperapp();
-		UserBoundary superappUser = this.restClient
-				.post().uri("/users")
-				.body(newSuperappUser)
-				.retrieve()
+		UserBoundary superappUser = this.restClient.post().uri("/users").body(newSuperappUser).retrieve()
 				.body(UserBoundary.class);
 
 		ObjectBoundary newObject1 = Utils.createNewObjectBySuperapp();
-		this.restClient
-		.post().uri("/users")
-		.body(newObject1)
-		.retrieve()
-		.body(ObjectBoundary.class);
-		
+		this.restClient.post().uri("/users").body(newObject1).retrieve().body(ObjectBoundary.class);
+
 		ObjectBoundary newObject2 = Utils.createNewObject2BySuperapp();
-		this.restClient
-		.post().uri("/users")
-		.body(newObject2)
-		.retrieve()
-		.body(ObjectBoundary.class);
-		
+		this.restClient.post().uri("/users").body(newObject2).retrieve().body(ObjectBoundary.class);
+
 		ObjectBoundary newObject3 = Utils.createNewObject3BySuperapp();
-		this.restClient
-		.post().uri("/users")
-		.body(newObject3)
-		.retrieve()
-		.body(ObjectBoundary.class);
-		
+		this.restClient.post().uri("/users").body(newObject3).retrieve().body(ObjectBoundary.class);
+
 		ObjectBoundary newObject4 = Utils.createNewObject4BySuperapp();
-		this.restClient
-		.post().uri("/users")
-		.body(newObject4)
-		.retrieve()
-		.body(ObjectBoundary.class);
-		
-		objects= new ObjectBoundary[] {newObject1, newObject2, newObject3, newObject4};
-		
-		
+		this.restClient.post().uri("/users").body(newObject4).retrieve().body(ObjectBoundary.class);
+
+		objects = new ObjectBoundary[] { newObject1, newObject2, newObject3, newObject4 };
+
 	}
-	
+
 	public void deleteAllAndAddAdmin() {
 		NewUserBoundary newAdmin = Utils.createNewUserBoundary("admin_avatar", "adminEmail@demo.or", Role.ADMIN,
 				"admin_username");
-		UserBoundary newUserAdmin= this.restClient
-				.post().uri("/users")
-				.body(newAdmin)
-				.retrieve()
+		UserBoundary newUserAdmin = this.restClient.post().uri("/users").body(newAdmin).retrieve()
 				.body(UserBoundary.class);
-		
-		this.restClient.delete()
-				.uri("/admin/miniapp?userSuperapp={superapp}&userEmail={adminEmail}", newUserAdmin.getUserId().getSuperapp(), newUserAdmin.getUserId().getEmail())
-				.retrieve();
 
-		this.restClient.delete()
-				.uri("/admin/objects?userSuperapp={superapp}&userEmail={adminEmail}", newUserAdmin.getUserId().getSuperapp(), newUserAdmin.getUserId().getEmail())
-				.retrieve();
+		this.restClient.delete().uri("/admin/miniapp?userSuperapp={superapp}&userEmail={adminEmail}",
+				newUserAdmin.getUserId().getSuperapp(), newUserAdmin.getUserId().getEmail()).retrieve();
 
-		this.restClient.delete()
-				.uri("/admin/users?userSuperapp={superapp}&userEmail={adminEmail}", newUserAdmin.getUserId().getSuperapp(), newUserAdmin.getUserId().getEmail())
-				.retrieve();
+		this.restClient.delete().uri("/admin/objects?userSuperapp={superapp}&userEmail={adminEmail}",
+				newUserAdmin.getUserId().getSuperapp(), newUserAdmin.getUserId().getEmail()).retrieve();
+
+		this.restClient.delete().uri("/admin/users?userSuperapp={superapp}&userEmail={adminEmail}",
+				newUserAdmin.getUserId().getSuperapp(), newUserAdmin.getUserId().getEmail()).retrieve();
 	}
 }

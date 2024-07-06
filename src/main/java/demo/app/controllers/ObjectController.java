@@ -57,18 +57,18 @@ public class ObjectController {
 	public ObjectBoundary[] getObjectsByType(@PathVariable("type") String type,
 			@RequestParam(name = "size", defaultValue = "5", required = false) int size,
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
-			@RequestParam(name = "superapp", required = true) String superapp,
-			@RequestParam(name = "email", required = true) String email) {
-		return this.objectLogic.getAllByType(type, size, page, superapp, email).toArray(new ObjectBoundary[0]);
+			@RequestParam(name = "userSuperapp", required = true) String userSuperapp,
+			@RequestParam(name = "userEmail", required = true) String userEmail) {
+		return this.objectLogic.getAllByType(type, size, page, userSuperapp, userEmail).toArray(new ObjectBoundary[0]);
 	}
 
 	@GetMapping(path = { "/search/byAlias/{alias}" }, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ObjectBoundary[] getObjectsByAlias(@PathVariable("alias") String alias,
 			@RequestParam(name = "size", defaultValue = "5", required = false) int size,
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
-			@RequestParam(name = "superapp", required = true) String superapp,
-			@RequestParam(name = "email", required = true) String email) {
-		return this.objectLogic.getAllByAlias(alias, size, page, superapp, email).toArray(new ObjectBoundary[0]);
+			@RequestParam(name = "userSuperapp", required = true) String userSuperapp,
+			@RequestParam(name = "userEmail", required = true) String userEmail) {
+		return this.objectLogic.getAllByAlias(alias, size, page, userEmail, userEmail).toArray(new ObjectBoundary[0]);
 	}
 
 	@GetMapping(path = { "/search/byAliasPattern/{pattern}" }, produces = MediaType.APPLICATION_JSON_VALUE)

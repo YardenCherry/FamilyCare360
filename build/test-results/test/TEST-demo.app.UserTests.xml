@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="demo.app.UserTests" tests="14" skipped="0" failures="0" errors="0" timestamp="2024-07-04T16:52:07" hostname="DESKTOP-G227G8D" time="2.429">
+  <properties/>
+  <testcase name="testLoginUserToDatabase()" classname="demo.app.UserTests" time="0.186"/>
+  <testcase name="testCreateNewUserWithEmptyUserName()" classname="demo.app.UserTests" time="0.116"/>
+  <testcase name="testCreateNewUserWithEmptyEmail()" classname="demo.app.UserTests" time="0.212"/>
+  <testcase name="testCreateNewUserToDatabase()" classname="demo.app.UserTests" time="0.136"/>
+  <testcase name="testCreateNewUserWithAnExistingEmailToDatabase()" classname="demo.app.UserTests" time="0.138"/>
+  <testcase name="testUpdateRoleUserToDatabase()" classname="demo.app.UserTests" time="0.221"/>
+  <testcase name="testCreateNewUserWithNullUserName()" classname="demo.app.UserTests" time="0.136"/>
+  <testcase name="testLoginUserNonExistingToDatabase()" classname="demo.app.UserTests" time="0.308"/>
+  <testcase name="testUpdateAvatarUserToDatabase()" classname="demo.app.UserTests" time="0.194"/>
+  <testcase name="testCreateNewUserWithEmptyAvatar()" classname="demo.app.UserTests" time="0.178"/>
+  <testcase name="testCreateNewUserWithNullAvatar()" classname="demo.app.UserTests" time="0.128"/>
+  <testcase name="testUpdateNameUserToDatabase()" classname="demo.app.UserTests" time="0.169"/>
+  <testcase name="testCreateNewUserWithInvalidEmail()" classname="demo.app.UserTests" time="0.113"/>
+  <testcase name="testCreateNewUserWithNullEmail()" classname="demo.app.UserTests" time="0.129"/>
+  <system-out><![CDATA[2024-07-04T19:52:07.614+03:00  INFO 31728 --- [2024b.yarden.cherry] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [demo.app.UserTests]: UserTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-07-04T19:52:07.615+03:00  INFO 31728 --- [2024b.yarden.cherry] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration demo.app.Application for test class demo.app.UserTests
+]]></system-out>
+  <system-err><![CDATA[beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+]]></system-err>
+</testsuite>

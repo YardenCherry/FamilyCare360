@@ -55,135 +55,90 @@ public class UserTests {
 		deleteAllAndAddAdmin();
 	}
 
-	
 	@Test
-	public void testCreateNewUserToDatabase() throws Exception{
+	public void testCreateNewUserToDatabase() throws Exception {
 		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
-		UserBoundary adminUser = this.restClient
-				.post().uri("/users")
-				.body(newAdmin)
-				.retrieve()
+		UserBoundary adminUser = this.restClient.post().uri("/users").body(newAdmin).retrieve()
 				.body(UserBoundary.class);
-		
-		assertThat(this.restClient
-				.get()
-				.uri("/users/login/{superapp}/{email}", adminUser.getUserId().getSuperapp(), adminUser.getUserId().getEmail())
-				.retrieve()
-				.body(UserBoundary.class))
-		.usingRecursiveComparison()
-		.isEqualTo(adminUser);
-		}
-	
+
+		assertThat(this.restClient.get()
+				.uri("/users/login/{superapp}/{email}", adminUser.getUserId().getSuperapp(),
+						adminUser.getUserId().getEmail())
+				.retrieve().body(UserBoundary.class)).usingRecursiveComparison().isEqualTo(adminUser);
+	}
+
 	@Test
-	public void testCreateNewUserWithAnExistingEmailToDatabase() throws Exception{
+	public void testCreateNewUserWithAnExistingEmailToDatabase() throws Exception {
 		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
-		UserBoundary adminUser = this.restClient
-				.post().uri("/users")
-				.body(newAdmin)
-				.retrieve()
+		UserBoundary adminUser = this.restClient.post().uri("/users").body(newAdmin).retrieve()
 				.body(UserBoundary.class);
-		
-		assertThatThrownBy(() -> this.restClient
-				.post().uri("/users")
-				.body(newAdmin)
-				.retrieve()
-				.body(UserBoundary.class))
-				.isInstanceOf(HttpStatusCodeException.class)
-				.extracting("statusCode")
-				.extracting("value")
+
+		assertThatThrownBy(
+				() -> this.restClient.post().uri("/users").body(newAdmin).retrieve().body(UserBoundary.class))
+				.isInstanceOf(HttpStatusCodeException.class).extracting("statusCode").extracting("value")
 				.isEqualTo(400);
 	}
-	
+
 	@Test
-	public void testCreateNewUserWithNullAvatar() throws Exception{
+	public void testCreateNewUserWithNullAvatar() throws Exception {
 		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
 		newAdmin.setAvatar(null);
-		assertThatThrownBy(() -> this.restClient
-				.post().uri("/users")
-				.body(newAdmin)
-				.retrieve()
-				.body(UserBoundary.class))
-				.isInstanceOf(HttpStatusCodeException.class)
-				.extracting("statusCode")
-				.extracting("value")
+		assertThatThrownBy(
+				() -> this.restClient.post().uri("/users").body(newAdmin).retrieve().body(UserBoundary.class))
+				.isInstanceOf(HttpStatusCodeException.class).extracting("statusCode").extracting("value")
 				.isEqualTo(400);
 	}
-	
+
 	@Test
-	public void testCreateNewUserWithEmptyAvatar() throws Exception{
+	public void testCreateNewUserWithEmptyAvatar() throws Exception {
 		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
 		newAdmin.setAvatar("");
-		assertThatThrownBy(() -> this.restClient
-				.post().uri("/users")
-				.body(newAdmin)
-				.retrieve()
-				.body(UserBoundary.class))
-				.isInstanceOf(HttpStatusCodeException.class)
-				.extracting("statusCode")
-				.extracting("value")
+		assertThatThrownBy(
+				() -> this.restClient.post().uri("/users").body(newAdmin).retrieve().body(UserBoundary.class))
+				.isInstanceOf(HttpStatusCodeException.class).extracting("statusCode").extracting("value")
 				.isEqualTo(400);
 	}
-	
+
 	@Test
-	public void testCreateNewUserWithNullUserName() throws Exception{
+	public void testCreateNewUserWithNullUserName() throws Exception {
 		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
 		newAdmin.setUsername(null);
-		assertThatThrownBy(() -> this.restClient
-				.post().uri("/users")
-				.body(newAdmin)
-				.retrieve()
-				.body(UserBoundary.class))
-				.isInstanceOf(HttpStatusCodeException.class)
-				.extracting("statusCode")
-				.extracting("value")
+		assertThatThrownBy(
+				() -> this.restClient.post().uri("/users").body(newAdmin).retrieve().body(UserBoundary.class))
+				.isInstanceOf(HttpStatusCodeException.class).extracting("statusCode").extracting("value")
 				.isEqualTo(400);
 	}
-	
+
 	@Test
-	public void testCreateNewUserWithEmptyUserName() throws Exception{
+	public void testCreateNewUserWithEmptyUserName() throws Exception {
 		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
 		newAdmin.setUsername("");
-		assertThatThrownBy(() -> this.restClient
-				.post().uri("/users")
-				.body(newAdmin)
-				.retrieve()
-				.body(UserBoundary.class))
-				.isInstanceOf(HttpStatusCodeException.class)
-				.extracting("statusCode")
-				.extracting("value")
+		assertThatThrownBy(
+				() -> this.restClient.post().uri("/users").body(newAdmin).retrieve().body(UserBoundary.class))
+				.isInstanceOf(HttpStatusCodeException.class).extracting("statusCode").extracting("value")
 				.isEqualTo(400);
 	}
-	
+
 	@Test
-	public void testCreateNewUserWithNullEmail() throws Exception{
+	public void testCreateNewUserWithNullEmail() throws Exception {
 		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
 		newAdmin.setEmail(null);
-		assertThatThrownBy(() -> this.restClient
-				.post().uri("/users")
-				.body(newAdmin)
-				.retrieve()
-				.body(UserBoundary.class))
-				.isInstanceOf(HttpStatusCodeException.class)
-				.extracting("statusCode")
-				.extracting("value")
+		assertThatThrownBy(
+				() -> this.restClient.post().uri("/users").body(newAdmin).retrieve().body(UserBoundary.class))
+				.isInstanceOf(HttpStatusCodeException.class).extracting("statusCode").extracting("value")
 				.isEqualTo(400);
 	}
-	
+
 	@Test
-	public void testCreateNewUserWithEmptyEmail() throws Exception{
+	public void testCreateNewUserWithEmptyEmail() throws Exception {
 		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
 		newAdmin.setEmail("");
-		assertThatThrownBy(() -> this.restClient
-				.post().uri("/users")
-				.body(newAdmin)
-				.retrieve()
-				.body(UserBoundary.class))
-				.isInstanceOf(HttpStatusCodeException.class)
-				.extracting("statusCode")
-				.extracting("value")
+		assertThatThrownBy(
+				() -> this.restClient.post().uri("/users").body(newAdmin).retrieve().body(UserBoundary.class))
+				.isInstanceOf(HttpStatusCodeException.class).extracting("statusCode").extracting("value")
 				.isEqualTo(400);
 	}
-	
+
 //	public void testCreateNewUserWithInvalidRole() throws Exception{
 //		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
 //		newAdmin.setRole(Role.ADMI);
@@ -198,222 +153,142 @@ public class UserTests {
 //				.extracting("value")
 //				.isEqualTo(400);
 //	}
-	
+
 	@Test
-	public void testCreateNewUserWithInvalidEmail() throws Exception{
+	public void testCreateNewUserWithInvalidEmail() throws Exception {
 		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
 		newAdmin.setEmail("admin");
-		assertThatThrownBy(() -> this.restClient
-				.post().uri("/users")
-				.body(newAdmin)
-				.retrieve()
-				.body(UserBoundary.class))
-				.isInstanceOf(HttpStatusCodeException.class)
-				.extracting("statusCode")
-				.extracting("value")
+		assertThatThrownBy(
+				() -> this.restClient.post().uri("/users").body(newAdmin).retrieve().body(UserBoundary.class))
+				.isInstanceOf(HttpStatusCodeException.class).extracting("statusCode").extracting("value")
 				.isEqualTo(400);
 	}
-	
+
 	@Test
-	public void testLoginUserToDatabase() throws Exception{
+	public void testLoginUserToDatabase() throws Exception {
 		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
-		UserBoundary adminUser = this.restClient
-				.post().uri("/users")
-				.body(newAdmin)
-				.retrieve()
+		UserBoundary adminUser = this.restClient.post().uri("/users").body(newAdmin).retrieve()
 				.body(UserBoundary.class);
-		
+
 		NewUserBoundary newSuperapp = Utils.createNewUserSuperapp();
-		this.restClient
-				.post().uri("/users")
-				.body(newSuperapp)
-				.retrieve()
-				.body(UserBoundary.class);
-		
+		this.restClient.post().uri("/users").body(newSuperapp).retrieve().body(UserBoundary.class);
+
 		NewUserBoundary newMiniApp = Utils.createNewUserMiniapp();
-		this.restClient
-				.post().uri("/users")
-				.body(newMiniApp)
-				.retrieve()
-				.body(UserBoundary.class);
-		
-		assertThat(this.restClient
-				.get()
-				.uri("/users/login/{superapp}/{email}", adminUser.getUserId().getSuperapp(), adminUser.getUserId().getEmail())
-				.retrieve()
-				.body(UserBoundary.class))
-		.usingRecursiveComparison()
-		.isEqualTo(adminUser);
-		
+		this.restClient.post().uri("/users").body(newMiniApp).retrieve().body(UserBoundary.class);
+
+		assertThat(this.restClient.get()
+				.uri("/users/login/{superapp}/{email}", adminUser.getUserId().getSuperapp(),
+						adminUser.getUserId().getEmail())
+				.retrieve().body(UserBoundary.class)).usingRecursiveComparison().isEqualTo(adminUser);
+
 	}
-	
+
 	@Test
-	public void testLoginUserNonExistingToDatabase() throws Exception{
+	public void testLoginUserNonExistingToDatabase() throws Exception {
 		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
-		UserBoundary adminUser = this.restClient
-				.post().uri("/users")
-				.body(newAdmin)
-				.retrieve()
+		UserBoundary adminUser = this.restClient.post().uri("/users").body(newAdmin).retrieve()
 				.body(UserBoundary.class);
-		
+
 		NewUserBoundary newSuperapp = Utils.createNewUserSuperapp();
-		this.restClient
-				.post().uri("/users")
-				.body(newSuperapp)
-				.retrieve()
-				.body(UserBoundary.class);
-		
+		this.restClient.post().uri("/users").body(newSuperapp).retrieve().body(UserBoundary.class);
+
 		NewUserBoundary newMiniApp = Utils.createNewUserMiniapp();
-		this.restClient
-				.post().uri("/users")
-				.body(newMiniApp)
-				.retrieve()
-				.body(UserBoundary.class);
-		
-		assertThatThrownBy(() -> this.restClient
-				.get()
-				.uri("/users/login/{superapp}/{email}", adminUser.getUserId().getSuperapp(), "noa@demo.org")
-				.retrieve()
-				.body(UserBoundary.class))
-		.isInstanceOf(HttpStatusCodeException.class)
-		.extracting("statusCode")
-		.extracting("value")
-		.isEqualTo(404);
+		this.restClient.post().uri("/users").body(newMiniApp).retrieve().body(UserBoundary.class);
+
+		assertThatThrownBy(() -> this.restClient.get()
+				.uri("/users/login/{superapp}/{email}", adminUser.getUserId().getSuperapp(), "noa@demo.org").retrieve()
+				.body(UserBoundary.class)).isInstanceOf(HttpStatusCodeException.class).extracting("statusCode")
+				.extracting("value").isEqualTo(404);
 	}
-	
+
 	@Test
-	public void testUpdateAvatarUserToDatabase() throws Exception{
+	public void testUpdateAvatarUserToDatabase() throws Exception {
 		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
-		UserBoundary adminUser = this.restClient
-				.post().uri("/users")
-				.body(newAdmin)
-				.retrieve()
+		UserBoundary adminUser = this.restClient.post().uri("/users").body(newAdmin).retrieve()
 				.body(UserBoundary.class);
-		
+
 		NewUserBoundary newSuperapp = Utils.createNewUserSuperapp();
-		this.restClient
-				.post().uri("/users")
-				.body(newSuperapp)
-				.retrieve()
-				.body(UserBoundary.class);
+		this.restClient.post().uri("/users").body(newSuperapp).retrieve().body(UserBoundary.class);
 
 		Map<String, Object> update = new HashMap<>();
 		update.put("avatar", "new");
 
-		this.restClient
-		.put()
-		.uri("/users/{superapp}/{email}",adminUser.getUserId().getSuperapp(),adminUser.getUserId().getEmail())
-		.body(update)
-		.retrieve()
-		.body(UserBoundary.class);
-		
+		this.restClient.put()
+				.uri("/users/{superapp}/{email}", adminUser.getUserId().getSuperapp(), adminUser.getUserId().getEmail())
+				.body(update).retrieve().body(UserBoundary.class);
+
 		adminUser.setAvatar("new");
-		
-		assertThat(this.restClient
-				.get()
-				.uri("/users/login/{superapp}/{email}", adminUser.getUserId().getSuperapp(), adminUser.getUserId().getEmail())
-				.retrieve()
-				.body(UserBoundary.class))
-		.usingRecursiveComparison()
-		.isEqualTo(adminUser);
-		
+
+		assertThat(this.restClient.get()
+				.uri("/users/login/{superapp}/{email}", adminUser.getUserId().getSuperapp(),
+						adminUser.getUserId().getEmail())
+				.retrieve().body(UserBoundary.class)).usingRecursiveComparison().isEqualTo(adminUser);
+
 	}
-	
+
 	@Test
-	public void testUpdateNameUserToDatabase() throws Exception{
+	public void testUpdateNameUserToDatabase() throws Exception {
 		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
-		UserBoundary adminUser = this.restClient
-				.post().uri("/users")
-				.body(newAdmin)
-				.retrieve()
+		UserBoundary adminUser = this.restClient.post().uri("/users").body(newAdmin).retrieve()
 				.body(UserBoundary.class);
-		
+
 		NewUserBoundary newSuperapp = Utils.createNewUserSuperapp();
-		this.restClient
-				.post().uri("/users")
-				.body(newSuperapp)
-				.retrieve()
-				.body(UserBoundary.class);
+		this.restClient.post().uri("/users").body(newSuperapp).retrieve().body(UserBoundary.class);
 
 		Map<String, Object> update = new HashMap<>();
 		update.put("username", "new");
 
-		this.restClient
-		.put()
-		.uri("/users/{superapp}/{email}",adminUser.getUserId().getSuperapp(),adminUser.getUserId().getEmail())
-		.body(update)
-		.retrieve()
-		.body(UserBoundary.class);
-		
+		this.restClient.put()
+				.uri("/users/{superapp}/{email}", adminUser.getUserId().getSuperapp(), adminUser.getUserId().getEmail())
+				.body(update).retrieve().body(UserBoundary.class);
+
 		adminUser.setUsername("new");
-		
-		assertThat(this.restClient
-				.get()
-				.uri("/users/login/{superapp}/{email}", adminUser.getUserId().getSuperapp(), adminUser.getUserId().getEmail())
-				.retrieve()
-				.body(UserBoundary.class))
-		.usingRecursiveComparison()
-		.isEqualTo(adminUser);
+
+		assertThat(this.restClient.get()
+				.uri("/users/login/{superapp}/{email}", adminUser.getUserId().getSuperapp(),
+						adminUser.getUserId().getEmail())
+				.retrieve().body(UserBoundary.class)).usingRecursiveComparison().isEqualTo(adminUser);
 	}
-	
+
 	@Test
-	public void testUpdateRoleUserToDatabase() throws Exception{
+	public void testUpdateRoleUserToDatabase() throws Exception {
 		NewUserBoundary newAdmin = Utils.createNewUserAdmin();
-		UserBoundary adminUser = this.restClient
-				.post().uri("/users")
-				.body(newAdmin)
-				.retrieve()
+		UserBoundary adminUser = this.restClient.post().uri("/users").body(newAdmin).retrieve()
 				.body(UserBoundary.class);
-		
+
 		NewUserBoundary newSuperapp = Utils.createNewUserSuperapp();
-		this.restClient
-				.post().uri("/users")
-				.body(newSuperapp)
-				.retrieve()
-				.body(UserBoundary.class);
+		this.restClient.post().uri("/users").body(newSuperapp).retrieve().body(UserBoundary.class);
 
 		Map<String, Object> update = new HashMap<>();
 		update.put("role", Role.MINIAPP_USER);
 
-		this.restClient
-		.put()
-		.uri("/users/{superapp}/{email}",adminUser.getUserId().getSuperapp(),adminUser.getUserId().getEmail())
-		.body(update)
-		.retrieve()
-		.body(UserBoundary.class);
-		
+		this.restClient.put()
+				.uri("/users/{superapp}/{email}", adminUser.getUserId().getSuperapp(), adminUser.getUserId().getEmail())
+				.body(update).retrieve().body(UserBoundary.class);
+
 		adminUser.setRole(Role.MINIAPP_USER);
-		
-		assertThat(this.restClient
-				.get()
-				.uri("/users/login/{superapp}/{email}", adminUser.getUserId().getSuperapp(), adminUser.getUserId().getEmail())
-				.retrieve()
-				.body(UserBoundary.class))
-		.usingRecursiveComparison()
-		.isEqualTo(adminUser);
-		
+
+		assertThat(this.restClient.get()
+				.uri("/users/login/{superapp}/{email}", adminUser.getUserId().getSuperapp(),
+						adminUser.getUserId().getEmail())
+				.retrieve().body(UserBoundary.class)).usingRecursiveComparison().isEqualTo(adminUser);
+
 	}
-	
+
 	public void deleteAllAndAddAdmin() {
 		NewUserBoundary newAdmin = Utils.createNewUserBoundary("admin_avatar", "adminEmail@demo.or", Role.ADMIN,
 				"admin_username");
-		UserBoundary newUserAdmin= this.restClient
-				.post().uri("/users")
-				.body(newAdmin)
-				.retrieve()
+		UserBoundary newUserAdmin = this.restClient.post().uri("/users").body(newAdmin).retrieve()
 				.body(UserBoundary.class);
-		
-		this.restClient.delete()
-				.uri("/admin/miniapp?userSuperapp={superapp}&userEmail={adminEmail}", newUserAdmin.getUserId().getSuperapp(), newUserAdmin.getUserId().getEmail())
-				.retrieve();
 
-		this.restClient.delete()
-				.uri("/admin/objects?userSuperapp={superapp}&userEmail={adminEmail}", newUserAdmin.getUserId().getSuperapp(), newUserAdmin.getUserId().getEmail())
-				.retrieve();
+		this.restClient.delete().uri("/admin/miniapp?userSuperapp={superapp}&userEmail={adminEmail}",
+				newUserAdmin.getUserId().getSuperapp(), newUserAdmin.getUserId().getEmail()).retrieve();
 
-		this.restClient.delete()
-				.uri("/admin/users?userSuperapp={superapp}&userEmail={adminEmail}", newUserAdmin.getUserId().getSuperapp(), newUserAdmin.getUserId().getEmail())
-				.retrieve();
+		this.restClient.delete().uri("/admin/objects?userSuperapp={superapp}&userEmail={adminEmail}",
+				newUserAdmin.getUserId().getSuperapp(), newUserAdmin.getUserId().getEmail()).retrieve();
+
+		this.restClient.delete().uri("/admin/users?userSuperapp={superapp}&userEmail={adminEmail}",
+				newUserAdmin.getUserId().getSuperapp(), newUserAdmin.getUserId().getEmail()).retrieve();
 	}
-	
+
 }

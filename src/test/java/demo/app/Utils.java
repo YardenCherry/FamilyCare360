@@ -25,66 +25,65 @@ public class Utils {
 	private static String superappEmail = "super@gmail.com";
 	@Value("${spring.application.name}")
 	private static String superapp;
-	
+
 	public static NewUserBoundary createNewUserAdmin() {
-		return createNewUserBoundary("admin_avatar", adminEmail, Role.ADMIN,
-				"admin_username");
+		return createNewUserBoundary("admin_avatar", adminEmail, Role.ADMIN, "admin_username");
 	}
-	
+
 	public static NewUserBoundary createNewUserSuperapp() {
-		return createNewUserBoundary("super_avatar", superappEmail,
-				Role.SUPERAPP_USER, "super_username");
+		return createNewUserBoundary("super_avatar", superappEmail, Role.SUPERAPP_USER, "super_username");
 	}
-	
+
 	public static NewUserBoundary createNewUserMiniapp() {
-		return createNewUserBoundary("mini_avatar", miniappEmail, Role.MINIAPP_USER,
-				"mini_username");
+		return createNewUserBoundary("mini_avatar", miniappEmail, Role.MINIAPP_USER, "mini_username");
 	}
-	
+
 	public static ObjectBoundary createNewObjectByAdmin() {
-		return createObjectBoundary("1", superapp , "type", "alias",
-				new Location(0,0), true, createCreatedBy(superapp,adminEmail), createObjectDetails());
+		return createObjectBoundary("1", superapp, "type", "alias", new Location(0, 0), true,
+				createCreatedBy(superapp, adminEmail), createObjectDetails());
 	}
-	
+
 	public static ObjectBoundary createNewObjectBySuperapp() {
-		return createObjectBoundary("1", superapp , "type", "alias",
-				new Location(10,0), true, createCreatedBy(superapp,superappEmail), createObjectDetails());
+		return createObjectBoundary("1", superapp, "type", "alias", new Location(10, 0), true,
+				createCreatedBy(superapp, superappEmail), createObjectDetails());
 	}
-	
+
 	public static ObjectBoundary createNewObject3BySuperapp() {
-		return createObjectBoundary("1", superapp , "type1", "alias",
-				new Location(10,0), true, createCreatedBy(superapp,superappEmail), createObjectDetails());
+		return createObjectBoundary("1", superapp, "type1", "alias", new Location(10, 0), true,
+				createCreatedBy(superapp, superappEmail), createObjectDetails());
 	}
-	
+
 	public static ObjectBoundary createNewObject2BySuperapp() {
-		return createObjectBoundary("1", superapp , "type1", "alias1",
-				new Location(0,10), true, createCreatedBy(superapp,superappEmail), createObjectDetails());
+		return createObjectBoundary("1", superapp, "type1", "alias1", new Location(0, 10), true,
+				createCreatedBy(superapp, superappEmail), createObjectDetails());
 	}
-	
+
 	public static ObjectBoundary createNewObject4BySuperapp() {
-		return createObjectBoundary("1", superapp , "type", "alias1",
-				new Location(10,10), true, createCreatedBy(superapp,superappEmail), createObjectDetails());
+		return createObjectBoundary("1", superapp, "type", "alias1", new Location(10, 10), true,
+				createCreatedBy(superapp, superappEmail), createObjectDetails());
 	}
-	
+
 	public static ObjectBoundary createNewObjectByMiniApp() {
-		return createObjectBoundary("1", superapp , "type", "alias",
-				new Location(0,0), true, createCreatedBy(superapp,miniappEmail), createObjectDetails());
+		return createObjectBoundary("1", superapp, "type", "alias", new Location(0, 0), true,
+				createCreatedBy(superapp, miniappEmail), createObjectDetails());
 	}
-	
+
 	public static MiniAppCommandBoundary createNewCommandByAdmin(String objectId) {
 		return createCommandBoundary(superapp, "miniapp", "1", "command", objectId, adminEmail, createObjectDetails());
 	}
-	
+
 	public static MiniAppCommandBoundary createNewCommandBySuperapp(String objectId) {
-		return createCommandBoundary(superapp, "miniapp", "1", "command", objectId, superappEmail, createObjectDetails());
+		return createCommandBoundary(superapp, "miniapp", "1", "command", objectId, superappEmail,
+				createObjectDetails());
 	}
-	
-	public static MiniAppCommandBoundary createNewCommandByMiniapp(String objectId,UserBoundary miniappUser) {
-		superapp=miniappUser.getUserId().getSuperapp();
-		return createCommandBoundary(miniappUser.getUserId().getSuperapp(), "miniapp", "1", "command", objectId, miniappEmail, createObjectDetails());
-	
+
+	public static MiniAppCommandBoundary createNewCommandByMiniapp(String objectId, UserBoundary miniappUser) {
+		superapp = miniappUser.getUserId().getSuperapp();
+		return createCommandBoundary(miniappUser.getUserId().getSuperapp(), "miniapp", "1", "command", objectId,
+				miniappEmail, createObjectDetails());
+
 	}
-	
+
 	public static NewUserBoundary createNewUserBoundary(String avatar, String email, Role role, String username) {
 		NewUserBoundary newUser = new NewUserBoundary();
 		newUser.setAvatar(avatar);
@@ -93,7 +92,6 @@ public class Utils {
 		newUser.setUsername(username);
 		return newUser;
 	}
-	
 
 	private static CreatedBy createCreatedBy(String superapp, String email) {
 		CreatedBy createdBy = new CreatedBy();
@@ -133,8 +131,8 @@ public class Utils {
 		return boundary;
 	}
 
-	private static MiniAppCommandBoundary createCommandBoundary(String superapp, String miniapp, String id, String Command,
-			String idObject, String email, Map<String, Object> commandsAttributess) {
+	private static MiniAppCommandBoundary createCommandBoundary(String superapp, String miniapp, String id,
+			String Command, String idObject, String email, Map<String, Object> commandsAttributess) {
 		MiniAppCommandBoundary commandBoundary = new MiniAppCommandBoundary();
 		commandBoundary.setCommandId(createCommandId(superapp, miniapp, id));
 		commandBoundary.setCommand(Command);
@@ -171,7 +169,7 @@ public class Utils {
 	public static void setSuperappUserEmail(String superappUserEmail) {
 		Utils.superappEmail = superappUserEmail;
 	}
-	
+
 	private static Map<String, Object> createObjectDetails() {
 		Map<String, Object> objectDetails = new HashMap<>();
 		objectDetails.put("key1", "can be set to any value you wish");
@@ -182,6 +180,5 @@ public class Utils {
 				Arrays.asList("Array", "of", 1, 2.0, false, Map.of("type", "user defined"), "values"));
 		return objectDetails;
 	}
-
 
 }
