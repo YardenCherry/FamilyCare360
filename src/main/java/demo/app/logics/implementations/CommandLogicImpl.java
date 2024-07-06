@@ -103,15 +103,19 @@ public class CommandLogicImpl implements CommandLogic {
 		List<ObjectEntity> entities;
 		List<Object> rv = new ArrayList<>();
 		String type;
+		int page, size;
 
 		switch (command) {
 
 		case "GetAllObjectsByTypeAndAliasAndActive":
 			type = commandEntity.getCommandAttributes().get("type").toString();
 			String alias = commandEntity.getCommandAttributes().get("alias").toString();
-			System.out.println("type: " + type + ", alias: " + alias);
+			page=Integer.parseInt(commandEntity.getCommandAttributes().get("page").toString());
+			size=Integer.parseInt(commandEntity.getCommandAttributes().get("size").toString());
+
+			System.out.println("type: " + type + ", alias: " + alias + ", page: "+ page);
 			entities = objectCrud.findAllByTypeAndAliasAndActiveTrue(type, alias,
-					PageRequest.of(0, 5, Direction.ASC, "objectID"));
+					PageRequest.of(page, size, Direction.ASC, "objectId"));
 			for (ObjectEntity entity : entities) {
 				rv.add(this.objectConverter.toBoundary(entity));
 				System.out.println("*** entity: " + entity);
@@ -124,7 +128,7 @@ public class CommandLogicImpl implements CommandLogic {
 			type = commandEntity.getCommandAttributes().get("type").toString();
 
 			entities = objectCrud.findAllByTypeAndLocationAndActiveTrue(type, latitude, longitude,
-					PageRequest.of(0, 5, Direction.ASC, "objectID"));
+					PageRequest.of(0, 5, Direction.ASC, "objectId"));
 			for (ObjectEntity entity : entities) {
 				rv.add(this.objectConverter.toBoundary(entity));
 			}

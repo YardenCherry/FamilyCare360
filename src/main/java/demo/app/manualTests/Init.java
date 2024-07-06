@@ -73,10 +73,40 @@ public class Init implements CommandLineRunner {
 						createBabysittingEventDetails("Event 2 Message", "2024-07-02", userBabysitter1.getUsername(),
 								userParent.getUsername(), userParent.getUserId().getEmail())),
 
+				createBoundary("2", "2024b.yarden.cherry", "BabysittingEvent", userBabysitter1.getUsername(),
+						new Location(0, 0), true,
+						createCreatedBy("2024b.yarden.cherry", userParent.getUserId().getEmail()),
+						createBabysittingEventDetails("Event 3 Message", "2024-07-02", userBabysitter1.getUsername(),
+								userParent.getUsername(), userParent.getUserId().getEmail())),
+
+				createBoundary("2", "2024b.yarden.cherry", "BabysittingEvent", userBabysitter1.getUsername(),
+						new Location(0, 0), true,
+						createCreatedBy("2024b.yarden.cherry", userParent.getUserId().getEmail()),
+						createBabysittingEventDetails("Event 4 Message", "2024-07-02", userBabysitter1.getUsername(),
+								userParent.getUsername(), userParent.getUserId().getEmail())),
+
+				createBoundary("2", "2024b.yarden.cherry", "BabysittingEvent", userBabysitter1.getUsername(),
+						new Location(0, 0), true,
+						createCreatedBy("2024b.yarden.cherry", userParent.getUserId().getEmail()),
+						createBabysittingEventDetails("Event 5 Message", "2024-07-02", userBabysitter1.getUsername(),
+								userParent.getUsername(), userParent.getUserId().getEmail())),
+
+				createBoundary("2", "2024b.yarden.cherry", "BabysittingEvent", userBabysitter1.getUsername(),
+						new Location(0, 0), true,
+						createCreatedBy("2024b.yarden.cherry", userParent.getUserId().getEmail()),
+						createBabysittingEventDetails("Event 6 Message", "2024-07-02", userBabysitter1.getUsername(),
+								userParent.getUsername(), userParent.getUserId().getEmail())),
+
+				createBoundary("2", "2024b.yarden.cherry", "BabysittingEvent", userBabysitter1.getUsername(),
+						new Location(0, 0), true,
+						createCreatedBy("2024b.yarden.cherry", userParent.getUserId().getEmail()),
+						createBabysittingEventDetails("Event 7 Message", "2024-07-02", userBabysitter1.getUsername(),
+								userParent.getUsername(), userParent.getUserId().getEmail())),
+
 				createBoundary("3", "2024b.yarden.cherry", "BabysittingEvent", userBabysitter2.getUsername(),
 						new Location(0, 0), true,
 						createCreatedBy("2024b.yarden.cherry", userParent.getUserId().getEmail()),
-						createBabysittingEventDetails("Event 3 Message", "2024-07-03", userBabysitter2.getUsername(),
+						createBabysittingEventDetails("Event 8 Message", "2024-07-03", userBabysitter2.getUsername(),
 								userParent.getUsername(), userParent.getUserId().getEmail()))
 
 		};
