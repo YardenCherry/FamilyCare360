@@ -35,8 +35,8 @@ public class CommandConverter {
 		String[] targetObjectParts = entity.getTargetObject().split("_");
 		if (targetObjectParts.length == 2) {
 			ObjectId objectId = new ObjectId();
-			objectId.setId(targetObjectParts[0]);
-			objectId.setSuperapp(targetObjectParts[1]);
+			objectId.setId(targetObjectParts[1]);
+			objectId.setSuperapp(targetObjectParts[0]);
 			TargetObject targetObject = new TargetObject();
 			targetObject.setObjectId(objectId);
 

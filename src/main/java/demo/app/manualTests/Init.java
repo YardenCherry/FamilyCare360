@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -28,6 +29,8 @@ public class Init implements CommandLineRunner {
 	private AdminLogic admin;
 	private ObjectBoundary[] objectsToStore;
 	private UserBoundary[] usersToStore;
+	@Value("${spring.application.name}")
+	private String superapp;
 
 	public Init(EnhancedObjectLogic objects, UserLogic users, AdminLogic admin) {
 		this.objects = objects;
@@ -38,8 +41,8 @@ public class Init implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		storeUsersInDatabase();
-		this.admin.deleteAllObjects("2024b.yarden.cherry", "admin@gmail.com");
-		this.admin.deleteAllUsers("2024b.yarden.cherry", "admin@gmail.com");
+		this.admin.deleteAllObjects(superapp, "admin@gmail.com");
+		this.admin.deleteAllUsers(superapp, "admin@gmail.com");
 		storeUsersInDatabase();
 		storeBabysittersAndParentsObjectsInDatabase();
 		updateUsersInDatabase();
@@ -47,11 +50,11 @@ public class Init implements CommandLineRunner {
 	}
 
 	private void storeBabysittingEventsInDatabase() {
-		UserBoundary userParent = users.getSpecificUser("2024b.yarden.cherry", "noa@gmail.com").get();
+		UserBoundary userParent = users.getSpecificUser(superapp, "noa@gmail.com").get();
 
-		UserBoundary userBabysitter1 = users.getSpecificUser("2024b.yarden.cherry", "adi@gmail.com").get();
+		UserBoundary userBabysitter1 = users.getSpecificUser(superapp, "adi@gmail.com").get();
 
-		UserBoundary userBabysitter2 = users.getSpecificUser("2024b.yarden.cherry", "rotem@gmail.com").get();
+		UserBoundary userBabysitter2 = users.getSpecificUser(superapp, "rotem@gmail.com").get();
 
 		for (UserBoundary user : usersToStore) {
 			if (user.getRole() != Role.ADMIN) {
@@ -61,52 +64,52 @@ public class Init implements CommandLineRunner {
 			}
 		}
 		objectsToStore = new ObjectBoundary[] {
-				createBoundary("1", "2024b.yarden.cherry", "BabysittingEvent", userBabysitter1.getUsername(),
+				createBoundary("1", superapp, "BabysittingEvent", userBabysitter1.getUsername(),
 						new Location(0, 0), true,
-						createCreatedBy("2024b.yarden.cherry", userParent.getUserId().getEmail()),
+						createCreatedBy(superapp, userParent.getUserId().getEmail()),
 						createBabysittingEventDetails("Event 1 Message", "2024-07-01", userBabysitter1.getUsername(),
 								userParent.getUsername(), userParent.getUserId().getEmail())),
 
-				createBoundary("2", "2024b.yarden.cherry", "BabysittingEvent", userBabysitter1.getUsername(),
+				createBoundary("2", superapp, "BabysittingEvent", userBabysitter1.getUsername(),
 						new Location(0, 0), true,
-						createCreatedBy("2024b.yarden.cherry", userParent.getUserId().getEmail()),
+						createCreatedBy(superapp, userParent.getUserId().getEmail()),
 						createBabysittingEventDetails("Event 2 Message", "2024-07-02", userBabysitter1.getUsername(),
 								userParent.getUsername(), userParent.getUserId().getEmail())),
 
-				createBoundary("2", "2024b.yarden.cherry", "BabysittingEvent", userBabysitter1.getUsername(),
+				createBoundary("2", superapp, "BabysittingEvent", userBabysitter1.getUsername(),
 						new Location(0, 0), true,
-						createCreatedBy("2024b.yarden.cherry", userParent.getUserId().getEmail()),
-						createBabysittingEventDetails("Event 3 Message", "2024-07-02", userBabysitter1.getUsername(),
+						createCreatedBy(superapp, userParent.getUserId().getEmail()),
+						createBabysittingEventDetails("Event 3 Message", "2024-07-03", userBabysitter1.getUsername(),
 								userParent.getUsername(), userParent.getUserId().getEmail())),
 
-				createBoundary("2", "2024b.yarden.cherry", "BabysittingEvent", userBabysitter1.getUsername(),
+				createBoundary("2", superapp, "BabysittingEvent", userBabysitter1.getUsername(),
 						new Location(0, 0), true,
-						createCreatedBy("2024b.yarden.cherry", userParent.getUserId().getEmail()),
-						createBabysittingEventDetails("Event 4 Message", "2024-07-02", userBabysitter1.getUsername(),
+						createCreatedBy(superapp, userParent.getUserId().getEmail()),
+						createBabysittingEventDetails("Event 4 Message", "2024-07-04", userBabysitter1.getUsername(),
 								userParent.getUsername(), userParent.getUserId().getEmail())),
 
-				createBoundary("2", "2024b.yarden.cherry", "BabysittingEvent", userBabysitter1.getUsername(),
+				createBoundary("2", superapp, "BabysittingEvent", userBabysitter1.getUsername(),
 						new Location(0, 0), true,
-						createCreatedBy("2024b.yarden.cherry", userParent.getUserId().getEmail()),
-						createBabysittingEventDetails("Event 5 Message", "2024-07-02", userBabysitter1.getUsername(),
+						createCreatedBy(superapp, userParent.getUserId().getEmail()),
+						createBabysittingEventDetails("Event 5 Message", "2024-07-05", userBabysitter1.getUsername(),
 								userParent.getUsername(), userParent.getUserId().getEmail())),
 
-				createBoundary("2", "2024b.yarden.cherry", "BabysittingEvent", userBabysitter1.getUsername(),
+				createBoundary("2", superapp, "BabysittingEvent", userBabysitter1.getUsername(),
 						new Location(0, 0), true,
-						createCreatedBy("2024b.yarden.cherry", userParent.getUserId().getEmail()),
-						createBabysittingEventDetails("Event 6 Message", "2024-07-02", userBabysitter1.getUsername(),
+						createCreatedBy(superapp, userParent.getUserId().getEmail()),
+						createBabysittingEventDetails("Event 6 Message", "2024-07-06", userBabysitter1.getUsername(),
 								userParent.getUsername(), userParent.getUserId().getEmail())),
 
-				createBoundary("2", "2024b.yarden.cherry", "BabysittingEvent", userBabysitter1.getUsername(),
+				createBoundary("2", superapp, "BabysittingEvent", userBabysitter1.getUsername(),
 						new Location(0, 0), true,
-						createCreatedBy("2024b.yarden.cherry", userParent.getUserId().getEmail()),
-						createBabysittingEventDetails("Event 7 Message", "2024-07-02", userBabysitter1.getUsername(),
+						createCreatedBy(superapp, userParent.getUserId().getEmail()),
+						createBabysittingEventDetails("Event 7 Message", "2024-07-07", userBabysitter1.getUsername(),
 								userParent.getUsername(), userParent.getUserId().getEmail())),
 
-				createBoundary("3", "2024b.yarden.cherry", "BabysittingEvent", userBabysitter2.getUsername(),
+				createBoundary("3", superapp, "BabysittingEvent", userBabysitter2.getUsername(),
 						new Location(0, 0), true,
-						createCreatedBy("2024b.yarden.cherry", userParent.getUserId().getEmail()),
-						createBabysittingEventDetails("Event 8 Message", "2024-07-03", userBabysitter2.getUsername(),
+						createCreatedBy(superapp, userParent.getUserId().getEmail()),
+						createBabysittingEventDetails("Event 8 Message", "2024-07-08", userBabysitter2.getUsername(),
 								userParent.getUsername(), userParent.getUserId().getEmail()))
 
 		};
@@ -143,19 +146,19 @@ public class Init implements CommandLineRunner {
 
 	private void storeBabysittersAndParentsObjectsInDatabase() {
 		objectsToStore = new ObjectBoundary[] {
-				createBoundary("1", "2024b.yarden.cherry", "Babysitter", "Aa,12345",
+				createBoundary("1", superapp, "Babysitter", "Aa,12345",
 						new Location(32.1785837, 34.8810362), true,
-						createCreatedBy("2024b.yarden.cherry", "adi@gmail.com"),
+						createCreatedBy(superapp, "adi@gmail.com"),
 						createBabysitterDetails("מוטה גור 2, רעננה, ישראל", "adi@gmail.com", 32.1785837, true, "4",
 								"1993-07-01", 7, "1", "Aa,12345", "0526553008", 25, "adi", "r", 34.8810362)),
-				createBoundary("2", "2024b.yarden.cherry", "Babysitter", "Aa!14567",
+				createBoundary("2", superapp, "Babysitter", "Aa!14567",
 						new Location(37.4220936, -122.083922), true,
-						createCreatedBy("2024b.yarden.cherry", "rotem@gmail.com"),
+						createCreatedBy(superapp, "rotem@gmail.com"),
 						createBabysitterDetails("Unnamed Road, Mountain View, CA 94043, USA", "rotem@gmai.com",
 								37.4220936, false, "t", "1986-07-01", 4, "2", "Aa!14567", "0526553002", 60, "rotem",
 								"t", -122.083922)),
-				createBoundary("3", "2024b.yarden.cherry", "Parent", "Aa,12345", new Location(32.1785796, 34.881024),
-						true, createCreatedBy("2024b.yarden.cherry", "noa@gmail.com"),
+				createBoundary("3", superapp, "Parent", "Aa,12345", new Location(32.1785796, 34.881024),
+						true, createCreatedBy(superapp, "noa@gmail.com"),
 						createParentDetails("3", "Aa,12345", 2, "מוטה גור 2, רעננה, ישראל", "noa@gmail.com",
 								"0526553001", 32.1785796, "noa", 34.881024)) };
 

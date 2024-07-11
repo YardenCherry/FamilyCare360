@@ -68,7 +68,7 @@ public class ObjectController {
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "userSuperapp", required = true) String userSuperapp,
 			@RequestParam(name = "userEmail", required = true) String userEmail) {
-		return this.objectLogic.getAllByAlias(alias, size, page, userEmail, userEmail).toArray(new ObjectBoundary[0]);
+		return this.objectLogic.getAllByAlias(alias, size, page, userSuperapp, userEmail).toArray(new ObjectBoundary[0]);
 	}
 
 	@GetMapping(path = { "/search/byAliasPattern/{pattern}" }, produces = MediaType.APPLICATION_JSON_VALUE)
