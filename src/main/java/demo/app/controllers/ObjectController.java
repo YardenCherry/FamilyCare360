@@ -39,7 +39,7 @@ public class ObjectController {
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ObjectBoundary[] getObjects(@RequestParam(name = "userSuperapp", required = true) String userSuperapp,
 			@RequestParam(name = "userEmail", required = true) String userEmail,
-			@RequestParam(name = "size", defaultValue = "5", required = false) int size,
+			@RequestParam(name = "size", defaultValue = "10", required = false) int size,
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page) {
 		return this.objectLogic.getAll(size, page, userSuperapp, userEmail).toArray(new ObjectBoundary[0]);
 	}
@@ -55,7 +55,7 @@ public class ObjectController {
 
 	@GetMapping(path = { "/search/byType/{type}" }, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ObjectBoundary[] getObjectsByType(@PathVariable("type") String type,
-			@RequestParam(name = "size", defaultValue = "5", required = false) int size,
+			@RequestParam(name = "size", defaultValue = "10", required = false) int size,
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "userSuperapp", required = true) String userSuperapp,
 			@RequestParam(name = "userEmail", required = true) String userEmail) {
@@ -64,7 +64,7 @@ public class ObjectController {
 
 	@GetMapping(path = { "/search/byAlias/{alias}" }, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ObjectBoundary[] getObjectsByAlias(@PathVariable("alias") String alias,
-			@RequestParam(name = "size", defaultValue = "5", required = false) int size,
+			@RequestParam(name = "size", defaultValue = "10", required = false) int size,
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page,
 			@RequestParam(name = "userSuperapp", required = true) String userSuperapp,
 			@RequestParam(name = "userEmail", required = true) String userEmail) {
@@ -87,7 +87,7 @@ public class ObjectController {
 			@RequestParam(name = "units", defaultValue = "NEUTRAL", required = false) String distanceUnits,
 			@RequestParam(name = "userSuperapp", required = true) String userSuperapp,
 			@RequestParam(name = "userEmail", required = true) String userEmail,
-			@RequestParam(name = "size", defaultValue = "5", required = false) int size,
+			@RequestParam(name = "size", defaultValue = "10", required = false) int size,
 			@RequestParam(name = "page", defaultValue = "0", required = false) int page) {
 		return this.objectLogic.getAllByLocation(lat, lng, distance, distanceUnits, size, page, userSuperapp, userEmail)
 				.toArray(new ObjectBoundary[0]);

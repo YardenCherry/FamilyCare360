@@ -128,7 +128,7 @@ public class CommandLogicImpl implements CommandLogic {
 			type = commandEntity.getCommandAttributes().get("type").toString();
 
 			entities = objectCrud.findAllByTypeAndLocationAndActiveTrue(type, latitude, longitude,
-					PageRequest.of(0, 5, Direction.ASC, "objectId"));
+					PageRequest.of(0, 5, Direction.ASC, "object_id"));
 			for (ObjectEntity entity : entities) {
 				rv.add(this.objectConverter.toBoundary(entity));
 			}

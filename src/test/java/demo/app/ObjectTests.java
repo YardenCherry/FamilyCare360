@@ -733,6 +733,140 @@ public class ObjectTests {
 				.extracting("statusCode").extracting("value").isEqualTo(403);
 	}
 
+	
+	@Test
+	public void testRetrieveObjectsByLocation() throws Exception {
+		NewUserBoundary newSuperappUser = Utils.createNewUserSuperapp();
+		UserBoundary superappUser = this.restClient.post().uri("/users").body(newSuperappUser).retrieve()
+				.body(UserBoundary.class);
+
+		ObjectBoundary newObject1 = Utils.createNewObjectBySuperapp();
+		newObject1.setLocation(new Location(5,2));
+		ObjectBoundary objectNotWithinDistance = this.restClient.post().uri("/objects").body(newObject1).retrieve()
+				.body(ObjectBoundary.class);
+		
+		ObjectBoundary newObject2 = Utils.createNewObjectBySuperapp();
+		newObject2.setLocation(new Location(-1,-2));
+		ObjectBoundary objectNotWithinDistance2 = this.restClient.post().uri("/objects").body(newObject2).retrieve()
+				.body(ObjectBoundary.class);
+		
+		ObjectBoundary newObject3 = Utils.createNewObjectBySuperapp();
+		newObject3.setLocation(new Location(0.5, 0));
+		ObjectBoundary objectWithinDistance = this.restClient.post().uri("/objects").body(newObject3).retrieve()
+				.body(ObjectBoundary.class);
+		
+		ObjectBoundary newObject4 = Utils.createNewObjectBySuperapp();
+		newObject4.setLocation(new Location(0.5, 0.5));
+		ObjectBoundary objectWithinDistance2 = this.restClient.post().uri("/objects").body(newObject4).retrieve()
+				.body(ObjectBoundary.class);
+		
+		ObjectBoundary[] objects1 = {objectWithinDistance2,objectWithinDistance};
+
+		ObjectBoundary[] response =this.restClient
+				.get()
+				.uri("/objects/search/byLocation/{lat}/{lng}/{distance}?units={units}&userSuperapp={userSuperapp}&userEmail={userEmail}&size=5&page=0",
+			        0, 0, 2, "NEUTRAL",
+			        superappUser.getUserId().getSuperapp(),
+			        superappUser.getUserId().getEmail())
+				.retrieve().body(ObjectBoundary[].class);
+		
+		assertThat(response).hasSize(objects1.length)
+				.usingRecursiveFieldByFieldElementComparator()
+				.containsAnyElementsOf(Arrays.asList(objects1));  		
+	}
+	
+	@Test
+    public void testGetObjectsByType() throws Exception {
+	  NewUserBoundary newSuperappUser = Utils.createNewUserSuperapp();
+		UserBoundary superappUser = this.restClient.post().uri("/users").body(newSuperappUser).retrieve()
+				.body(UserBoundary.class);
+	  	ObjectBoundary object1 =Utils.createNewObjectBySuperapp();
+        ObjectBoundary object2 =Utils.createNewObjectBySuperapp();
+        ObjectBoundary object3 =Utils.createNewObjectBySuperapp();
+        String type = "testType";
+
+        object1.setType(type);
+        object2.setType(type);
+        object3.setType("OtherType");
+        
+        ObjectBoundary ob1 = this.restClient.post().uri("/objects").body(object1).retrieve()
+				.body(ObjectBoundary.class);
+        ObjectBoundary ob2 = this.restClient.post().uri("/objects").body(object2).retrieve()
+				.body(ObjectBoundary.class);
+        ObjectBoundary ob3 = this.restClient.post().uri("/objects").body(object3).retrieve()
+				.body(ObjectBoundary.class);
+        ObjectBoundary[] objects1 = {ob1,ob2};
+		ObjectBoundary[] response = this.restClient.get()
+				.uri("/objects/search/byType/{type}?userSuperapp={userSuperapp}&userEmail={userEmail}",
+						object1.getType(), superappUser.getUserId().getSuperapp(),superappUser.getUserId().getEmail())
+				.retrieve().body(ObjectBoundary[].class);
+
+	assertThat(response).hasSize(objects1.length).usingRecursiveFieldByFieldElementComparator()
+				.containsAnyElementsOf(Arrays.asList(objects1));  
+        
+    }
+	
+	@Test
+    public void testGetObjectsByAlias() throws Exception {
+	  NewUserBoundary newSuperappUser = Utils.createNewUserSuperapp();
+		UserBoundary superappUser = this.restClient.post().uri("/users").body(newSuperappUser).retrieve()
+				.body(UserBoundary.class);
+	  	ObjectBoundary object1 =Utils.createNewObjectBySuperapp();
+        ObjectBoundary object2 =Utils.createNewObjectBySuperapp();
+        ObjectBoundary object3 =Utils.createNewObjectBySuperapp();
+        String alias = "testAlias";
+
+        object1.setAlias(alias);
+        object2.setAlias(alias);
+        object3.setAlias("OtherAlias");
+        
+        ObjectBoundary ob1 = this.restClient.post().uri("/objects").body(object1).retrieve()
+				.body(ObjectBoundary.class);
+        ObjectBoundary ob2 = this.restClient.post().uri("/objects").body(object2).retrieve()
+				.body(ObjectBoundary.class);
+        ObjectBoundary ob3 = this.restClient.post().uri("/objects").body(object3).retrieve()
+				.body(ObjectBoundary.class);
+        ObjectBoundary[] objects1 = {ob1,ob2};
+		ObjectBoundary[] response = this.restClient.get()
+				.uri("/objects/search/byAlias/{alias}?userSuperapp={userSuperapp}&userEmail={userEmail}",
+						object1.getAlias(), superappUser.getUserId().getSuperapp(),superappUser.getUserId().getEmail())
+				.retrieve().body(ObjectBoundary[].class);
+
+	assertThat(response).hasSize(objects1.length).usingRecursiveFieldByFieldElementComparator()
+				.containsAnyElementsOf(Arrays.asList(objects1));
+	}
+	
+	@Test
+    public void testGetObjectsByAliasPattern() throws Exception {
+		 NewUserBoundary newSuperappUser = Utils.createNewUserSuperapp();
+			UserBoundary superappUser = this.restClient.post().uri("/users").body(newSuperappUser).retrieve()
+					.body(UserBoundary.class);
+		  	ObjectBoundary object1 =Utils.createNewObjectBySuperapp();
+	        ObjectBoundary object2 =Utils.createNewObjectBySuperapp();
+	        ObjectBoundary object3 =Utils.createNewObjectBySuperapp();
+	        String alias = "testAlias";
+
+	        object1.setAlias(alias);
+	        object2.setAlias(alias);
+	        object3.setAlias("OtherAlias");
+	        
+	        ObjectBoundary ob1 = this.restClient.post().uri("/objects").body(object1).retrieve()
+					.body(ObjectBoundary.class);
+	        ObjectBoundary ob2 = this.restClient.post().uri("/objects").body(object2).retrieve()
+					.body(ObjectBoundary.class);
+	        ObjectBoundary ob3 = this.restClient.post().uri("/objects").body(object3).retrieve()
+					.body(ObjectBoundary.class);
+	        ObjectBoundary[] objects1 = {ob1,ob2};
+	        
+			ObjectBoundary[] response = this.restClient.get()
+					.uri("/objects/search/byAliasPattern/{pattern}?userSuperapp={userSuperapp}&userEmail={userEmail}&page=0&size=5",
+							"est", superappUser.getUserId().getSuperapp(),superappUser.getUserId().getEmail())
+					.retrieve().body(ObjectBoundary[].class);
+
+		assertThat(response).hasSize(objects1.length).usingRecursiveFieldByFieldElementComparator()
+					.containsAnyElementsOf(Arrays.asList(objects1));
+		}
+	
 	@Test
 	public void testSuperAppGetAllObjects() throws Exception {
 		UserBoundary superappUser = addObjects();
@@ -759,6 +893,7 @@ public class ObjectTests {
 
 		assertThat(response).usingRecursiveComparison().isEqualTo(objects[0]);
 	}
+	
 
 	public UserBoundary addObjects() {
 		NewUserBoundary newSuperappUser = Utils.createNewUserSuperapp();
