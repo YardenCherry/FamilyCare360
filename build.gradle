@@ -25,6 +25,9 @@ dependencies {
  	
  	implementation 'org.json:json:20210307' //json array
  	
+ 	// Add Checker Framework dependency
+ 	implementation 'org.checkerframework:checker-qual:3.21.2'
+
  // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
  implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
  
@@ -36,7 +39,6 @@ dependencies {
 
  testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // note test plan management support
  
- //testImplementation 'org.checkerframework:checker-qual:3.21.2'
 }
 
 tasks.named('test') {

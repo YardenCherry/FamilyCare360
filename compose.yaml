@@ -7,8 +7,13 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/mydatabase
       SPRING_DATASOURCE_USERNAME: myuser
       SPRING_DATASOURCE_PASSWORD: secret
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_H2_CONSOLE_PATH: /h2-console
+      SPRING_H2_WEB_ALLOW_OTHERS: "true"
     depends_on:
-      - postgres	
+      postgres:
+       condition: service_healthy
+
   postgres:
     image: 'postgis/postgis:latest'
     environment:
@@ -16,4 +21,14 @@ services:
       - POSTGRES_PASSWORD=secret
       - POSTGRES_USER=myuser
     ports:
-      - '5432:5432'
+      - "5432:5432"
+    volumes:
+    - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+     test: ["CMD-SHELL", "pg_isready -U myuser -d mydatabase"]
+     interval: 10s
+     timeout: 5s
+     retries: 5
+
+volumes:
+  postgres_data:

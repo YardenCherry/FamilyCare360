@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="demo.app.ObjectTests" tests="42" skipped="0" failures="0" errors="0" timestamp="2024-07-15T12:22:00" hostname="NOAGILBOA" time="13.124">
+  <properties/>
+  <testcase name="testGetObjectsByType()" classname="demo.app.ObjectTests" time="0.484"/>
+  <testcase name="testSuperAppCreateObjectWithNullAlias()" classname="demo.app.ObjectTests" time="0.31"/>
+  <testcase name="testMiniappUpdateObjectIdAndSuperappToDatabase()" classname="demo.app.ObjectTests" time="0.38"/>
+  <testcase name="testMiniappCreateObject()" classname="demo.app.ObjectTests" time="0.268"/>
+  <testcase name="testAdminCreateObjectWithEmptyType()" classname="demo.app.ObjectTests" time="0.228"/>
+  <testcase name="testSuperappUpdateObjectIdAndSuperappToDatabase()" classname="demo.app.ObjectTests" time="0.377"/>
+  <testcase name="testGetObjectsByAliasPattern()" classname="demo.app.ObjectTests" time="0.397"/>
+  <testcase name="testMiniappCreateObjectWithNullAlias()" classname="demo.app.ObjectTests" time="0.205"/>
+  <testcase name="testAdminUpdateObjectTypeToDatabase()" classname="demo.app.ObjectTests" time="0.354"/>
+  <testcase name="testMiniappTryToSearchAndFindAnNotActiveObject()" classname="demo.app.ObjectTests" time="0.412"/>
+  <testcase name="testMiniappCreateObjectWithEmptyAlias()" classname="demo.app.ObjectTests" time="0.291"/>
+  <testcase name="testSuperappTryToSearchAndFindAnNotActiveObject()" classname="demo.app.ObjectTests" time="0.366"/>
+  <testcase name="testAdminUpdateObjectIdAndSuperappToDatabase()" classname="demo.app.ObjectTests" time="0.299"/>
+  <testcase name="testSuperGetObjectById()" classname="demo.app.ObjectTests" time="0.368"/>
+  <testcase name="testMiniappUpdateObjectTypeToDatabase()" classname="demo.app.ObjectTests" time="0.276"/>
+  <testcase name="testAdminCreateObjectWithEmptyCreatedByDetails()" classname="demo.app.ObjectTests" time="0.288"/>
+  <testcase name="testAdminCreateObject()" classname="demo.app.ObjectTests" time="0.272"/>
+  <testcase name="testAdminCreateObjectWithNullType()" classname="demo.app.ObjectTests" time="0.288"/>
+  <testcase name="testAMiniappCreateObjectWithEmptyCreatedByDetails()" classname="demo.app.ObjectTests" time="0.305"/>
+  <testcase name="testAdminTryToSearchAndFindAnNotActiveObject()" classname="demo.app.ObjectTests" time="0.315"/>
+  <testcase name="testSuperAppCreateObjectWithEmptyType()" classname="demo.app.ObjectTests" time="0.322"/>
+  <testcase name="testSuperappUpdateObjectAliasToDatabase()" classname="demo.app.ObjectTests" time="0.598"/>
+  <testcase name="testSuperAppCreateObjectWithEmptyAlias()" classname="demo.app.ObjectTests" time="0.234"/>
+  <testcase name="testAdminUpdateObjectLocationToDatabase()" classname="demo.app.ObjectTests" time="0.257"/>
+  <testcase name="testMiniappCreateObjectWithEmptyType()" classname="demo.app.ObjectTests" time="0.228"/>
+  <testcase name="testMiniappTryToSearchAndFindAnActiveObject()" classname="demo.app.ObjectTests" time="0.26"/>
+  <testcase name="testAdminUpdateObjectAliasToDatabase()" classname="demo.app.ObjectTests" time="0.26"/>
+  <testcase name="testAdminCreateObjectWithNullAlias()" classname="demo.app.ObjectTests" time="0.223"/>
+  <testcase name="testSuperappTryToSearchAndFindAnActiveObject()" classname="demo.app.ObjectTests" time="0.262"/>
+  <testcase name="testAdminTryToSearchAndFindAnActiveObject()" classname="demo.app.ObjectTests" time="0.295"/>
+  <testcase name="testRetrieveObjectsByLocation()" classname="demo.app.ObjectTests" time="0.599"/>
+  <testcase name="testSuperappUpdateObjectLocationToDatabase()" classname="demo.app.ObjectTests" time="0.25"/>
+  <testcase name="testSuperAppCreateObject()" classname="demo.app.ObjectTests" time="0.253"/>
+  <testcase name="testMiniappCreateObjectWithNullType()" classname="demo.app.ObjectTests" time="0.248"/>
+  <testcase name="testSuperAppCreateObjectWithEmptyCreatedByDetails()" classname="demo.app.ObjectTests" time="0.206"/>
+  <testcase name="testGetObjectsByAlias()" classname="demo.app.ObjectTests" time="0.377"/>
+  <testcase name="testSuperappUpdateObjectTypeToDatabase()" classname="demo.app.ObjectTests" time="0.289"/>
+  <testcase name="testMiniappUpdateObjectAliasToDatabase()" classname="demo.app.ObjectTests" time="0.22"/>
+  <testcase name="testSuperAppCreateObjectWithNullType()" classname="demo.app.ObjectTests" time="0.162"/>
+  <testcase name="testMiniappUpdateObjectLocationToDatabase()" classname="demo.app.ObjectTests" time="0.207"/>
+  <testcase name="testSuperAppGetAllObjects()" classname="demo.app.ObjectTests" time="0.291"/>
+  <testcase name="testAdminCreateObjectWithEmptyAlias()" classname="demo.app.ObjectTests" time="0.218"/>
+  <system-out><![CDATA[2024-07-15T15:22:00.423+03:00  INFO 24108 --- [2024b.yarden.cherry] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [demo.app.ObjectTests]: ObjectTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-07-15T15:22:00.433+03:00  INFO 24108 --- [2024b.yarden.cherry] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration demo.app.Application for test class demo.app.ObjectTests
+ObjectBoundary {objectId=ObjectId{id='0ae56370-d6d4-4ac6-9274-68005ea5154a/n, superapp='2024b.yarden.cherry/n}, type=type, alias=alias, active=true, location= Location{lat=10.0, lng=0.0}, creationTimestamp=Mon Jul 15 15:22:05 IDT 2024, createdBy=CreatedBy{userId=UserId {superapp=2024b.yarden.cherry,/n email=super@gmail.com}}, objectDetails={key1=can be set to any value you wish, key2=you can also name the attributes any name you like, key5=[Array, of, 1, 2.0, false, {type=user defined}, values], key3=42.0, key4=true}}
+ObjectBoundary {objectId=ObjectId{id='0ae56370-d6d4-4ac6-9274-68005ea5154a/n, superapp='2024b.yarden.cherry/n}, type=type, alias=alias, active=true, location= Location{lat=10.0, lng=0.0}, creationTimestamp=Mon Jul 15 15:22:05 IDT 2024, createdBy=CreatedBy{userId=UserId {superapp=2024b.yarden.cherry,/n email=super@gmail.com}}, objectDetails={key1=can be set to any value you wish, key2=you can also name the attributes any name you like, key5=[Array, of, 1, 2.0, false, {type=user defined}, values], key3=42.0, key4=true}}
+ObjectBoundary {objectId=ObjectId{id='175268d4-0778-4049-9eca-a6abb059c60a/n, superapp='2024b.yarden.cherry/n}, type=type, alias=alias, active=true, location= Location{lat=10.0, lng=0.0}, creationTimestamp=Mon Jul 15 15:22:13 IDT 2024, createdBy=CreatedBy{userId=UserId {superapp=2024b.yarden.cherry,/n email=super@gmail.com}}, objectDetails={key1=can be set to any value you wish, key2=you can also name the attributes any name you like, key5=[Array, of, 1, 2.0, false, {type=user defined}, values], key3=42.0, key4=true}}
+]]></system-out>
+  <system-err><![CDATA[beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+beginning test
+set up
+tear down
+]]></system-err>
+</testsuite>
