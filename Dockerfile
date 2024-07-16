@@ -9,7 +9,7 @@ ARG JAR_FILE=build/libs/2024b.yarden.cherry-final.jar
 # Copy the JAR file into the container
 COPY ${JAR_FILE} app.jar
 
-# Make port 8084 available to the world outside this container
+# Make port 80 available to the world outside this container
 EXPOSE 80
 
 # Run the JAR file
