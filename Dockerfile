@@ -10,7 +10,7 @@ ARG JAR_FILE=build/libs/2024b.yarden.cherry-final.jar
 COPY ${JAR_FILE} app.jar
 
 # Make port 8084 available to the world outside this container
-EXPOSE 8084
+EXPOSE 80
 
 # Run the JAR file
 ENTRYPOINT ["java","-jar","/app.jar"]
