@@ -43,18 +43,12 @@ Ensure you have the following installed:
 
 ### Setup
 
-1. **Clone the repository:**
-   ```bash
-   git clone git clone https://NoaGilboa1@bitbucket.org/afekaprojectnoagilboa/2024b.yarden.cherry.git
-   cd 2024B.Yarden.cherry
-   ```
-
-2. **Build the project:**
+1. **Build the project:**
    ```bash
    ./gradlew build
    ```
 
-3. **Run the application:**
+2. **Run the application:**
    ```bash
    ./gradlew bootRun
    ```
