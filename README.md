@@ -218,14 +218,7 @@ Access the H2 Console at `http://localhost:8084/h2-console` after running the ap
 - **Username:** `myuser`
 - **Password:** `secret`
 
-## Contributing
-Contributions are welcome! Please submit a pull request or open an issue for any changes or suggestions.
 
-## License
-This project is
+[FamilyCare360 (2).pptx](https://github.com/user-attachments/files/16263553/FamilyCare360.2.pptx)
 
- licensed under the MIT License. See the `LICENSE` file for more details.
-
-## Acknowledgements
-Thank you to all contributors and supporters of this project.
 
