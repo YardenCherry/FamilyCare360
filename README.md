@@ -221,4 +221,5 @@ Access the H2 Console at `http://localhost:8084/h2-console` after running the ap
 
 [FamilyCare360 (2).pptx](https://github.com/user-attachments/files/16263553/FamilyCare360.2.pptx)
 
-
+## License
+Copyright (c) 2024 Yarden Cherry | Noa Gilboa | Netanel Boris Cohen Niazov | Roei Hakmon | Daniel Suliman
